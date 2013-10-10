@@ -1,0 +1,6 @@
+*.iml
+.idea
+local.properties
+buck-*
+out
+docs
