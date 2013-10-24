@@ -1,0 +1,159 @@
+---
+title: Rebound
+---
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>rebound</title>
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono|Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <script type="text/javascript" charset="utf-8" src="demo/spring.js"></script>
+  <script type="text/javascript" charset="utf-8" src="demo/utils.js"></script>
+  <script type="text/javascript" charset="utf-8" src="demo/example.js"></script>
+  <link rel="stylesheet" href="demo/example.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="syntax.css" type="text/css" media="screen" charset="utf-8">
+  <style type="text/css" media="screen">
+    * {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .title {
+      font-weight: 300;
+      font-size: 48px;
+    }
+
+    .subtitle {
+      font-weight: 300;
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    .section_title {
+      font-weight: 400;
+      font-size: 24px;
+      margin-top: 48px;
+    }
+
+    .content {
+      width: 600px;
+      margin: auto;
+      padding: 20px; 
+      position: relative;
+      margin-bottom: 100px;
+    }
+
+    .code {
+    }
+
+    .code * {
+      font-size: 14px;
+      font-family: 'Droid Sans Mono', sans-serif;
+      font-weight: normal;
+    }
+
+    p {
+      font-weight: 300;
+      font-size: 16px;
+    }
+
+    p.license {
+      font-weight: 300;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="content">
+    <div class="title">Rebound</div>
+    <div class="subtitle">Spring Animations for Android</div>
+
+    <div class="section_title">About</div>
+    <p>
+    Rebound is a simple java library that models spring dynamics. These Spring 
+    models can be used to create animations that feel natural by introducing 
+    real world physics to your application.
+    </p>
+
+    <div class="section_title">Demo</div>
+    <p>
+    Press and release the Android icon to toggle a Spring from zero to one and
+    observe the spring model drive a scaling animation.
+    </p>
+    <p class="demo_container">
+    <canvas id="graph-canvas" width="600" height="600"></canvas>
+      <script type="text/javascript" charset="utf-8">
+      </script>
+      <img id="example-photo" src="demo/landscape.jpg" class="photo" width="300" height="300"/>
+      <div class="controls">
+        <label for="tension">tension</label><input type="range" id="tension" name="tension" min="1" max="100" value="40"/><br /><br />
+        <label for="friction">friction</label><input type="range" id="friction" name="friction" min="1" max="30" value="3"/>
+      </div>
+    </p>
+
+    <div class="section_title">Usage</div>
+
+    <div class="code">
+    {% highlight java %}
+    // Create a system to solve the spring physics equation.
+    SpringSystem springSystem = SpringSystem.create();
+
+    // Add a spring to the system.
+    Spring spring = mSpringSystem.createSpring();
+
+    // Add a listener to observe the motion of the spring.
+    spring.addListener(new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        // You can observe the updates in the spring state by asking its current
+        // value in onSpringUpdate.
+        float xTranslate = (float) spring.getCurrentValue();
+        myView.setTranslationX(xTranslate);
+      }
+    });
+
+    // Set the spring in motion; moving from 0 to 50.
+    spring.setEndValue(50);
+    {% endhighlight %}
+    </div>
+
+    <div class="section_title">License</div>
+
+    <p>
+    BSD License
+    </p>
+    <p>
+    For Rebound software
+    </p>
+    <p>
+    Copyright (c) 2013, Facebook, Inc.
+    All rights reserved.
+    </p>
+    <p>
+    Redistribution and use in source and binary forms, with or without 
+    modification, are permitted provided that the following conditions are met:
+    </p>
+    <p>
+    * Redistributions of source code must retain the above copyright notice, 
+    this list of conditions and the following disclaimer.
+    </p>
+    <p>
+    * Redistributions in binary form must reproduce the above copyright notice, 
+    this list of conditions and the following disclaimer in the documentation 
+    and/or other materials provided with the distribution.
+    </p>
+    <p>
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+    </p>
+  </div>
+</body>
+</html>
