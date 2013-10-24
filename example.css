@@ -2,6 +2,10 @@
   position: relative;
 }
 
+a {
+  text-decoration: none;
+}
+
 #graph-canvas {
   width: 300px;
   height: 300px;
@@ -19,11 +23,13 @@
   position: absolute;
   top: 0px;
   left: 0px;
+  background: url(landscape.jpg);
 }
 
 .controls {
   text-align: center;
   margin: auto;
+  margin-top: 10px;
   width: 500px;
 }
 
@@ -35,4 +41,30 @@
 
 .controls input {
   width: 300px;
+}
+
+.pill {
+  border-radius: 32px;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -56px;
+  margin-top: -12px;
+  width: 100px;
+  color: #fff;
+  text-align: center;
+  padding: 6px;
+  font-size: 12px;
+  cursor: default;
+  -webkit-transition: opacity 0.3s;
+  -moz-transition: opacity 0.3s;
+  -ms-transition: opacity 0.3s;
+  -o-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  opacity: 1;
+}
+
+.photo.down .pill{
+  opacity: 0;
 }

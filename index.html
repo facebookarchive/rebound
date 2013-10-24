@@ -17,6 +17,20 @@ title: Rebound
       font-family: 'Roboto', sans-serif;
     }
 
+    .header {
+      padding-left: 100px;
+      position: relative;
+    }
+
+    .logo {
+      width: 90px;
+      height: 90px;
+      position: absolute;
+      display: block;
+      left: 0px;
+      top: 0px;
+    }
+
     .title {
       font-weight: 300;
       font-size: 48px;
@@ -64,37 +78,33 @@ title: Rebound
 </head>
 <body>
   <div class="content">
-    <div class="title">Rebound</div>
-    <div class="subtitle">Spring Animations for Android</div>
+    <div class="header">
+      <img src="rebound.jpg" class="logo" />
+      <div class="title">Rebound</div>
+      <div class="subtitle">Spring Animations for Android</div>
+    </div>
 
     <div class="section_title">About</div>
     <p>
-    Rebound is a simple java library that models spring dynamics. These Spring 
+    Rebound is a java library that models spring dynamics. Rebound spring
     models can be used to create animations that feel natural by introducing 
     real world physics to your application.
     </p>
-
-    <div class="section_title">Demo</div>
     <p>
-    Press and release the Android icon to toggle a Spring from zero to one and
-    observe the spring model drive a scaling animation.
-    </p>
-    <p class="demo_container">
-    <canvas id="graph-canvas" width="600" height="600"></canvas>
-      <script type="text/javascript" charset="utf-8">
-      </script>
-      <img id="example-photo" src="landscape.jpg" class="photo" width="300" height="300"/>
-      <div class="controls">
-        <label for="tension">tension</label><input type="range" id="tension" name="tension" min="1" max="100" value="40"/><br /><br />
-        <label for="friction">friction</label><input type="range" id="friction" name="friction" min="1" max="30" value="3"/>
-      </div>
+    Rebound is not a general purpose physics library; however, spring dynamics
+    can be used to drive a wide variety of animations. The simplicity of Rebound
+    makes it easy to integrate and use as a building block for creating more
+    complex components like pagers, toggles, and scrollers.
     </p>
 
     <div class="section_title">Usage</div>
-
+    <p>
+    Here's a simple example of using a Spring model to drive scaling animation
+    on a View.
+    </p>
     <div class="code">
     {% highlight java %}
-    // Create a system to solve the spring physics equation.
+    // Create a system to run the physics loop for a set of springs.
     SpringSystem springSystem = SpringSystem.create();
 
     // Add a spring to the system.
@@ -102,19 +112,55 @@ title: Rebound
 
     // Add a listener to observe the motion of the spring.
     spring.addListener(new SimpleSpringListener() {
+
       @Override
       public void onSpringUpdate(Spring spring) {
-        // You can observe the updates in the spring state by asking its current
-        // value in onSpringUpdate.
-        float xTranslate = (float) spring.getCurrentValue();
-        myView.setTranslationX(xTranslate);
+        // You can observe the updates in the spring 
+        // state by asking its current value in onSpringUpdate.
+        float value = (float) spring.getCurrentValue();
+        float scale = 1f - (value * 0.5f);
+        myView.setScaleX(scale);
+        myView.setScaleY(scale);
       }
+
     });
 
-    // Set the spring in motion; moving from 0 to 50.
-    spring.setEndValue(50);
+    // Set the spring in motion; moving from 0 to 1
+    spring.setEndValue(1);
     {% endhighlight %}
     </div>
+
+    <div class="section_title">Demo</div>
+    <p>
+    Press and release the photo to toggle a Spring from zero to one and
+    observe the spring model drive a scaling animation. This demo is built using
+    a JavaScript port of Rebound.
+    </p>
+    <div class="demo_container">
+    <canvas id="graph-canvas" width="600" height="600"></canvas>
+      <div id="example-photo" class="photo" onmousedown="this.className='photo down'">
+        <div class="pill">Press and Hold</div>
+      </div>
+      <div class="controls">
+        <label for="tension">tension</label><input type="range" id="tension" name="tension" min="1" max="100" value="40"/><br /><br />
+        <label for="friction">friction</label><input type="range" id="friction" name="friction" min="1" max="30" value="3"/>
+      </div>
+    </div>
+
+    <div class="section_title">Download</div>
+    <p>
+    Rebound is available as a jar file and depends on Guava.
+    <br />
+    <br />
+    <a href="http://search.maven.org/remotecontent?filepath=com/google/guava/guava/15.0/guava-15.0.jar">Download Guava</a><br />
+    <a href="rebound_1.0.jar">Download Rebound</a><br />
+    <a href="http://github.com/facebook/rebound">View on Github</a>
+    </p>
+    <p>
+    Rebound is built using <a href="http://facebook.github.io/buck/">Buck</a> a 
+    build system developed at Facebook that encourages the creation of small, 
+    reusable modules consisting of code and resources.
+    </p>
 
     <div class="section_title">License</div>
 
