@@ -2,7 +2,7 @@
 
 ##About
 
-<a href="http://facebook.github.io/reboung">Rebound</a> is a java library that
+<a href="http://facebook.github.io/rebound">Rebound</a> is a java library that
 models spring dynamics. Rebound spring models can be used to create animations
 that feel natural by introducing real world physics to your application.
 
