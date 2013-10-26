@@ -21,7 +21,7 @@ on a View.
 SpringSystem springSystem = SpringSystem.create();
 
 // Add a spring to the system.
-Spring spring = mSpringSystem.createSpring();
+Spring spring = springSystem.createSpring();
 
 // Add a listener to observe the motion of the spring.
 spring.addListener(new SimpleSpringListener() {
