@@ -18,11 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.facebook.rebound.*;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The SpringConfiguratorView provides a reusable view for live-editing all registered springs
@@ -41,7 +41,7 @@ public class SpringConfiguratorView extends FrameLayout {
 
   private final SpringSystem springSystem;
   private final ArrayAdapter<String> springArrayAdapter;
-  private final List<SpringConfig> mSpringConfigs = Lists.newArrayList();
+  private final List<SpringConfig> mSpringConfigs = new ArrayList<SpringConfig>();
   private final Spring mRevealerSpring;
   private final float mStashPx;
   private final float mRevealPx;
@@ -128,12 +128,12 @@ public class SpringConfiguratorView extends FrameLayout {
    * reload the springs from the registry and update the UI
    */
   public void refreshSpringConfigurations() {
-    ImmutableMap<SpringConfig, String> springConfigMap = springConfigRegistry.getAllSpringConfig();
+    Map<SpringConfig, String> springConfigMap = springConfigRegistry.getAllSpringConfig();
 
     springArrayAdapter.clear();
     mSpringConfigs.clear();
 
-    for (ImmutableMap.Entry<SpringConfig, String> entry : springConfigMap.entrySet()) {
+    for (Map.Entry<SpringConfig, String> entry : springConfigMap.entrySet()) {
       mSpringConfigs.add(entry.getKey());
       springArrayAdapter.add(entry.getValue());
     }

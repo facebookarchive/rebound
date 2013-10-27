@@ -1,5 +1,7 @@
 *.iml
 .idea
+.gradle
+gen
 local.properties
 buck-*
 out

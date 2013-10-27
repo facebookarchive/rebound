@@ -10,8 +10,8 @@
 
 package com.facebook.rebound;
 
-import com.google.common.collect.ImmutableSet;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -44,7 +44,7 @@ public class ReentrantCallback<CallbackClass> implements Iterable<CallbackClass>
    */
   public synchronized Set<CallbackClass> getListeners() {
     if (mReturnSet == null) {
-      mReturnSet = ImmutableSet.copyOf(mListeners);
+      mReturnSet = Collections.unmodifiableSet(mListeners);
     }
     return mReturnSet;
   }
@@ -52,7 +52,7 @@ public class ReentrantCallback<CallbackClass> implements Iterable<CallbackClass>
   @Override
   public synchronized Iterator<CallbackClass> iterator() {
     if (mReturnSet == null) {
-      mReturnSet = ImmutableSet.copyOf(mListeners);
+      mReturnSet = Collections.unmodifiableSet(mListeners);
     }
     return mReturnSet.iterator();
   }

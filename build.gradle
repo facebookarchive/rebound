@@ -32,7 +32,3 @@ android {
         }
     }
 }
-
-dependencies {
-    compile 'com.google.guava:guava:14.0.+'
-}

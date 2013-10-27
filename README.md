@@ -44,17 +44,15 @@ spring.setEndValue(1);
 
 ##Download
 
-Rebound is available as a jar file and depends on Guava.
-
-<a href="http://search.maven.org/remotecontent?filepath=com/google/guava/guava/15.0/guava-15.0.jar">Download Guava</a>
+Rebound is available as a prebuilt jar or can be built using Gradle or Buck.
 
 <a href="rebound_1.0.jar">Download Rebound</a>
 
 <a href="http://github.com/facebook/rebound">View on Github</a>
 
-Rebound is built using <a href="http://facebook.github.io/buck/">Buck</a> a 
-build system developed at Facebook that encourages the creation of small, 
-reusable modules consisting of code and resources.
+<a href="http://facebook.github.io/buck/">Buck</a> is a build system developed
+at Facebook that encourages the creation of small, reusable modules consisting
+of code and resources.
 
 ##License
 

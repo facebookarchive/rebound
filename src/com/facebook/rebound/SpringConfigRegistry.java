@@ -10,11 +10,8 @@
 
 package com.facebook.rebound;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
-
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,9 +33,8 @@ public class SpringConfigRegistry {
   /**
    * constructor for the SpringConfigRegistry
    */
-  @VisibleForTesting
   SpringConfigRegistry(boolean includeDefaultEntry) {
-    mSpringConfigMap = Maps.newHashMap();
+    mSpringConfigMap = new HashMap<SpringConfig, String>();
     if (includeDefaultEntry) {
       addSpringConfig(SpringConfig.defaultConfig, "default config");
     }
@@ -53,10 +49,16 @@ public class SpringConfigRegistry {
    *    present.
    */
   public boolean addSpringConfig(SpringConfig springConfig, String configName) {
-    if (mSpringConfigMap.containsKey(Preconditions.checkNotNull(springConfig))) {
+    if (springConfig == null) {
+      throw new IllegalArgumentException("springConfig is required");
+    }
+    if (configName == null) {
+      throw new IllegalArgumentException("configName is required");
+    }
+    if (mSpringConfigMap.containsKey(springConfig)) {
       return false;
     }
-    mSpringConfigMap.put(springConfig, Preconditions.checkNotNull(configName));
+    mSpringConfigMap.put(springConfig, configName);
     return true;
   }
 
@@ -66,15 +68,18 @@ public class SpringConfigRegistry {
    * @return true if the SpringConfig was removed, false if it was not present.
    */
   public boolean removeSpringConfig(SpringConfig springConfig) {
-    return mSpringConfigMap.remove(Preconditions.checkNotNull(springConfig)) != null;
+    if (springConfig == null) {
+      throw new IllegalArgumentException("springConfig is required");
+    }
+    return mSpringConfigMap.remove(springConfig) != null;
   }
 
   /**
    * retrieve all SpringConfig in the registry
    * @return a list of all SpringConfig
    */
-  public ImmutableMap<SpringConfig, String> getAllSpringConfig() {
-    return ImmutableMap.copyOf(mSpringConfigMap);
+  public Map<SpringConfig, String> getAllSpringConfig() {
+    return Collections.unmodifiableMap(mSpringConfigMap);
   }
 
   /**

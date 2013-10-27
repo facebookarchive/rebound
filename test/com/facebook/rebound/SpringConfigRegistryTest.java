@@ -10,11 +10,12 @@
 
 package com.facebook.rebound;
 
-import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -38,7 +39,7 @@ public class SpringConfigRegistryTest {
   public void testAddSpringConfig() {
     SpringConfig config = new SpringConfig(TENSION, FRICTION);
     mSpringConfigRegistrySpy.addSpringConfig(config, CONFIG_NAME);
-    ImmutableMap<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
+    Map<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
 
     assertEquals(1, configs.size());
     assertTrue(configs.containsKey(config));
@@ -51,7 +52,7 @@ public class SpringConfigRegistryTest {
     SpringConfig config = new SpringConfig(TENSION, FRICTION);
     mSpringConfigRegistrySpy.addSpringConfig(config, CONFIG_NAME);
 
-    ImmutableMap<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
+    Map<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
     assertEquals(1, configs.size());
     mSpringConfigRegistrySpy.removeSpringConfig(config);
 
@@ -69,7 +70,7 @@ public class SpringConfigRegistryTest {
     mSpringConfigRegistrySpy.addSpringConfig(configB, "b");
     mSpringConfigRegistrySpy.addSpringConfig(configC, "c");
 
-    ImmutableMap<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
+    Map<SpringConfig, String> configs = mSpringConfigRegistrySpy.getAllSpringConfig();
     assertEquals(3, configs.size());
 
     mSpringConfigRegistrySpy.removeAllSpringConfig();

@@ -10,8 +10,6 @@
 
 package com.facebook.rebound;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Classical spring implementing Hooke's law with configurable friction and tension.
  */
@@ -54,7 +52,9 @@ public class Spring {
    * create a new spring
    */
   Spring(SpringSystem springSystem) {
-    Preconditions.checkNotNull(springSystem, "Spring cannot be created outside of a SpringSystem");
+    if (springSystem == null) {
+      throw new IllegalArgumentException("Spring cannot be created outside of a SpringSystem");
+    }
     mSpringSystem = springSystem;
     mId = "spring:" + ID++;
     setSpringConfig(SpringConfig.defaultConfig);
@@ -84,7 +84,10 @@ public class Spring {
    * @return this Spring instance for chaining
    */
   public Spring setSpringConfig(SpringConfig springConfig) {
-    mSpringConfig = Preconditions.checkNotNull(springConfig);
+    if (springConfig == null) {
+      throw new IllegalArgumentException("springConfig is required");
+    }
+    mSpringConfig = springConfig;
     return this;
   }
 
@@ -468,7 +471,9 @@ public class Spring {
    * @return the spring for chaining
    */
   public Spring addListener(SpringListener newListener) {
-    Preconditions.checkNotNull(newListener);
+    if (newListener == null) {
+      throw new IllegalArgumentException("newListener is required");
+    }
     mListeners.addListener(newListener);
     return this;
   }
@@ -479,7 +484,9 @@ public class Spring {
    * @return the spring for chaining
    */
   public Spring removeListener(SpringListener listenerToRemove) {
-    Preconditions.checkNotNull(listenerToRemove);
+    if (listenerToRemove == null) {
+      throw new IllegalArgumentException("listenerToRemove is required");
+    }
     mListeners.removeListener(listenerToRemove);
     return this;
   }

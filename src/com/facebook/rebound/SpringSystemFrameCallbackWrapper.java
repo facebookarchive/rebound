@@ -10,8 +10,6 @@
 
 package com.facebook.rebound;
 
-import com.google.common.base.Preconditions;
-
 /**
  * SpringSystemFrameCallbackWrapper is a FrameCallbackWrapper that can be configured to work on a
  * specific SpringSystem. This improves testability by allowing an outside caller to manipulate the
@@ -35,7 +33,6 @@ public class SpringSystemFrameCallbackWrapper extends FrameCallbackWrapper {
    */
   @Override
   public void doFrame(long frameTimeNanos) {
-    Preconditions.checkNotNull(mSpringSystem);
     mSpringSystem.loop();
   }
 }

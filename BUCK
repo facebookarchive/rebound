@@ -9,11 +9,6 @@ prebuilt_jar(
 )
 
 prebuilt_jar(
-  name = 'guava',
-  binary_jar = 'libs/guava-14.0.1.jar',
-)
-
-prebuilt_jar(
   name = 'junit',
   binary_jar = 'libs/junit-4.11.jar',
 )
@@ -30,7 +25,6 @@ java_test(
   srcs = glob(['test/**/*Test.java']),
   visibility = ['//:rebound'],
   deps = [
-    '//:guava',
     '//:robolectric',
     '//:mockito',
     '//:junit',
@@ -43,7 +37,6 @@ android_library(
   name = 'rebound',
   srcs = glob(['src/**/*.java']),
   deps = [
-    '//:guava',
     '//:res'
   ],
   visibility = ['PUBLIC'],

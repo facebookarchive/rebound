@@ -10,14 +10,7 @@
 
 package com.facebook.rebound;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,7 +23,7 @@ public class SpringSystem {
 
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
   private final Set<Spring> mActiveSprings =
-      Sets.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
+      Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
   private final ChoreographerWrapper mChoreographer;
   private final SpringSystemFrameCallbackWrapper mLoopFrameCallback;
   private final SpringClock mClock;
@@ -61,9 +54,18 @@ public class SpringSystem {
       SpringClock clock,
       ChoreographerWrapper choreographerWrapper,
       SpringSystemFrameCallbackWrapper loopFrameCallback) {
-    mClock = Preconditions.checkNotNull(clock);
-    mChoreographer = Preconditions.checkNotNull(choreographerWrapper);
-    mLoopFrameCallback = Preconditions.checkNotNull(loopFrameCallback);
+    if (clock == null) {
+      throw new IllegalArgumentException("clock is required");
+    }
+    if (choreographerWrapper == null) {
+      throw new IllegalArgumentException("choreographerWrapper is required");
+    }
+    if (loopFrameCallback == null) {
+      throw new IllegalArgumentException("loopFrameCallback is required");
+    }
+    mClock = clock;
+    mChoreographer = choreographerWrapper;
+    mLoopFrameCallback = loopFrameCallback;
     mLoopFrameCallback.setSpringSystem(this);
   }
 
@@ -103,25 +105,38 @@ public class SpringSystem {
    * @return Spring with the specified key
    */
   public Spring getSpringById(String id) {
-    return mSpringRegistry.get(Preconditions.checkNotNull(id));
+    if (id == null) {
+      throw new IllegalArgumentException("id is required");
+    }
+    return mSpringRegistry.get(id);
   }
 
   /**
    * return all the springs in the simulator
    * @return all the springs
    */
-  public ImmutableList<Spring> getAllSprings() {
-    return ImmutableList.copyOf(mSpringRegistry.values());
+  public List<Spring> getAllSprings() {
+    Collection<Spring> collection = mSpringRegistry.values();
+    List<Spring> list;
+    if (collection instanceof List) {
+      list = (List<Spring>)collection;
+    } else {
+      list = new ArrayList<Spring>(collection);
+    }
+    return Collections.unmodifiableList(list);
   }
 
   /**
    * Registers a Spring to this SpringSystem so it can be iterated if active.
    * @param spring the Spring to register
    */
-  @VisibleForTesting
   void registerSpring(Spring spring) {
-    Preconditions.checkNotNull(spring);
-    Preconditions.checkState(!mSpringRegistry.containsKey(spring.getId()));
+    if (spring == null) {
+      throw new IllegalArgumentException("spring is required");
+    }
+    if (mSpringRegistry.containsKey(spring.getId())) {
+      throw new IllegalArgumentException("spring is already registered");
+    }
     mSpringRegistry.put(spring.getId(), spring);
   }
 
@@ -131,9 +146,10 @@ public class SpringSystem {
    *
    * @param spring the Spring to deregister
    */
-  @VisibleForTesting
   void deregisterSpring(Spring spring) {
-    Preconditions.checkNotNull(spring);
+    if (spring == null) {
+      throw new IllegalArgumentException("spring is required");
+    }
     mActiveSprings.remove(spring);
     mSpringRegistry.remove(spring.getId());
   }
@@ -191,11 +207,11 @@ public class SpringSystem {
    * active springs on this system and start the iteration if the system was idle before this call.
    * @param springId the id of the Spring to be activated
    */
-  @VisibleForTesting
   void activateSpring(String springId) {
     Spring spring = mSpringRegistry.get(springId);
-    Preconditions.checkNotNull(spring, "Tried to activate Spring with id " + springId +
-        " not registered to SpringSystem.");
+    if (spring == null) {
+      throw new IllegalArgumentException("springId " + springId + " does not reference a registered spring");
+    }
     synchronized (this) {
       mActiveSprings.add(spring);
       if (getIsIdle()) {
@@ -208,12 +224,16 @@ public class SpringSystem {
   /** listeners **/
 
   public void addListener(SpringSystemListener newListener) {
-    Preconditions.checkNotNull(newListener);
+    if (newListener == null) {
+      throw new IllegalArgumentException("newListener is required");
+    }
     mListeners.addListener(newListener);
   }
 
   public void removeListener(SpringSystemListener listenerToRemove) {
-    Preconditions.checkNotNull(listenerToRemove);
+    if (listenerToRemove == null) {
+      throw new IllegalArgumentException("listenerToRemove is required");
+    }
     mListeners.removeListener(listenerToRemove);
   }
 
