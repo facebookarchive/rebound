@@ -10,7 +10,7 @@
 
 package com.facebook.rebound;
 
-import com.facebook.rebound.android.AndroidSpringChoreographer;
+import com.facebook.rebound.android.AndroidSpringLooper;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +26,7 @@ public class SpringSystem {
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
   private final Set<Spring> mActiveSprings =
       Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
-  private final SpringChoreographer mSpringChoreographer;
+  private final SpringLooper mSpringLooper;
   private final SpringClock mClock;
   private long mLastTimeMillis = -1;
   private ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
@@ -37,26 +37,25 @@ public class SpringSystem {
    * @return a new SpringSystem
    */
   public static SpringSystem create() {
-    return new SpringSystem(new SpringClock(), new AndroidSpringChoreographer());
+    return new SpringSystem(new SpringClock(), new AndroidSpringLooper());
   }
 
   /**
    * create a new SpringSystem
    * @param clock parameterized Clock to allow testability of the physics loop
-   * @param springChoreographer parameterized springChoreographer to allow testability of the
-   *        physics loop
+   * @param springLooper parameterized springLooper to allow testability of the physics loop
    */
   public SpringSystem(
       SpringClock clock,
-      SpringChoreographer springChoreographer) {
+      SpringLooper springLooper) {
     if (clock == null) {
       throw new IllegalArgumentException("clock is required");
     }
-    if (springChoreographer == null) {
-      throw new IllegalArgumentException("springChoreographer is required");
+    if (springLooper == null) {
+      throw new IllegalArgumentException("springLooper is required");
     }
     mClock = clock;
-    mSpringChoreographer = springChoreographer;
+    mSpringLooper = springLooper;
   }
 
   /**
@@ -186,7 +185,7 @@ public class SpringSystem {
     }
 
     if (mIdle) {
-      mSpringChoreographer.stop();
+      mSpringLooper.stop();
     }
   }
 
@@ -205,7 +204,7 @@ public class SpringSystem {
       mActiveSprings.add(spring);
       if (getIsIdle()) {
         mIdle = false;
-        mSpringChoreographer.start(new Runnable() {
+        mSpringLooper.start(new Runnable() {
           @Override
           public void run() {
             loop();

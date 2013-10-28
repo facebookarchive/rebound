@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.facebook.rebound.*;
-import com.facebook.rebound.android.AndroidSpringChoreographer;
+import com.facebook.rebound.android.AndroidSpringLooper;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class SpringConfiguratorView extends FrameLayout {
   public SpringConfiguratorView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
 
-    springSystem = new SpringSystem(new SpringClock(), new AndroidSpringChoreographer());
+    springSystem = new SpringSystem(new SpringClock(), new AndroidSpringLooper());
     springConfigRegistry = SpringConfigRegistry.getInstance();
     springArrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.spring_text);
 
