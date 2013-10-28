@@ -10,8 +10,6 @@
 
 package com.facebook.rebound;
 
-import com.facebook.rebound.android.AndroidSpringLooper;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,14 +29,6 @@ public class SpringSystem {
   private long mLastTimeMillis = -1;
   private ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
   private boolean mIdle = true;
-
-  /**
-   * Create a SpringSystem with dependencies
-   * @return a new SpringSystem
-   */
-  public static SpringSystem create() {
-    return new SpringSystem(new SpringClock(), new AndroidSpringLooper());
-  }
 
   /**
    * create a new SpringSystem
