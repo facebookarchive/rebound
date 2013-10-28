@@ -17,20 +17,6 @@ title: Rebound
       font-family: 'Roboto', sans-serif;
     }
 
-    .header {
-      padding-left: 100px;
-      position: relative;
-    }
-
-    .logo {
-      width: 90px;
-      height: 90px;
-      position: absolute;
-      display: block;
-      left: 0px;
-      top: 0px;
-    }
-
     .title {
       font-weight: 300;
       font-size: 48px;
@@ -74,12 +60,41 @@ title: Rebound
       font-weight: 300;
     }
 
+    .header {
+      padding-left: 0px;
+      position: relative;
+    }
+
+    .logo {
+      width: 75px;
+      height: 75px;
+      position: absolute;
+      display: block;
+      left: -85px;
+      top: 0px;
+      background-image: url(Rebound.png);
+      background-size: 75px 75px;
+    }
+
+    @media (-webkit-min-device-pixel-ratio: 2),
+       (min--moz-device-pixel-ratio: 2),
+       (min-resolution: 2dppx),
+       (min-resolution: 192dpi) {
+
+      .logo {
+        background-image: url(Rebound_2x.png);
+        width: 75px;
+        height: 75px;
+      }
+
+    }
+
   </style>
 </head>
 <body>
   <div class="content">
     <div class="header">
-      <img src="rebound.jpg" class="logo" />
+      <div class="logo"></div>
       <div class="title">Rebound</div>
       <div class="subtitle">Spring Animations for Android</div>
     </div>
