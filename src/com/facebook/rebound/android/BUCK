@@ -1,9 +1,9 @@
 android_library(
-  name = 'android',
+  name = 'rebound_android',
   srcs = glob(['**/*.java']),
   deps = [
-    '//:rebound',
-    '//android_res/com/facebook/rebound/android:res'
+    '//:rebound_lib',
+    '//android_res:res'
   ],
   visibility = ['PUBLIC'],
 )

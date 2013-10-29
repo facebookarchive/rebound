@@ -1,12 +1,19 @@
 project_config(
-  src_target = ':rebound',
+  src_target = ':rebound_lib',
   test_target = ':rebound_test',
   src_roots = ['src'],
   test_roots = ['test'],
 )
 
-java_library(
+java_binary(
   name = 'rebound',
+  deps = [
+    ':rebound_lib',
+  ],
+)
+
+java_library(
+  name = 'rebound_lib',
   srcs = glob(['src/**/*.java'], excludes = ['src/com/facebook/rebound/android/**/*.java']),
   visibility = [
     'PUBLIC'
@@ -17,15 +24,14 @@ java_test(
   name = 'rebound_test',
   srcs = glob(['test/**/*Test.java']),
   deps = [
-    ':rebound',
+    ':rebound_lib',
     ':robolectric',
     ':mockito',
     ':junit',
     '//src/com/facebook/rebound/android:android',
   ],
-  source_under_test = [':rebound', ],
-  visibility = [
-    '//:project_config',
+  source_under_test = [
+    ':rebound_lib',
   ],
 )
 
