@@ -1,0 +1,6 @@
+{
+  "name": "rebound",
+  "version": "0.0.1",
+  "description": "A simple library for modeling spring dynamics",
+  "main": "rebound.js"
+}
