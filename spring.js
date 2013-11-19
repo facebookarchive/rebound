@@ -1,6 +1,7 @@
 // *** SpringSystem ***
+var rebound = {};
 
-var SpringSystem = function SpringSystem() {
+var SpringSystem = rebound.SpringSystem = function SpringSystem() {
   this._springRegistry = {};
   this._activeSprings = [];
   this._listeners = [];
@@ -135,7 +136,7 @@ extend(SpringSystem.prototype, {
 
 // *** Spring ***
 
-var Spring = function Spring(springSystem) {
+var Spring = rebound.Spring = function Spring(springSystem) {
   this._id = Spring._ID++;
   this._springSystem = springSystem;
   this._listeners = [];
@@ -452,10 +453,11 @@ extend(PhysicsState.prototype, {
   velocity: 0
 });
 
-var SpringConfig = function SpringConfig(tension, friction) {
-  this.tension = tension;
-  this.friction = friction;
-};
+var SpringConfig = rebound.SpringConfig =
+  function SpringConfig(tension, friction) {
+    this.tension = tension;
+    this.friction = friction;
+  };
 
 extend(SpringConfig, {
   fromQcTensionAndFriction: function(qcTension, qcFriction) {
@@ -498,15 +500,22 @@ function removeFirst(array, item) {
 }
 
 function compatCancelAnimationFrame(id) {
-  return window.cancelAnimationFrame && cancelAnimationFrame(id);
+  return typeof window != 'undefined' &&
+    window.cancelAnimationFrame &&
+    cancelAnimationFrame(id);
 }
 
 function compatRequestAnimationFrame(func) {
-  var meth = window.requestAnimationFrame ||
-             window.webkitRequestAnimationFrame ||
-             window.mozRequestAnimationFrame ||
-             window.msRequestAnimationFrame ||
-             window.oRequestAnimationFrame;
+  var meth;
+  if (typeof process != 'undefined') {
+    meth = process.nextTick;
+  } else {
+    meth = window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    window.oRequestAnimationFrame;
+  }
   return meth(func);
 }
 
@@ -524,3 +533,8 @@ function extend(target, source) {
     }
   }
 }
+
+if (typeof exports != 'undefined') {
+  extend(exports, rebound);
+}
+
