@@ -1,0 +1,38 @@
+keystore(
+  name = 'debug_keystore',
+  store = 'debug.keystore',
+  properties = 'debug.keystore.properties',
+)
+
+android_resource(
+  name = 'res',
+  res = 'res',
+  package = 'com.facebook.rebound.example',
+  visibility = ['//example:example'],
+)
+
+android_library(
+  name = 'src',
+  srcs = glob(['src/**/*.java']),
+  deps = [
+    ':res',
+    '//:rebound',
+  ],
+)
+
+android_binary(
+  name = 'example',
+  manifest = 'AndroidManifest.xml',
+  target = 'Google Inc.:Google APIs:16',
+  package_type = 'debug',
+  keystore = ':debug_keystore',
+  deps = [
+    ':res',
+    ':src',
+  ],
+)
+
+project_config(
+  src_target = ':example',
+  src_roots = ['src'],
+)
