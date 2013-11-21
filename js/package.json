@@ -5,6 +5,7 @@
   "main": "rebound.js",
   "author": "Facebook",
   "license": "BSD",
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git://github.com/facebook/rebound.git"
