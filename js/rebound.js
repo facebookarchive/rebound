@@ -8,7 +8,7 @@
  */
 
 /**
- * Example: http://jsfiddle.net/wbailey/Xz464/2/
+ * Example: http://jsfiddle.net/Xz464/7/
  */
 
 // *** SpringSystem ***
