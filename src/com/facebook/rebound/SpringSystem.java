@@ -10,8 +10,15 @@
 
 package com.facebook.rebound;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * SpringSystem maintains the set of springs within an Application context. It is responsible for
@@ -22,8 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SpringSystem {
 
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
-  private final Set<Spring> mActiveSprings =
-      Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
+  private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
   private final ChoreographerWrapper mChoreographer;
   private final SpringSystemFrameCallbackWrapper mLoopFrameCallback;
   private final SpringClock mClock;
@@ -33,6 +39,7 @@ public class SpringSystem {
 
   /**
    * Create a SpringSystem with dependencies
+   *
    * @return a new SpringSystem
    */
   public static SpringSystem create() {
@@ -44,11 +51,12 @@ public class SpringSystem {
 
   /**
    * create a new SpringSystem
-   * @param clock parameterized Clock to allow testability of the physics loop
+   *
+   * @param clock                parameterized Clock to allow testability of the physics loop
    * @param choreographerWrapper parameterized choreographerWrapper to allow testability of the
-   *        physics loop
-   * @param loopFrameCallback parameterized SpringSystemFrameCallbackWrapper to allow testability
-   *        of the physics loop
+   *                             physics loop
+   * @param loopFrameCallback    parameterized SpringSystemFrameCallbackWrapper to allow testability
+   *                             of the physics loop
    */
   public SpringSystem(
       SpringClock clock,
@@ -71,6 +79,7 @@ public class SpringSystem {
 
   /**
    * check if the system is idle
+   *
    * @return is the system idle
    */
   public boolean getIsIdle() {
@@ -79,6 +88,7 @@ public class SpringSystem {
 
   /**
    * create a spring with a random uuid for its name.
+   *
    * @return the spring
    */
   public Spring createSpring() {
@@ -89,7 +99,7 @@ public class SpringSystem {
 
   /**
    * Destroys a certain spring from this system.
-   *
+   * <p/>
    * DEPRECATED: use {@link Spring#destroy()} instead
    *
    * @param spring the spring to be destroyed
@@ -101,6 +111,7 @@ public class SpringSystem {
 
   /**
    * get a spring by name
+   *
    * @param id id of the spring to retrieve
    * @return Spring with the specified key
    */
@@ -113,13 +124,14 @@ public class SpringSystem {
 
   /**
    * return all the springs in the simulator
+   *
    * @return all the springs
    */
   public List<Spring> getAllSprings() {
     Collection<Spring> collection = mSpringRegistry.values();
     List<Spring> list;
     if (collection instanceof List) {
-      list = (List<Spring>)collection;
+      list = (List<Spring>) collection;
     } else {
       list = new ArrayList<Spring>(collection);
     }
@@ -128,6 +140,7 @@ public class SpringSystem {
 
   /**
    * Registers a Spring to this SpringSystem so it can be iterated if active.
+   *
    * @param spring the Spring to register
    */
   void registerSpring(Spring spring) {
@@ -156,7 +169,8 @@ public class SpringSystem {
 
   /**
    * update the springs in the system
-   * @param time system time millis
+   *
+   * @param time      system time millis
    * @param deltaTime delta since last update in millis
    */
   void advance(long time, long deltaTime) {
@@ -186,7 +200,7 @@ public class SpringSystem {
     }
     advance(currentTimeMillis, ellapsedMillis);
     synchronized (this) {
-      if (mActiveSprings.size() == 0) {
+      if (mActiveSprings.isEmpty()) {
         mIdle = true;
         mLastTimeMillis = -1;
       }
@@ -205,6 +219,7 @@ public class SpringSystem {
    * This is used internally by the {@link Spring}s created by this {@link SpringSystem} to notify
    * it has reached a state where it needs to be iterated. This will add the spring to the list of
    * active springs on this system and start the iteration if the system was idle before this call.
+   *
    * @param springId the id of the Spring to be activated
    */
   void activateSpring(String springId) {
@@ -221,7 +236,9 @@ public class SpringSystem {
     }
   }
 
-  /** listeners **/
+  /**
+   * listeners *
+   */
 
   public void addListener(SpringSystemListener newListener) {
     if (newListener == null) {
