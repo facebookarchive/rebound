@@ -15,12 +15,12 @@ repositories {
 }
 
 android {
-    compileSdkVersion 18
-    buildToolsVersion "18.1.0"
+    compileSdkVersion 19
+    buildToolsVersion "19"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 17
+        targetSdkVersion 19
     }
 
     sourceSets {
