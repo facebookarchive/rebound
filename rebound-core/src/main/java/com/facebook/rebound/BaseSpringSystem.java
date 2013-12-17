@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * BaseSpringSystem maintains the set of springs within an Application context. It is responsible for
@@ -28,8 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BaseSpringSystem {
 
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
-  private final Set<Spring> mActiveSprings =
-      Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
+  private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
   private final SpringClock mClock;
   private final SpringLooper mSpringLooper;
   private long mLastTimeMillis = -1;
@@ -56,6 +55,7 @@ public class BaseSpringSystem {
 
   /**
    * check if the system is idle
+   *
    * @return is the system idle
    */
   public boolean getIsIdle() {
@@ -64,6 +64,7 @@ public class BaseSpringSystem {
 
   /**
    * create a spring with a random uuid for its name.
+   *
    * @return the spring
    */
   public Spring createSpring() {
@@ -74,6 +75,7 @@ public class BaseSpringSystem {
 
   /**
    * get a spring by name
+   *
    * @param id id of the spring to retrieve
    * @return Spring with the specified key
    */
@@ -86,13 +88,14 @@ public class BaseSpringSystem {
 
   /**
    * return all the springs in the simulator
+   *
    * @return all the springs
    */
   public List<Spring> getAllSprings() {
     Collection<Spring> collection = mSpringRegistry.values();
     List<Spring> list;
     if (collection instanceof List) {
-      list = (List<Spring>)collection;
+      list = (List<Spring>) collection;
     } else {
       list = new ArrayList<Spring>(collection);
     }
@@ -129,7 +132,8 @@ public class BaseSpringSystem {
 
   /**
    * update the springs in the system
-   * @param time system time millis
+   *
+   * @param time      system time millis
    * @param deltaTime delta since last update in millis
    */
   void advance(long time, long deltaTime) {
@@ -159,7 +163,7 @@ public class BaseSpringSystem {
     }
     advance(currentTimeMillis, ellapsedMillis);
     synchronized (this) {
-      if (mActiveSprings.size() == 0) {
+      if (mActiveSprings.isEmpty()) {
         mIdle = true;
         mLastTimeMillis = -1;
       }
@@ -177,6 +181,7 @@ public class BaseSpringSystem {
    * This is used internally by the {@link Spring}s created by this {@link BaseSpringSystem} to notify
    * it has reached a state where it needs to be iterated. This will add the spring to the list of
    * active springs on this system and start the iteration if the system was idle before this call.
+   *
    * @param springId the id of the Spring to be activated
    */
   void activateSpring(String springId) {
@@ -193,7 +198,9 @@ public class BaseSpringSystem {
     }
   }
 
-  /** listeners **/
+  /**
+   * listeners *
+   */
 
   public void addListener(SpringSystemListener newListener) {
     if (newListener == null) {
