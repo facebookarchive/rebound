@@ -61,15 +61,6 @@
     return toLow + (valueScale * toRangeSize);
   }
 
-  window.bindSpacebar = function(url) {
-    document.addEventListener('keypress', function(evt) {
-      if (evt.keyCode === 32) {
-        document.location.href = url;
-      }
-    });
-  }
-
-
   window.downEvt = window.ontouchstart !== undefined ? 'touchstart' : 'mousedown';
   window.upEvt = window.ontouchend !== undefined ? 'touchend' : 'mouseup';
 })();

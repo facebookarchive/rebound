@@ -88,7 +88,6 @@ var example1 = function() {
       QcValueConverter.tensionFromQcValue(tensionControl.value);
   });
 
-  bindSpacebar('example2.html');
 }
 
 document.addEventListener('DOMContentLoaded', example1);
