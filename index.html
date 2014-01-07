@@ -1,100 +1,20 @@
----
-title: Rebound
----
 <!DOCTYPE HTML>
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <title>rebound</title>
   <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono|Roboto:400,300,700' rel='stylesheet' type='text/css'>
-  <script type="text/javascript" charset="utf-8" src="spring.js"></script>
-  <script type="text/javascript" charset="utf-8" src="utils.js"></script>
-  <script type="text/javascript" charset="utf-8" src="example.js"></script>
-  <link rel="stylesheet" href="example.css" type="text/css" media="screen" charset="utf-8">
-  <link rel="stylesheet" href="syntax.css" type="text/css" media="screen" charset="utf-8">
-  <style type="text/css" media="screen">
-    * {
-      font-family: 'Roboto', sans-serif;
-    }
-
-    .title {
-      font-weight: 300;
-      font-size: 48px;
-    }
-
-    .subtitle {
-      font-weight: 300;
-      font-size: 16px;
-      margin-bottom: 40px;
-    }
-
-    .section_title {
-      font-weight: 400;
-      font-size: 24px;
-      margin-top: 48px;
-    }
-
-    .content {
-      width: 600px;
-      margin: auto;
-      padding: 20px; 
-      position: relative;
-      margin-bottom: 100px;
-    }
-
-    .code {
-    }
-
-    .code * {
-      font-size: 14px;
-      font-family: 'Droid Sans Mono', sans-serif;
-      font-weight: normal;
-    }
-
-    p {
-      font-weight: 300;
-      font-size: 16px;
-    }
-
-    p.license {
-      font-weight: 300;
-    }
-
-    .header {
-      padding-left: 0px;
-      position: relative;
-    }
-
-    .logo {
-      width: 75px;
-      height: 75px;
-      position: absolute;
-      display: block;
-      left: -85px;
-      top: 0px;
-      background-image: url(Rebound.png);
-      background-size: 75px 75px;
-    }
-
-    @media (-webkit-min-device-pixel-ratio: 2),
-       (min--moz-device-pixel-ratio: 2),
-       (min-resolution: 2dppx),
-       (min-resolution: 192dpi) {
-
-      .logo {
-        background-image: url(Rebound_2x.png);
-        width: 75px;
-        height: 75px;
-      }
-
-    }
-
-  </style>
+  <script type="text/javascript" charset="utf-8" src="js/spring.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/utils.js"></script>
+  <script type="text/javascript" charset="utf-8" src="js/example.js"></script>
+  <link rel="stylesheet" href="css/example.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="css/syntax.css" type="text/css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="css/site.css" type="text/css" media="screen" charset="utf-8">
 </head>
 <body>
   <div class="content">
     <div class="header">
-      <div class="logo"></div>
+      <div class="logo rebound"></div>
       <div class="title">Rebound</div>
       <div class="subtitle">Spring Animations for Android</div>
     </div>
@@ -118,31 +38,31 @@ title: Rebound
     on a View.
     </p>
     <div class="code">
-    {% highlight java %}
-    // Create a system to run the physics loop for a set of springs.
-    SpringSystem springSystem = SpringSystem.create();
+    <div class="highlight"><pre><code class="java">    <span class="c1">// Create a system to run the physics loop for a set of springs.</span>
+    <span class="n">SpringSystem</span> <span class="n">springSystem</span> <span class="o">=</span> <span class="n">SpringSystem</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
 
-    // Add a spring to the system.
-    Spring spring = springSystem.createSpring();
+    <span class="c1">// Add a spring to the system.</span>
+    <span class="n">Spring</span> <span class="n">spring</span> <span class="o">=</span> <span class="n">springSystem</span><span class="o">.</span><span class="na">createSpring</span><span class="o">();</span>
 
-    // Add a listener to observe the motion of the spring.
-    spring.addListener(new SimpleSpringListener() {
+    <span class="c1">// Add a listener to observe the motion of the spring.</span>
+    <span class="n">spring</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleSpringListener</span><span class="o">()</span> <span class="o">{</span>
 
-      @Override
-      public void onSpringUpdate(Spring spring) {
-        // You can observe the updates in the spring 
-        // state by asking its current value in onSpringUpdate.
-        float value = (float) spring.getCurrentValue();
-        float scale = 1f - (value * 0.5f);
-        myView.setScaleX(scale);
-        myView.setScaleY(scale);
-      }
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSpringUpdate</span><span class="o">(</span><span class="n">Spring</span> <span class="n">spring</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// You can observe the updates in the spring </span>
+        <span class="c1">// state by asking its current value in onSpringUpdate.</span>
+        <span class="kt">float</span> <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span> <span class="n">spring</span><span class="o">.</span><span class="na">getCurrentValue</span><span class="o">();</span>
+        <span class="kt">float</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span> <span class="o">-</span> <span class="o">(</span><span class="n">value</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="o">);</span>
+        <span class="n">myView</span><span class="o">.</span><span class="na">setScaleX</span><span class="o">(</span><span class="n">scale</span><span class="o">);</span>
+        <span class="n">myView</span><span class="o">.</span><span class="na">setScaleY</span><span class="o">(</span><span class="n">scale</span><span class="o">);</span>
+      <span class="o">}</span>
 
-    });
+    <span class="o">});</span>
 
-    // Set the spring in motion; moving from 0 to 1
-    spring.setEndValue(1);
-    {% endhighlight %}
+    <span class="c1">// Set the spring in motion; moving from 0 to 1</span>
+    <span class="n">spring</span><span class="o">.</span><span class="na">setEndValue</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+    
+</code></pre></div>
     </div>
 
     <div class="section_title">Demo</div>
@@ -175,6 +95,34 @@ title: Rebound
     developed at Facebook that encourages the creation of small, reusable
     modules consisting of code and resources.
     </p>
+
+    <div class="section_title">Who is using Rebound?</div>
+    <p>
+    Open an issue on Github if you are using Rebound in production and would like to be added to this list.
+    </p>
+    <div class="usages">
+      <div class="usage">
+        <a href="http://jelly.co" class="logo jelly" target="_blank"></a>
+        <p class="description">
+          <a class="app_link" href="http://jelly.co" target="_blank">Jelly</a><br />
+          Jelly's Android app uses Rebound to drive its playful animations.
+        </p>
+      </div>
+      <div class="usage">
+        <a href="https://getperka.com" class="logo perka" target="_blank"></a>
+        <p class="description">
+          <a class="app_link" href="https://getperka.com/" target="_blank">Perka</a><br />
+          Perka used Rebound to create a realtime dashboard with bouncy animations in HTML5 to highlight their mobile loyalty card application.
+        </p>
+      </div>
+      <div class="usage">
+        <a href="https://facebook.com/home" class="logo home" target="_blank"></a>
+        <p class="description">
+          <a class="app_link" href="https://facebook.com/home" target="_blank">Home</a><br />
+          Facebook Home uses Rebound to drive all the animations for features like Cover Feed and Chat Heads.
+        </p>
+      </div>
+    </div>
 
     <div class="section_title">License</div>
 
