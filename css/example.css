@@ -23,7 +23,7 @@ a {
   position: absolute;
   top: 0px;
   left: 0px;
-  background: url(/images/landscape.jpg);
+  background: url(../images/landscape.jpg);
 }
 
 .controls {

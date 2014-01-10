@@ -82,7 +82,7 @@ a.app_link {
 }
 
 .logo.rebound {
-  background-image: url(/images/rebound.png);
+  background-image: url(../images/rebound.png);
   position: absolute;
   left: -85px;
   top: 0px;
@@ -95,19 +95,19 @@ a.app_link {
 }
 
 .logo.jelly {
-  background-image: url(/images/jelly.png);
+  background-image: url(../images/jelly.png);
 }
 
 .logo.perka {
-  background-image: url(/images/perka.png);
+  background-image: url(../images/perka.png);
 }
 
 .logo.home {
-  background-image: url(/images/home.png);
+  background-image: url(../images/home.png);
 }
 
 .logo.messenger {
-  background-image: url(/images/messenger.png);
+  background-image: url(../images/messenger.png);
 }
 
 @media (-webkit-min-device-pixel-ratio: 2),
@@ -116,23 +116,23 @@ a.app_link {
 (min-resolution: 192dpi) {
 
   .logo.rebound {
-    background-image: url(/images/rebound_2x.png);
+    background-image: url(../images/rebound_2x.png);
   }
 
   .logo.jelly {
-    background-image: url(/images/jelly_2x.png);
+    background-image: url(../images/jelly_2x.png);
   }
 
   .logo.perka {
-    background-image: url(/images/perka_2x.png);
+    background-image: url(../images/perka_2x.png);
   }
 
   .logo.home {
-    background-image: url(/images/home_2x.png);
+    background-image: url(../images/home_2x.png);
   }
 
   .logo.messenger {
-    background-image: url(/images/messenger_2x.png);
+    background-image: url(../images/messenger_2x.png);
   }
 
 }
