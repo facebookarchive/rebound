@@ -106,6 +106,10 @@ a.app_link {
   background-image: url(../images/home.png);
 }
 
+.logo.inflikr {
+  background-image: url(../images/inflikr.png);
+}
+
 .logo.messenger {
   background-image: url(../images/messenger.png);
 }
@@ -129,6 +133,10 @@ a.app_link {
 
   .logo.home {
     background-image: url(../images/home_2x.png);
+  }
+
+  .logo.inflikr {
+    background-image: url(../images/inflikr_2x.png);
   }
 
   .logo.messenger {
