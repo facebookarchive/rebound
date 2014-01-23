@@ -10,6 +10,7 @@
 
 package com.facebook.rebound;
 
+import com.facebook.rebound.android.AndroidSpringLooper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,21 +26,14 @@ public class SpringSystemTest {
   private SpringSystem mSpringSystem;
   private Spring mMockSpring;
   private SpringClock mClockSpy;
-  private ChoreographerWrapper mChoreographerWrapper;
-  private SpringSystemFrameCallbackWrapper mSpringSystemFrameCallbackWrapper;
+  private SpringLooper mSpringLooper;
 
   @Before
   public void beforeEach() {
     mClockSpy = spy(new SpringClock());
-    mChoreographerWrapper = spy(new ChoreographerWrapper());
-    mSpringSystemFrameCallbackWrapper = spy(new SpringSystemFrameCallbackWrapper());
+    mSpringLooper = spy(new AndroidSpringLooper());
     when(mClockSpy.now()).thenReturn(1L, 2L, 3L, 4L, 5L);
-    mSpringSystem = spy(new SpringSystem(
-        mClockSpy,
-        mChoreographerWrapper,
-        mSpringSystemFrameCallbackWrapper));
-    // NB: make sure the runnable calls the spy
-    mSpringSystemFrameCallbackWrapper.setSpringSystem(mSpringSystem);
+    mSpringSystem = spy(new SpringSystem(mClockSpy, mSpringLooper));
     mMockSpring = mock(Spring.class);
     when(mMockSpring.getId()).thenReturn("spring_id");
   }

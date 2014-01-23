@@ -1,0 +1,6 @@
+android_resource(
+  name = 'res',
+  res = 'res',
+  package = 'com.facebook.rebound',
+  visibility = ['//src/com/facebook/rebound/android:'],
+)

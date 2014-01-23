@@ -24,49 +24,28 @@ public class SpringSystem {
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
   private final Set<Spring> mActiveSprings =
       Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
-  private final ChoreographerWrapper mChoreographer;
-  private final SpringSystemFrameCallbackWrapper mLoopFrameCallback;
+  private final SpringLooper mSpringLooper;
   private final SpringClock mClock;
   private long mLastTimeMillis = -1;
   private ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
   private boolean mIdle = true;
 
   /**
-   * Create a SpringSystem with dependencies
-   * @return a new SpringSystem
-   */
-  public static SpringSystem create() {
-    return new SpringSystem(
-        new SpringClock(),
-        new ChoreographerWrapper(),
-        new SpringSystemFrameCallbackWrapper());
-  }
-
-  /**
    * create a new SpringSystem
    * @param clock parameterized Clock to allow testability of the physics loop
-   * @param choreographerWrapper parameterized choreographerWrapper to allow testability of the
-   *        physics loop
-   * @param loopFrameCallback parameterized SpringSystemFrameCallbackWrapper to allow testability
-   *        of the physics loop
+   * @param springLooper parameterized springLooper to allow testability of the physics loop
    */
   public SpringSystem(
       SpringClock clock,
-      ChoreographerWrapper choreographerWrapper,
-      SpringSystemFrameCallbackWrapper loopFrameCallback) {
+      SpringLooper springLooper) {
     if (clock == null) {
       throw new IllegalArgumentException("clock is required");
     }
-    if (choreographerWrapper == null) {
-      throw new IllegalArgumentException("choreographerWrapper is required");
-    }
-    if (loopFrameCallback == null) {
-      throw new IllegalArgumentException("loopFrameCallback is required");
+    if (springLooper == null) {
+      throw new IllegalArgumentException("springLooper is required");
     }
     mClock = clock;
-    mChoreographer = choreographerWrapper;
-    mLoopFrameCallback = loopFrameCallback;
-    mLoopFrameCallback.setSpringSystem(this);
+    mSpringLooper = springLooper;
   }
 
   /**
@@ -195,9 +174,8 @@ public class SpringSystem {
       listener.onAfterIntegrate(this);
     }
 
-    mChoreographer.removeFrameCallback(mLoopFrameCallback);
-    if (!mIdle) {
-      mChoreographer.postFrameCallback(mLoopFrameCallback);
+    if (mIdle) {
+      mSpringLooper.stop();
     }
   }
 
@@ -216,7 +194,12 @@ public class SpringSystem {
       mActiveSprings.add(spring);
       if (getIsIdle()) {
         mIdle = false;
-        mChoreographer.postFrameCallback(mLoopFrameCallback);
+        mSpringLooper.start(new Runnable() {
+          @Override
+          public void run() {
+            loop();
+          }
+        });
       }
     }
   }

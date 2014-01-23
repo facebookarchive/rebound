@@ -1,0 +1,9 @@
+android_library(
+  name = 'rebound_android',
+  srcs = glob(['**/*.java']),
+  deps = [
+    '//:rebound_lib',
+    '//android_res:res'
+  ],
+  visibility = ['PUBLIC'],
+)
