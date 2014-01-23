@@ -6,3 +6,5 @@ local.properties
 buck-*
 out
 docs
+build
+.DS_Store
