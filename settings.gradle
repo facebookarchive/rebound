@@ -1,1 +1,1 @@
-include ':example'
+include ':rebound-core', ':rebound-android', ':rebound-android-example'

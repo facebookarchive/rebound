@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.facebook.rebound.example"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <uses-sdk android:targetSdkVersion="19"
+              android:minSdkVersion="14"/>
+    <application
+        android:label="@string/app_name"
+        android:hardwareAccelerated="true"
+        android:allowBackup="false"
+        android:icon="@drawable/rebound_icon"
+        >
+        <activity android:name="com.facebook.rebound.example.MainActivity"
+                  android:theme="@android:style/Theme.DeviceDefault.NoActionBar.Fullscreen"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

@@ -1,0 +1,5 @@
+apply plugin: 'java'
+
+dependencies {
+    testCompile files('libs/junit-4.11.jar', 'libs/mockito-all-1.9.5.jar')
+}
