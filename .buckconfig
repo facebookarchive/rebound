@@ -1,0 +1,9 @@
+[alias]
+  core    = //rebound-core:src
+  test    = //rebound-core:test
+  android = //rebound-android:src
+  app     = //rebound-android-example:bin
+  rebound = //:rebound
+
+[project]
+  ignore = .git

@@ -1,0 +1,33 @@
+prebuilt_jar(
+  name = 'mockito',
+  binary_jar = 'libs/mockito-all-1.9.5.jar',
+)
+
+prebuilt_jar(
+  name = 'junit',
+  binary_jar = 'libs/junit-4.11.jar',
+)
+
+java_test(
+  name = 'test',
+  srcs = glob(['src/test/java/**/*Test.java']),
+  deps = [
+    '//rebound-core:mockito',
+    '//rebound-core:junit',
+    '//rebound-core:src'
+  ],
+  source_under_test = ['//rebound-core:src'],
+)
+
+android_library(
+  name = 'src',
+  srcs = glob(['src/main/java/**/*.java']),
+  visibility = ['PUBLIC'],
+)
+
+project_config(
+  src_target = '//rebound-core:src',
+  test_target = '//rebound-core:test',
+  src_roots = ['src/main/java'],
+  test_roots = ['src/test/java'],
+)

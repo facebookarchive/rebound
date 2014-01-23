@@ -54,6 +54,8 @@ Rebound is available as a prebuilt jar or can be built using Gradle or Buck.
 at Facebook that encourages the creation of small, reusable modules consisting
 of code and resources.
 
+[![Build Status](https://travis-ci.org/willbailey/rebound.png?branch=master)](https://travis-ci.org/willbailey/rebound)
+
 ##License
 
 BSD License
