@@ -110,6 +110,10 @@ a.app_link {
   background-image: url(../images/inflikr.png);
 }
 
+.logo.linkedin {
+  background-image: url(../images/linkedin.png);
+}
+
 .logo.messenger {
   background-image: url(../images/messenger.png);
 }
@@ -137,6 +141,10 @@ a.app_link {
 
   .logo.inflikr {
     background-image: url(../images/inflikr_2x.png);
+  }
+
+  .logo.inflikr {
+    background-image: url(../images/linkedin_2x.png);
   }
 
   .logo.messenger {
