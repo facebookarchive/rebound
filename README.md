@@ -46,7 +46,7 @@ spring.setEndValue(1);
 
 Rebound is available as a prebuilt jar or can be built using Gradle or Buck.
 
-<a href="https://github.com/facebook/rebound/releases/download/v0.3.1/rebound-v0.3.1.jar">Download Rebound v0.3.1</a>
+<a href="https://github.com/facebook/rebound/releases/latest">Download Latest Jar</a>
 
 <a href="http://github.com/facebook/rebound">View on Github</a>
 
