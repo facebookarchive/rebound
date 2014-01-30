@@ -1,50 +1,8 @@
-prebuilt_jar(
-  name = 'mockito',
-  binary_jar = 'libs/mockito-all-1.9.5.jar',
-)
-
-prebuilt_jar(
-  name = 'robolectric',
-  binary_jar = 'libs/robolectric-2.2-20130606.235928-4-jar-with-dependencies.jar',
-)
-
-prebuilt_jar(
-  name = 'junit',
-  binary_jar = 'libs/junit-4.11.jar',
-)
-
-android_resource(
-  name = 'res',
-  res = 'res',
-  package = 'com.facebook.rebound',
-  visibility = ['//:rebound'],
-)
-
-java_test(
-  name = 'rebound_test',
-  srcs = glob(['test/**/*Test.java']),
-  visibility = ['//:rebound'],
-  deps = [
-    '//:robolectric',
-    '//:mockito',
-    '//:junit',
-    '//:rebound'
-  ],
-  source_under_test = ['//:rebound'],
-)
-
-android_library(
+# A special build that includes rebound-android but not the resources so that a jar file can be
+# created for distribution to users who do not use the gradle aar and don't need the utils like
+# SpringConfiguratorView.
+java_binary(
   name = 'rebound',
-  srcs = glob(['src/**/*.java']),
-  deps = [
-    '//:res'
-  ],
+  deps = ['//rebound-android:src-no-res'],
   visibility = ['PUBLIC'],
-)
-
-project_config(
-  src_target = '//:rebound',
-  test_target = '//:rebound_test',
-  src_roots = ['src'],
-  test_roots = ['test'],
 )
