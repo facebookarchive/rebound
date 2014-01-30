@@ -1,29 +1,7 @@
-android_resource(
-  name = 'res',
-  res = 'src/main/res',
-  package = 'com.facebook.rebound',
-  visibility = ['//rebound-android:src'],
-)
-
 android_library(
   name = 'src',
   srcs = glob(['src/main/java/**/*.java']),
-  deps = [
-    '//rebound-core:src',
-    '//rebound-android:res',
-  ],
-  visibility = ['PUBLIC'],
-)
-
-android_library(
-  name = 'src-no-res',
-  srcs = glob(
-    ['src/main/java/**/*.java'],
-    excludes = ['src/main/java/com/facebook/rebound/ui/*'],
-  ),
-  deps = [
-    '//rebound-core:src',
-  ],
+  deps = ['//rebound-core:src'],
   visibility = ['PUBLIC'],
 )
 

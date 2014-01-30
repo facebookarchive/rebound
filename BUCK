@@ -1,8 +1,6 @@
-# A special build that includes rebound-android but not the resources so that a jar file can be
-# created for distribution to users who do not use the gradle aar and don't need the utils like
-# SpringConfiguratorView.
+# A special build that depends on rebound-android:src and packages into a jar file for distribution.
 java_binary(
   name = 'rebound',
-  deps = ['//rebound-android:src-no-res'],
+  deps = ['//rebound-android:src'],
   visibility = ['PUBLIC'],
 )
