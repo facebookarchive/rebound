@@ -85,7 +85,6 @@ public class BaseSpringSystem {
 
   /**
    * return all the springs in the simulator
-   *
    * @return all the springs
    */
   public List<Spring> getAllSprings() {
@@ -129,7 +128,6 @@ public class BaseSpringSystem {
 
   /**
    * update the springs in the system
-   *
    * @param time system time millis
    * @param deltaTime delta since last update in millis
    */
@@ -195,6 +193,7 @@ public class BaseSpringSystem {
   }
 
   /** listeners **/
+
   public void addListener(SpringSystemListener newListener) {
     if (newListener == null) {
       throw new IllegalArgumentException("newListener is required");
