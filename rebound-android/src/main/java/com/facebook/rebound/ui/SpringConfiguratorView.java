@@ -30,6 +30,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import com.facebook.rebound.OrigamiValueConverter;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringConfigRegistry;
@@ -52,9 +53,9 @@ public class SpringConfiguratorView extends FrameLayout {
 
   private static final int MAX_SEEKBAR_VAL = 100000;
   private static final float MIN_TENSION = 0;
-  private static final float MAX_TENSION = 500;
+  private static final float MAX_TENSION = 200;
   private static final float MIN_FRICTION = 0;
-  private static final float MAX_FRICTION = 100;
+  private static final float MAX_FRICTION = 50;
   private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
 
   private final SpinnerAdapter spinnerAdapter;
@@ -266,14 +267,16 @@ public class SpringConfiguratorView extends FrameLayout {
 
       if (seekBar == mTensionSeekBar) {
         float scaledTension = ((val) * tensionRange) / MAX_SEEKBAR_VAL + MIN_TENSION;
-        mSelectedSpringConfig.tension = scaledTension;
+        mSelectedSpringConfig.tension =
+            OrigamiValueConverter.tensionFromOrigamiValue(scaledTension);
         String roundedTensionLabel = DECIMAL_FORMAT.format(scaledTension);
         mTensionLabel.setText("T:" + roundedTensionLabel);
       }
 
       if (seekBar == mFrictionSeekBar) {
         float scaledFriction = ((val) * frictionRange) / MAX_SEEKBAR_VAL + MIN_FRICTION;
-        mSelectedSpringConfig.friction = scaledFriction;
+        mSelectedSpringConfig.friction =
+            OrigamiValueConverter.frictionFromOrigamiValue(scaledFriction);
         String roundedFrictionLabel = DECIMAL_FORMAT.format(scaledFriction);
         mFrictionLabel.setText("F:" + roundedFrictionLabel);
       }
@@ -293,11 +296,11 @@ public class SpringConfiguratorView extends FrameLayout {
    * @param springConfig current editing spring
    */
   private void updateSeekBarsForSpringConfig(SpringConfig springConfig) {
-    float tension = (float) springConfig.tension;
+    float tension = (float) OrigamiValueConverter.origamiValueFromTension(springConfig.tension);
     float tensionRange = MAX_TENSION - MIN_TENSION;
     int scaledTension = Math.round(((tension - MIN_TENSION) * MAX_SEEKBAR_VAL) / tensionRange);
 
-    float friction = (float) springConfig.friction;
+    float friction = (float) OrigamiValueConverter.origamiValueFromFriction(springConfig.friction);
     float frictionRange = MAX_FRICTION - MIN_FRICTION;
     int scaledFriction = Math.round(((friction - MIN_FRICTION) * MAX_SEEKBAR_VAL) / frictionRange);
 
