@@ -233,9 +233,15 @@ public class SpringConfiguratorView extends FrameLayout {
     mSpringConfigs.clear();
 
     for (Map.Entry<SpringConfig, String> entry : springConfigMap.entrySet()) {
+      if (entry.getKey() == SpringConfig.defaultConfig) {
+        continue;
+      }
       mSpringConfigs.add(entry.getKey());
       spinnerAdapter.add(entry.getValue());
     }
+    // Add the default config in last.
+    mSpringConfigs.add(SpringConfig.defaultConfig);
+    spinnerAdapter.add(springConfigMap.get(SpringConfig.defaultConfig));
     spinnerAdapter.notifyDataSetChanged();
     if (mSpringConfigs.size() > 0) {
       mSpringSelectorSpinner.setSelection(0);

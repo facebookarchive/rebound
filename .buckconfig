@@ -3,6 +3,7 @@
   test    = //rebound-core:test
   android = //rebound-android:src
   app     = //rebound-android-example:bin
+  origami = //rebound-android-origami-example:bin
   rebound = //:rebound
 
 [project]
