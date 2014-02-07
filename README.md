@@ -12,6 +12,7 @@ makes it easy to integrate and use as a building block for creating more
 complex components like pagers, toggles, and scrollers.
 
 For examples and usage instructions head over to:
+
 <a href="http://facebook.github.io/rebound">facebook.github.io/rebound</a>
 
 ##License
