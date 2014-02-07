@@ -11,50 +11,8 @@ can be used to drive a wide variety of animations. The simplicity of Rebound
 makes it easy to integrate and use as a building block for creating more
 complex components like pagers, toggles, and scrollers.
 
-##Usage
-
-Here's a simple example of using a Spring model to drive scaling animation
-on a View.
-
-```java
-// Create a system to run the physics loop for a set of springs.
-SpringSystem springSystem = SpringSystem.create();
-
-// Add a spring to the system.
-Spring spring = springSystem.createSpring();
-
-// Add a listener to observe the motion of the spring.
-spring.addListener(new SimpleSpringListener() {
-
-  @Override
-  public void onSpringUpdate(Spring spring) {
-    // You can observe the updates in the spring 
-    // state by asking its current value in onSpringUpdate.
-    float value = (float) spring.getCurrentValue();
-    float scale = 1f - (value * 0.5f);
-    myView.setScaleX(scale);
-    myView.setScaleY(scale);
-  }
-
-});
-
-// Set the spring in motion; moving from 0 to 1
-spring.setEndValue(1);
-```
-
-##Download
-
-Rebound is available as a prebuilt jar or can be built using Gradle or Buck.
-
-<a href="https://github.com/facebook/rebound/releases/latest">Download Latest Jar</a>
-
-<a href="http://github.com/facebook/rebound">View on Github</a>
-
-<a href="http://facebook.github.io/buck/">Buck</a> is a build system developed
-at Facebook that encourages the creation of small, reusable modules consisting
-of code and resources.
-
-[![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound)
+For examples and usage instructions head over to:
+<a href="http://facebook.github.io/rebound">facebook.github.io/rebound</a>
 
 ##License
 
