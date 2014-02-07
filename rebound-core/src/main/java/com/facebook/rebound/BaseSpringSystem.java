@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * BaseSpringSystem maintains the set of springs within an Application context. It is responsible for
@@ -28,8 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class BaseSpringSystem {
 
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
-  private final Set<Spring> mActiveSprings =
-      Collections.newSetFromMap(new ConcurrentHashMap<Spring, Boolean>());
+  private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
   private final SpringClock mClock;
   private final SpringLooper mSpringLooper;
   private long mLastTimeMillis = -1;
@@ -159,7 +158,7 @@ public class BaseSpringSystem {
     }
     advance(currentTimeMillis, ellapsedMillis);
     synchronized (this) {
-      if (mActiveSprings.size() == 0) {
+      if (mActiveSprings.isEmpty()) {
         mIdle = true;
         mLastTimeMillis = -1;
       }
