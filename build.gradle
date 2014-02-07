@@ -1,4 +1,110 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.7.1+'
+    }
+}
+
+apply plugin: 'android-library'
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.0"
+
+    sourceSets {
+        main {
+            manifest.srcFile 'rebound-android/src/main/AndroidManifest.xml'
+            java.srcDirs = ['rebound-core/src/main/java', 'rebound-android/src/main/java']
+        }
+    }
+}
+
+// Create jar for distribution.
+android.libraryVariants.all { variant ->
+    if (name.equals(com.android.builder.BuilderConstants.RELEASE)) {
+
+        def task = project.tasks.create "reboundDistJar", Jar
+        task.dependsOn variant.javaCompile
+        task.from variant.javaCompile.destinationDir
+        artifacts.add('archives', task)
+
+    }
+}
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.allJava
+}
+
+task androidJavadocsJar(type: Jar) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.allSource
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
 
 task installOrigamiExample(dependsOn: 'rebound-android-origami-example:installDebug')
 task installExample(dependsOn: 'rebound-android-example:installDebug')
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+
+version = "0.3.2"
+group = "com.facebook.rebound"
+
+signing {
+    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+        repository(url: sonatypeRepo) {
+            authentication(userName: sonatypeUsername, password: sonatypePassword)
+        }
+
+        pom.project {
+            name 'Rebound'
+            packaging 'jar'
+            description 'Rebound is a simple spring dynamics animation library for Java and Android applications.'
+            url 'http://facebook.github.io/rebound'
+
+            scm {
+                url 'scm:git@github.com:facebook/rebound.git'
+                connection 'scm:git@github.com:facebook/rebound.git'
+                developerConnection 'scm:git@github.com:facebook/rebound.git'
+            }
+
+            licenses {
+                license {
+                    name 'BSD 2-Clause License'
+                    url 'https://github.com/facebook/rebound/blob/master/LICENSE'
+                    distribution 'repo'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'will.bailey'
+                    name 'Will Bailey'
+                    email 'will.bailey@gmail.com'
+                }
+            }
+        }
+    }
+}
