@@ -71,6 +71,13 @@ task smokeTest(dependsOn: [
   'reboundDistJar'
 ])
 
+// Configure gradle.properties to do maven builds
+if (!project.hasProperty('sonatypeRepo') ||
+    !project.hasProperty('sonatypeUsername') ||
+    !project.hasProperty('sonatypePassword')) {
+  return;
+}
+
 // Maven Push
 
 apply plugin: 'maven'
