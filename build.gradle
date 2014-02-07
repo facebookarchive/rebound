@@ -61,6 +61,15 @@ artifacts {
 
 task installOrigamiExample(dependsOn: 'rebound-android-origami-example:installDebug')
 task installExample(dependsOn: 'rebound-android-example:installDebug')
+task smokeTest(dependsOn: [
+  'rebound-core:assemble',
+  'rebound-core:check',
+  'rebound-android:assemble',
+  'rebound-android:check',
+  'rebound-android-example:assembleDebug',
+  'rebound-android-origami-example:assembleDebug',
+  'reboundDistJar'
+])
 
 // Maven Push
 

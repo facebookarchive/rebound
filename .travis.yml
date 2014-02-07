@@ -36,3 +36,5 @@ before_install:
   - echo yes | android update sdk --filter sysimg-19 --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
+
+script: ./gradlew smokeTest
