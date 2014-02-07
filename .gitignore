@@ -9,4 +9,3 @@ docs
 build
 .DS_Store
 _site
-gradle.properties
