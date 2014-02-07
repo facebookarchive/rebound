@@ -42,6 +42,21 @@ p {
   color: #333;
 }
 
+.download_link {
+  margin: 20px 0;
+  background: #6cc644;
+  border-radius: 12px;
+  -moz-border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -o-border-radius: 12px;
+  color: #fff;
+  padding: 15px;
+  display: block;
+  font-size:18px;
+  width: 180px;
+  text-align: center;
+}
+
 p.license {
   font-weight: 300;
 }
@@ -56,9 +71,6 @@ p.license {
   min-height: 75px;
   display: table;
   margin-bottom: 20px;
-}
-
-.usages {
 }
 
 .usage .description {

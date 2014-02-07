@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -42,31 +44,30 @@
     on a View.
     </p>
     <div class="code">
-    <div class="highlight"><pre><code class="java">    <span class="c1">// Create a system to run the physics loop for a set of springs.</span>
-    <span class="n">SpringSystem</span> <span class="n">springSystem</span> <span class="o">=</span> <span class="n">SpringSystem</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+    {% highlight java %}
+    // Create a system to run the physics loop for a set of springs.
+    SpringSystem springSystem = SpringSystem.create();
 
-    <span class="c1">// Add a spring to the system.</span>
-    <span class="n">Spring</span> <span class="n">spring</span> <span class="o">=</span> <span class="n">springSystem</span><span class="o">.</span><span class="na">createSpring</span><span class="o">();</span>
+    // Add a spring to the system.
+    Spring spring = springSystem.createSpring();
 
-    <span class="c1">// Add a listener to observe the motion of the spring.</span>
-    <span class="n">spring</span><span class="o">.</span><span class="na">addListener</span><span class="o">(</span><span class="k">new</span> <span class="n">SimpleSpringListener</span><span class="o">()</span> <span class="o">{</span>
+    // Add a listener to observe the motion of the spring.
+    spring.addListener(new SimpleSpringListener() {
 
-      <span class="nd">@Override</span>
-      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onSpringUpdate</span><span class="o">(</span><span class="n">Spring</span> <span class="n">spring</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// You can observe the updates in the spring </span>
-        <span class="c1">// state by asking its current value in onSpringUpdate.</span>
-        <span class="kt">float</span> <span class="n">value</span> <span class="o">=</span> <span class="o">(</span><span class="kt">float</span><span class="o">)</span> <span class="n">spring</span><span class="o">.</span><span class="na">getCurrentValue</span><span class="o">();</span>
-        <span class="kt">float</span> <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span><span class="n">f</span> <span class="o">-</span> <span class="o">(</span><span class="n">value</span> <span class="o">*</span> <span class="mf">0.5f</span><span class="o">);</span>
-        <span class="n">myView</span><span class="o">.</span><span class="na">setScaleX</span><span class="o">(</span><span class="n">scale</span><span class="o">);</span>
-        <span class="n">myView</span><span class="o">.</span><span class="na">setScaleY</span><span class="o">(</span><span class="n">scale</span><span class="o">);</span>
-      <span class="o">}</span>
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        // You can observe the updates in the spring 
+        // state by asking its current value in onSpringUpdate.
+        float value = (float) spring.getCurrentValue();
+        float scale = 1f - (value * 0.5f);
+        myView.setScaleX(scale);
+        myView.setScaleY(scale);
+      }
+    });
 
-    <span class="o">});</span>
-
-    <span class="c1">// Set the spring in motion; moving from 0 to 1</span>
-    <span class="n">spring</span><span class="o">.</span><span class="na">setEndValue</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
-    
-</code></pre></div>
+    // Set the spring in motion; moving from 0 to 1
+    spring.setEndValue(1);
+    {% endhighlight %}
     </div>
 
     <div class="section_title">Demo</div>
@@ -85,20 +86,58 @@
         <label for="friction">friction</label><input type="range" id="friction" name="friction" min="1" max="30" value="3"/>
       </div>
     </div>
-
     <div class="section_title">Download</div>
     <p>
-    Rebound is available as a prebuilt jar or can be built using Gradle or Buck.
-    <br />
-    <br />
-    <a href="https://github.com/facebook/rebound/releases/latest" target="_blank">Download Latest Jar</a><br />
-    <a href="http://github.com/facebook/rebound">View on Github</a>
+    To include Rebound in your project, grab the latest prebuilt Jar file. 
+    <a class="download_link" href="https://github.com/facebook/rebound/releases/latest" target="_blank">↓ Download Jar v0.3.2</a>
     </p>
     <p>
-    <a href="http://facebook.github.io/buck/">Buck</a> is a build system
-    developed at Facebook that encourages the creation of small, reusable
-    modules consisting of code and resources.
+    Alternatively you can include Rebound from Maven Central via Gradle or Maven.
     </p>
+    <div class="code">
+    {% highlight groovy %}
+    // Gradle dependency on Rebound
+    dependencies {
+      compile 'com.facebook.rebound:rebound:0.3.2'
+    }
+    {% endhighlight %}
+    </div>
+    <br />
+    <div class="code">
+    {% highlight xml %}
+    <!-- Maven dependency on Rebound -->
+    <dependency>
+      <groupId>com.facebook.rebound</groupId>
+      <artifactId>rebound</artifactId>
+      <version>0.3.2</version>
+    </dependency>
+    {% endhighlight %}
+    </div>
+    </p>
+    <div class="section_title">Building</div>
+    <p>
+    You can use the included Gradle wrapper to build Rebound libraries and sample applications locally as well.
+    </p>
+    <div class="code">
+    {% highlight bash %}
+    cd $REBOUND_CHECKOUT
+
+    # build the core java library
+    ./gradlew rebound-core:assemble
+
+    # run core library tests
+    ./gradlew rebound-core:check
+
+    # build the Android distribution Jar
+    ./gradlew reboundDistJar
+
+    # install the simple example app
+    ./gradlew installExample
+
+    # install the origami example app
+    ./gradlew installOrigamiExample
+    {% endhighlight %}
+    </div>
 
     <div class="section_title">Support</div>
     <p>
