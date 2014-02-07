@@ -15,6 +15,11 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.0.0"
 
+    defaultConfig {
+        minSdkVersion 11
+        targetSdkVersion 19
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'rebound-android/src/main/AndroidManifest.xml'
