@@ -1,4 +1,4 @@
-#Rebound
+#Rebound [![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound)
 
 ##About
 
