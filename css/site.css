@@ -130,6 +130,10 @@ a.app_link {
   background-image: url(../images/messenger.png);
 }
 
+.logo.skitch {
+  background-image: url(../images/skitch.png);
+}
+
 @media (-webkit-min-device-pixel-ratio: 2),
 (min--moz-device-pixel-ratio: 2),
 (min-resolution: 2dppx),
@@ -161,6 +165,10 @@ a.app_link {
 
   .logo.messenger {
     background-image: url(../images/messenger_2x.png);
+  }
+
+  .logo.skitch {
+    background-image: url(../images/skitch_2x.png);
   }
 
 }
