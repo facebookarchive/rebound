@@ -474,10 +474,10 @@
     };
 
   extend(SpringConfig, {
-    fromQcTensionAndFriction: function(qcTension, qcFriction) {
+    fromOrigamiTensionAndFriction: function(oTension, oFriction) {
       return new SpringConfig(
-        QcValueConverter.tensionFromQcValue(qcTension),
-        QcValueConverter.frictionFromQcValue(qcFriction));
+        OrigamiValueConverter.tensionFromOrigamiValue(oTension),
+        OrigamiValueConverter.frictionFromOrigamiValue(oFriction));
     }
   });
 
@@ -486,20 +486,20 @@
     tension: 0
   });
 
-  var QcValueConverter = {
-    tensionFromQcValue: function(qcValue) {
-      return (qcValue - 30.0) * 3.62 + 194.0;
+  var OrigamiValueConverter = {
+    tensionFromOrigamiValue: function(oValue) {
+      return (oValue - 30.0) * 3.62 + 194.0;
     },
 
-    qcValueFromTension: function(tension) {
+    origamiValueFromTension: function(tension) {
       return (tension - 194.0) / 3.62 + 30.0;
     },
 
-    frictionFromQcValue: function(qcValue) {
-      return (qcValue - 8.0) * 3.0 + 25.0;
+    frictionFromOrigamiValue: function(oValue) {
+      return (oValue - 8.0) * 3.0 + 25.0;
     },
 
-    qcValueFromFriction: function(friction) {
+    origamiFromFriction: function(friction) {
       return (friction - 25.0) / 3.0 + 8.0;
     }
   };
