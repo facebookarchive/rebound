@@ -1,0 +1,26 @@
+{
+  "name": "rebound-js",
+  "version": "0.0.2",
+  "homepage": "http://facebook.github.io/rebound/",
+  "authors": [
+    "will.bailey@gmail.com"
+  ],
+  "description": "JS port of the rebound spring dynamics Java library.",
+  "main": "rebound.js",
+  "moduleType": [
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "animation",
+    "physics"
+  ],
+  "license": "BSD",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
