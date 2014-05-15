@@ -50,12 +50,12 @@ purpose of driving physical animations.</p>
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <p><a href="http://facebook.github.io/rebound">Rebound</a> was originally written
-in Java to provide a lightweight physics system for 
-<a href="https://play.google.com/store/apps/details?id=com.facebook.home">Facebook Home</a> 
-and <a href="https://play.google.com/store/apps/details?id=com.facebook.orca">Chat Heads</a> 
+in Java to provide a lightweight physics system for
+<a href="https://play.google.com/store/apps/details?id=com.facebook.home">Facebook Home</a>
+and <a href="https://play.google.com/store/apps/details?id=com.facebook.orca">Chat Heads</a>
 on Android. It’s now been adopted by several other Android
 applications. This JavaScript port was written to provide a quick
-way to demonstrate Rebound animations on the web for a 
+way to demonstrate Rebound animations on the web for a
 <a href="https://www.youtube.com/watch?v=s5kNm-DgyjY">conference talk</a>. Since then the
 JavaScript version has been used to build some really nice interfaces.
 Check out <a href="http://brandonwalkin.com">brandonwalkin.com</a> for an
@@ -143,8 +143,9 @@ el.addEventListener('mouseup', function() {
 <span class="hljs-keyword">var</span> springSystem = <span class="hljs-keyword">new</span> rebound.SpringSystem();
 <span class="hljs-keyword">var</span> spring = springSystem.createSpring(<span class="hljs-number">50</span>, <span class="hljs-number">3</span>);
 
-<span class="hljs-comment">// Add a listener to the spring. Every time the physics </span>
-<span class="hljs-comment">// solver updates its value this will be called. The </span>
+<span class="hljs-comment">// Add a listener to the spring. Every time the physics</span>
+<span class="hljs-comment">// solver updates the Spring's value onSpringUpdate will</span>
+<span class="hljs-comment">// be called.</span>
 spring.addListener({
   onSpringUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(spring)</span> {</span>
     <span class="hljs-keyword">var</span> val = spring.getCurrentValue();
@@ -154,7 +155,7 @@ spring.addListener({
   }
 });
 
-<span class="hljs-comment">// Listen for mouse down/up/out and toggle the </span>
+<span class="hljs-comment">// Listen for mouse down/up/out and toggle the</span>
 <span class="hljs-comment">//springs endValue from 0 to 1.</span>
 el.addEventListener(<span class="hljs-string">'mousedown'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
   spring.setEndValue(<span class="hljs-number">1</span>);
@@ -168,12 +169,12 @@ el.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hlj
   spring.setEndValue(<span class="hljs-number">0</span>);
 });
 
-<span class="hljs-comment">// Helper for scaling an element with css transforms. </span>
+<span class="hljs-comment">// Helper for scaling an element with css transforms.</span>
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">scale</span><span class="hljs-params">(el, val)</span> {</span>
   el.style.mozTransform =
   el.style.msTransform =
   el.style.webkitTransform =
-  el.style.transform = <span class="hljs-string">'scale3d('</span> + 
+  el.style.transform = <span class="hljs-string">'scale3d('</span> +
     val + <span class="hljs-string">', '</span> + val + <span class="hljs-string">', 1)'</span>;
 }
 </code></pre>
@@ -193,7 +194,19 @@ el.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hlj
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <h2 id="springsystem">SpringSystem</h2>
-<p><strong>SpringSystem</strong> is a set of Springs that all run on the same physics
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p><strong>SpringSystem</strong> is a set of Springs that all run on the same physics
 timing loop. To get started with a Rebound animation you first
 create a new SpringSystem and then add springs to it.</p>
 
@@ -232,11 +245,11 @@ create a new SpringSystem and then add springs to it.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Create and register a new spring with the SpringSystem. This
 Spring will now be solved for during the physics iteration loop. By default
@@ -260,11 +273,11 @@ friction, but you can also provide your own values here.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>You can check if a SpringSystem is idle or active by calling
 getIsIdle. If all of the Springs in the SpringSystem are at rest,
@@ -280,11 +293,11 @@ method will return true.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <p>Retrieve a specific Spring from the SpringSystem by id. This
 can be useful for inspecting the state of a spring before
@@ -299,11 +312,11 @@ or after an integration loop in the SpringSystem executes.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-11">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <p>Get a listing of all the springs registered with this
 SpringSystem.</p>
@@ -317,11 +330,11 @@ SpringSystem.</p>
         </li>
         
         
-        <li id="section-11">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
               <p>registerSpring is called automatically as soon as you create
 a Spring with SpringSystem#createSpring. This method sets the
@@ -337,11 +350,11 @@ solver loop.</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <p>Deregister a spring with this SpringSystem. The SpringSystem will
 no longer consider this Spring during its integration loop once
@@ -374,11 +387,11 @@ you call Spring#destroy.</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               <p>This is our main solver loop called to move the simulation
 forward through time. Before each pass in the solver loop
@@ -432,11 +445,11 @@ SpringSystem.</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>activateSpring is used to notify the SpringSystem that a Spring
 has become displaced. The system responds by starting its solver
@@ -460,11 +473,11 @@ loop up if it is currently idle.</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Add a listener to the SpringSystem so that you can receive
 before/after integration notifications allowing Springs to be
@@ -479,11 +492,11 @@ constrained or adjusted.</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Remove a previously added listener on the SpringSystem.</p>
 
@@ -496,11 +509,11 @@ constrained or adjusted.</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Remove all previously added listeners on the SpringSystem.</p>
 
@@ -515,11 +528,11 @@ constrained or adjusted.</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <h2 id="spring">Spring</h2>
 
@@ -528,11 +541,11 @@ constrained or adjusted.</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p><strong>Spring</strong> provides a model of a classical spring acting to
 resolve a body to equilibrium. Springs have configurable
@@ -600,11 +613,11 @@ animation off of the spring’s resolution curve.</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Remove a Spring from simulation and clear its listeners.</p>
 
@@ -618,11 +631,11 @@ animation off of the spring’s resolution curve.</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Get the id of the spring, which can be used to retrieve it from
 the SpringSystems it participates in later.</p>
@@ -636,11 +649,11 @@ the SpringSystems it participates in later.</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Set the configuration values for this Spring. A SpringConfig
 contains the tension and friction values used to solve for the
@@ -656,11 +669,11 @@ equilibrium of the Spring in the physics loop.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Retrieve the SpringConfig used by this Spring.</p>
 
@@ -673,11 +686,11 @@ equilibrium of the Spring in the physics loop.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Set the current position of this Spring. Listeners will be updated
 with this value immediately. If the rest or <code>endValue</code> is not
@@ -717,11 +730,11 @@ be unified using this technique.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Get the position that the most recent animation started at. This
 can be useful for determining the number off oscillations that
@@ -736,11 +749,11 @@ have occurred.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Retrieve the current value of the Spring.</p>
 
@@ -753,11 +766,11 @@ have occurred.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Get the absolute distance of the Spring from it’s resting endValue position.</p>
 
@@ -774,11 +787,11 @@ have occurred.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Set the endValue or resting position of the spring. If this
 value is different than the current value, the SpringSystem will
@@ -806,11 +819,11 @@ immediately.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Retrieve the endValue or resting position of this spring.</p>
 
@@ -823,11 +836,11 @@ immediately.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Set the current velocity of the Spring. As previously mentioned,
 this can be useful when you are performing a direct manipulation
@@ -847,11 +860,11 @@ return to rest on a natural feeling curve.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Get the current velocity of the Spring.</p>
 
@@ -864,11 +877,11 @@ return to rest on a natural feeling curve.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>Set a threshold value for the movement speed of the Spring below
 which it will be considered to be not moving or resting.</p>
@@ -883,11 +896,11 @@ which it will be considered to be not moving or resting.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Retrieve the rest speed threshold for this Spring.</p>
 
@@ -900,11 +913,11 @@ which it will be considered to be not moving or resting.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Set a threshold value for displacement below which the Spring
 will be considered to be not displaced i.e. at its resting
@@ -919,11 +932,11 @@ will be considered to be not displaced i.e. at its resting
         </li>
         
         
-        <li id="section-35">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Retrieve the rest displacement threshold for this spring.</p>
 
@@ -936,11 +949,11 @@ will be considered to be not displaced i.e. at its resting
         </li>
         
         
-        <li id="section-36">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Enable overshoot clamping. This means that the Spring will stop
 immediately when it reaches its resting position regardless of
@@ -958,11 +971,11 @@ down to 0 or alpha fade.</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Check if overshoot clamping is enabled for this spring.</p>
 
@@ -975,11 +988,11 @@ down to 0 or alpha fade.</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Check if the Spring has gone past its end point by comparing
 the direction it was moving in when it started to the current
@@ -997,11 +1010,11 @@ position and end value.</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Spring.advance is the main solver method for the Spring. It takes
 the current time and delta since the last time step and performs
@@ -1122,11 +1135,11 @@ displacement of the Spring.</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Check if the SpringSystem should advance. Springs are advanced
 a final frame after they reach equilibrium to ensure that the
@@ -1146,11 +1159,11 @@ displacement threshold.</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>Check if the Spring is atRest meaning that it’s currentValue and
 endValue are the same and that it has no velocity. The previously
@@ -1168,11 +1181,11 @@ of this equivalence check.</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>Force the spring to be at rest at its current position. As
 described in the documentation for setCurrentValue, this method
@@ -1220,11 +1233,11 @@ elements that are attached to springs via SpringListeners.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <h2 id="physicsstate">PhysicsState</h2>
 
@@ -1233,11 +1246,11 @@ elements that are attached to springs via SpringListeners.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <p><strong>PhysicsState</strong> consists of a position and velocity. A Spring uses
 this internally to keep track of its current and prior position and
@@ -1255,11 +1268,11 @@ velocity values.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <h2 id="springconfig">SpringConfig</h2>
 
@@ -1268,11 +1281,11 @@ velocity values.</p>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-47">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
               <p><strong>SpringConfig</strong> maintains a set of tension and friction constants
 for a Spring. You can use fromOrigamiTensionAndFriction to convert
@@ -1290,11 +1303,11 @@ design tool directly to Rebound spring constants.</p>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-48">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-48">&#182;</a>
               </div>
               <p>Math for converting from
 <a href="http://facebook.github.io/origami/">Origami</a> to
@@ -1327,14 +1340,14 @@ SpringConfig.fromOrigamiTensionAndFriction(v, v);</p>
         </li>
         
         
-        <li id="section-48">
+        <li id="section-49">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
               <p>Convert an origami Spring tension and friction to Rebound spring
-constants. If you are prototyping a design with Origami, this 
+constants. If you are prototyping a design with Origami, this
 makes it easy to make your springs behave exactly the same in
 Rebound.</p>
 
@@ -1359,11 +1372,11 @@ Rebound.</p>
         </li>
         
         
-        <li id="section-49">
+        <li id="section-50">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
+                <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
               <p>This helper function does a linear interpolation of a value from
 one range to another. This can be very useful for converting the
@@ -1387,26 +1400,13 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-50">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
-              </div>
-              <h2 id="utilities">Utilities</h2>
-
-            </div>
-            
-        </li>
-        
-        
         <li id="section-51">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
-              <p>Here are a few useful JavaScript utilities.</p>
+              <h2 id="utilities">Utilities</h2>
 
             </div>
             
@@ -1418,6 +1418,19 @@ animation range in the <em>to</em> parameters.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p>Here are a few useful JavaScript utilities.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
               <p>Lop off the first occurence of the reference in the Array.</p>
 
@@ -1437,11 +1450,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-53">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
               <p>Cross browser/node timer functions.</p>
 
@@ -1467,11 +1480,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
               <p>Bind a function to a context object.</p>
 
@@ -1487,11 +1500,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
               <p>Add all the properties in the source to the target.</p>
 
@@ -1508,11 +1521,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-57">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
               <p>Export the public api using exports for common js or the window for
 normal browser inclusion.</p>
@@ -1529,11 +1542,11 @@ normal browser inclusion.</p>
         </li>
         
         
-        <li id="section-57">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               <h2 id="legal-stuff">Legal Stuff</h2>
 
@@ -1542,11 +1555,11 @@ normal browser inclusion.</p>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               
             </div>
