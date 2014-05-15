@@ -6,12 +6,12 @@
 // Origin
 // ------
 // [Rebound](http://facebook.github.io/rebound) was originally written
-// in Java to provide a lightweight physics system for 
-// [Facebook Home](https://play.google.com/store/apps/details?id=com.facebook.home) 
-// and [Chat Heads](https://play.google.com/store/apps/details?id=com.facebook.orca) 
+// in Java to provide a lightweight physics system for
+// [Facebook Home](https://play.google.com/store/apps/details?id=com.facebook.home)
+// and [Chat Heads](https://play.google.com/store/apps/details?id=com.facebook.orca)
 // on Android. It's now been adopted by several other Android
 // applications. This JavaScript port was written to provide a quick
-// way to demonstrate Rebound animations on the web for a 
+// way to demonstrate Rebound animations on the web for a
 // [conference talk](https://www.youtube.com/watch?v=s5kNm-DgyjY). Since then the
 // JavaScript version has been used to build some really nice interfaces.
 // Check out [brandonwalkin.com](http://brandonwalkin.com) for an
@@ -39,7 +39,7 @@
 // </div>
 // <script src="../rebound.min.js"></script>
 // <script>
-// 
+//
 // function scale(el, val) {
 //   el.style.mozTransform =
 //   el.style.msTransform =
@@ -47,7 +47,7 @@
 //   el.style.transform = 'scale3d(' + val + ', ' + val + ', 1)';
 // }
 // var el = document.getElementById('logo');
-// 
+//
 // var springSystem = new rebound.SpringSystem();
 // var spring = springSystem.createSpring(50, 3);
 // spring.addListener({
@@ -57,11 +57,11 @@
 //     scale(el, val);
 //   }
 // });
-// 
+//
 // el.addEventListener('mousedown', function() {
 //   spring.setEndValue(1);
 // });
-// 
+//
 // el.addEventListener('mouseout', function() {
 //   spring.setEndValue(0);
 // });
@@ -69,21 +69,22 @@
 // el.addEventListener('mouseup', function() {
 //   spring.setEndValue(0);
 // });
-// 
+//
 // </script>
-// 
+//
 // Here's how it works.
 //
 // ```
 // // Get a reference to the logo element.
 // var el = document.getElementById('logo');
-// 
+//
 // // create a SpringSystem and a Spring with a bouncy config.
 // var springSystem = new rebound.SpringSystem();
 // var spring = springSystem.createSpring(50, 3);
-// 
-// // Add a listener to the spring. Every time the physics 
-// // solver updates its value this will be called. The 
+//
+// // Add a listener to the spring. Every time the physics
+// // solver updates the Spring's value onSpringUpdate will
+// // be called.
 // spring.addListener({
 //   onSpringUpdate: function(spring) {
 //     var val = spring.getCurrentValue();
@@ -92,8 +93,8 @@
 //     scale(el, val);
 //   }
 // });
-// 
-// // Listen for mouse down/up/out and toggle the 
+//
+// // Listen for mouse down/up/out and toggle the
 // //springs endValue from 0 to 1.
 // el.addEventListener('mousedown', function() {
 //   spring.setEndValue(1);
@@ -102,17 +103,17 @@
 // el.addEventListener('mouseout', function() {
 //   spring.setEndValue(0);
 // });
-// 
+//
 // el.addEventListener('mouseup', function() {
 //   spring.setEndValue(0);
 // });
-// 
-// // Helper for scaling an element with css transforms. 
+//
+// // Helper for scaling an element with css transforms.
 // function scale(el, val) {
 //   el.style.mozTransform =
 //   el.style.msTransform =
 //   el.style.webkitTransform =
-//   el.style.transform = 'scale3d(' + 
+//   el.style.transform = 'scale3d(' +
 //     val + ', ' + val + ', 1)';
 // }
 // ```
@@ -121,7 +122,7 @@
   var rebound = {};
 
   // SpringSystem
-  // ------------ 
+  // ------------
   // **SpringSystem** is a set of Springs that all run on the same physics
   // timing loop. To get started with a Rebound animation you first
   // create a new SpringSystem and then add springs to it.
@@ -398,14 +399,14 @@
     // updated to match this value, then the spring will be dispalced and
     // the SpringSystem will start to loop to restore the spring to the
     // `endValue`.
-    // 
+    //
     // A common pattern is to move a Spring around without animation by
     // calling.
-    // 
+    //
     // ```
     // spring.setCurrentValue(n).setAtRest();
     // ```
-    // 
+    //
     // This moves the Spring to a new position `n`, sets the endValue
     // to `n`, and removes any velocity from the `Spring`. By doing
     // this you can allow the `SpringListener` to manage the position
@@ -655,7 +656,7 @@
       }
     },
 
-    
+
     // Check if the SpringSystem should advance. Springs are advanced
     // a final frame after they reach equilibrium to ensure that the
     // currentValue is exactly the requested endValue regardless of the
@@ -741,7 +742,7 @@
       this.tension = tension;
       this.friction = friction;
     };
-  
+
   // Math for converting from
   // [Origami](http://facebook.github.io/origami/) to
   // [Rebound](http://facebook.github.io/rebound).
@@ -767,7 +768,7 @@
 
   extend(SpringConfig, {
     // Convert an origami Spring tension and friction to Rebound spring
-    // constants. If you are prototyping a design with Origami, this 
+    // constants. If you are prototyping a design with Origami, this
     // makes it easy to make your springs behave exactly the same in
     // Rebound.
     fromOrigamiTensionAndFriction: function(oTension, oFriction) {
