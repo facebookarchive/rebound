@@ -53,11 +53,11 @@ purpose of driving physical animations.</p>
 in Java to provide a lightweight physics system for 
 <a href="https://play.google.com/store/apps/details?id=com.facebook.home">Facebook Home</a> 
 and <a href="https://play.google.com/store/apps/details?id=com.facebook.orca">Chat Heads</a> 
-on Android. Its now been adopted by several other Android
+on Android. It’s now been adopted by several other Android
 applications. This JavaScript port was written to provide a quick
 way to demonstrate Rebound animations on the web for a 
 <a href="https://www.youtube.com/watch?v=s5kNm-DgyjY">conference talk</a>. Since then the
-JavaScript version has been used to build some really nice UIs.
+JavaScript version has been used to build some really nice interfaces.
 Check out <a href="http://brandonwalkin.com">brandonwalkin.com</a> for an
 example.</p>
 <h2 id="overview">Overview</h2>
@@ -179,7 +179,8 @@ el.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hlj
 </code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
+            <div class="content"><div class='highlight'><pre>
+(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> {</span>
   <span class="hljs-keyword">var</span> rebound = {};</pre></div></div>
             
         </li>
@@ -240,7 +241,7 @@ create a new SpringSystem and then add springs to it.</p>
               <p>Create and register a new spring with the SpringSystem. This
 Spring will now be solved for during the physics iteration loop. By default
 the spring will use the default Origami spring config with 40 tension and 7
-friction.</p>
+friction, but you can also provide your own values here.</p>
 
             </div>
             
@@ -324,7 +325,7 @@ SpringSystem.</p>
               </div>
               <p>registerSpring is called automatically as soon as you create
 a Spring with SpringSystem#createSpring. This method sets the
-spring up in the registry so that it can be solved in the springs
+spring up in the registry so that it can be solved in the
 solver loop.</p>
 
             </div>
@@ -342,7 +343,7 @@ solver loop.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Deregister a spring with this SprinSystem. The SpringSystem will
+              <p>Deregister a spring with this SpringSystem. The SpringSystem will
 no longer consider this Spring during its integration loop once
 this is called. This is normally done automatically for you when
 you call Spring#destroy.</p>
@@ -533,17 +534,18 @@ constrained or adjusted.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p><strong>Spring</strong> provides a model of a classical spring acting to resolve
-a body to equilibrium. Springs have configurable tension which is
-a force multipler on the displacement of the spring from its rest
-point as defined by Hooke’s law. Springs also have configurable
-friction, which ensures that they do not oscillate infinitely. When
-a Spring is displaced by updating it’s resting or current position,
-the SpringSystems that contain that Spring will automatically
-start looping to solve for equilibrium. As each timestep passes,
-SpringListeners attached to the Spring will be notified of the
-updates providing a way to drive an animation off of the Springs
-resolution curve.</p>
+              <p><strong>Spring</strong> provides a model of a classical spring acting to
+resolve a body to equilibrium. Springs have configurable
+tension which is a force multipler on the displacement of the
+spring from its rest point or <code>endValue</code> as defined by <a href="http://en.wikipedia.org/wiki/Hooke&#39;s_law">Hooke’s
+law</a>. Springs also have
+configurable friction, which ensures that they do not oscillate
+infinitely. When a Spring is displaced by updating it’s resting
+or <code>currentValue</code>, the SpringSystems that contain that Spring
+will automatically start looping to solve for equilibrium. As each
+timestep passes, <code>SpringListener</code> objects attached to the Spring
+will be notified of the updates providing a way to drive an
+animation off of the spring’s resolution curve.</p>
 
             </div>
             
@@ -678,24 +680,26 @@ equilibrium of the Spring in the physics loop.</p>
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Set the current position of this Spring. Listeners will be updated
-with this value immediately. If the rest or “end” value is not
+with this value immediately. If the rest or <code>endValue</code> is not
 updated to match this value, then the spring will be dispalced and
 the SpringSystem will start to loop to restore the spring to the
-endValue.</p>
+<code>endValue</code>.</p>
 <p>A common pattern is to move a Spring around without animation by
 calling.</p>
-<p>spring.setCurrentValue(n).setAtRest();</p>
-<p>This moves the Spring to a new position “n”, sets the endValue
-to “n”, and removes any velocity from the Spring. By doing
-this you can allow the SpringListener to manage the position
+<pre><code>spring.setCurrentValue(n).setAtRest();
+</code></pre><p>This moves the Spring to a new position <code>n</code>, sets the endValue
+to <code>n</code>, and removes any velocity from the <code>Spring</code>. By doing
+this you can allow the <code>SpringListener</code> to manage the position
 of UI elements attached to the spring even when moving without
-animation. For example, when dragging an elements you can update
-the position of an attached view through a spring by calling
-setCurrentValue(x).setAtRest(). When the gesture ends you
-can update the Springs velocity and endValue without calling
-setAtRest to cause it to naturally animate the UI element to
-the resting position taking into account existing velocity. The
-codepath for synchronous movement and spring driven animation can
+animation. For example, when dragging an element you can
+update the position of an attached view through a spring
+by calling <code>spring.setCurrentValue(x).setAtRest()</code>. When
+the gesture ends you can update the Springs
+velocity and endValue without calling setAtRest
+<code>spring.setVelocity(gestureEndVelocity).setEndValue(flingTarget)</code>
+to cause it to naturally animate the UI element to the resting
+position taking into account existing velocity. The codepath for
+synchronous movement and spring driven animation can
 be unified using this technique.</p>
 
             </div>
@@ -828,10 +832,10 @@ immediately.</p>
               <p>Set the current velocity of the Spring. As previously mentioned,
 this can be useful when you are performing a direct manipulation
 gesture. When a UI element is released you may call setVelocity
-on its animation Spring soLVER_TIMESTEP_SEC that the Spring
-continues with the same velocity as the gesture ended with. The
-friction, tension, and displacement of the Spring will then
-govern its motion to return to rest in a natural feeling curve.</p>
+on its animation Spring so that the Spring continues with the
+same velocity as the gesture ended with. The friction, tension,
+and displacement of the Spring will then govern its motion to
+return to rest on a natural feeling curve.</p>
 
             </div>
             
@@ -903,8 +907,8 @@ which it will be considered to be not moving or resting.</p>
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Set a threshold value for displacement below which the Spring
-will be considered to be not displaced or at its resting
-endValue.</p>
+will be considered to be not displaced i.e. at its resting
+<code>endValue</code>.</p>
 
             </div>
             
@@ -1272,8 +1276,8 @@ velocity values.</p>
               </div>
               <p><strong>SpringConfig</strong> maintains a set of tension and friction constants
 for a Spring. You can use fromOrigamiTensionAndFriction to convert
-values from the Origami Design tool directly to Rebound spring
-constants.</p>
+values from the <a href="http://facebook.github.io/origami/">Origami</a>
+design tool directly to Rebound spring constants.</p>
 
             </div>
             
@@ -1366,7 +1370,7 @@ one range to another. This can be very useful for converting the
 motion of a Spring to a range of UI property values. For example a
 spring moving from position 0 to 1 could be interpolated to move a
 view from pixel 300 to 350 and scale it from 0.5 to 1. The current
-position of the Spring just needs to be run through this method
+position of the <code>Spring</code> just needs to be run through this method
 taking its input range in the <em>from</em> parameters with the property
 animation range in the <em>to</em> parameters.</p>
 
@@ -1428,9 +1432,22 @@ animation range in the <em>to</em> parameters.</p>
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">typeof</span> window != <span class="hljs-string">'undefined'</span> &amp;&amp;
       window.cancelAnimationFrame &amp;&amp;
       cancelAnimationFrame(id);
-  }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <p>Cross browser/node timer functions.</p>
 
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compatRequestAnimationFrame</span><span class="hljs-params">(func)</span> {</span>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">compatRequestAnimationFrame</span><span class="hljs-params">(func)</span> {</span>
     <span class="hljs-keyword">var</span> meth;
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> process != <span class="hljs-string">'undefined'</span>) {
       meth = process.nextTick;
@@ -1450,11 +1467,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-53">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
               <p>Bind a function to a context object.</p>
 
@@ -1470,11 +1487,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
               <p>Add all the properties in the source to the target.</p>
 
@@ -1491,11 +1508,11 @@ animation range in the <em>to</em> parameters.</p>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
               <p>Export the public api using exports for common js or the window for
 normal browser inclusion.</p>
@@ -1512,11 +1529,11 @@ normal browser inclusion.</p>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-57">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
               <h2 id="legal-stuff">Legal Stuff</h2>
 
@@ -1525,11 +1542,11 @@ normal browser inclusion.</p>
         </li>
         
         
-        <li id="section-57">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               
             </div>
