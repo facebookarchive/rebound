@@ -1,0 +1,20 @@
+{
+  "name": "rebound",
+  "version": "0.0.2",
+  "description": "A simple library for modeling spring dynamics",
+  "main": "rebound.js",
+  "author": "Facebook",
+  "license": "BSD",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/facebook/rebound.git"
+  },
+  "bugs": {
+    "url": "https://github.com/facebook/rebound/issues"
+  },
+  "keywords": [
+    "facebook",
+    "animation"
+  ]
+}
