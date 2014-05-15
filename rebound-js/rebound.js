@@ -9,11 +9,11 @@
 // in Java to provide a lightweight physics system for 
 // [Facebook Home](https://play.google.com/store/apps/details?id=com.facebook.home) 
 // and [Chat Heads](https://play.google.com/store/apps/details?id=com.facebook.orca) 
-// on Android. Its now been adopted by several other Android
+// on Android. It's now been adopted by several other Android
 // applications. This JavaScript port was written to provide a quick
 // way to demonstrate Rebound animations on the web for a 
 // [conference talk](https://www.youtube.com/watch?v=s5kNm-DgyjY). Since then the
-// JavaScript version has been used to build some really nice UIs.
+// JavaScript version has been used to build some really nice interfaces.
 // Check out [brandonwalkin.com](http://brandonwalkin.com) for an
 // example.
 //
@@ -158,7 +158,7 @@
     // Create and register a new spring with the SpringSystem. This
     // Spring will now be solved for during the physics iteration loop. By default
     // the spring will use the default Origami spring config with 40 tension and 7
-    // friction.
+    // friction, but you can also provide your own values here.
     createSpring: function(tension, friction) {
       var spring = new Spring(this);
       this.registerSpring(spring);
@@ -194,13 +194,13 @@
 
     // registerSpring is called automatically as soon as you create
     // a Spring with SpringSystem#createSpring. This method sets the
-    // spring up in the registry so that it can be solved in the springs
+    // spring up in the registry so that it can be solved in the
     // solver loop.
     registerSpring: function(spring) {
       this._springRegistry[spring.getId()] = spring;
     },
 
-    // Deregister a spring with this SprinSystem. The SpringSystem will
+    // Deregister a spring with this SpringSystem. The SpringSystem will
     // no longer consider this Spring during its integration loop once
     // this is called. This is normally done automatically for you when
     // you call Spring#destroy.
@@ -308,17 +308,18 @@
 
   // Spring
   // ------
-  // **Spring** provides a model of a classical spring acting to resolve
-  // a body to equilibrium. Springs have configurable tension which is
-  // a force multipler on the displacement of the spring from its rest
-  // point as defined by Hooke’s law. Springs also have configurable
-  // friction, which ensures that they do not oscillate infinitely. When
-  // a Spring is displaced by updating it’s resting or current position,
-  // the SpringSystems that contain that Spring will automatically
-  // start looping to solve for equilibrium. As each timestep passes,
-  // SpringListeners attached to the Spring will be notified of the
-  // updates providing a way to drive an animation off of the Springs
-  // resolution curve.
+  // **Spring** provides a model of a classical spring acting to
+  // resolve a body to equilibrium. Springs have configurable
+  // tension which is a force multipler on the displacement of the
+  // spring from its rest point or `endValue` as defined by [Hooke’s
+  // law](http://en.wikipedia.org/wiki/Hooke's_law). Springs also have
+  // configurable friction, which ensures that they do not oscillate
+  // infinitely. When a Spring is displaced by updating it’s resting
+  // or `currentValue`, the SpringSystems that contain that Spring
+  // will automatically start looping to solve for equilibrium. As each
+  // timestep passes, `SpringListener` objects attached to the Spring
+  // will be notified of the updates providing a way to drive an
+  // animation off of the spring's resolution curve.
   var Spring = rebound.Spring = function Spring(springSystem) {
     this._id = Spring._ID++;
     this._springSystem = springSystem;
@@ -393,27 +394,31 @@
     },
 
     // Set the current position of this Spring. Listeners will be updated
-    // with this value immediately. If the rest or “end” value is not
+    // with this value immediately. If the rest or `endValue` is not
     // updated to match this value, then the spring will be dispalced and
     // the SpringSystem will start to loop to restore the spring to the
-    // endValue.
+    // `endValue`.
     // 
     // A common pattern is to move a Spring around without animation by
     // calling.
     // 
+    // ```
     // spring.setCurrentValue(n).setAtRest();
+    // ```
     // 
-    // This moves the Spring to a new position “n”, sets the endValue
-    // to “n”, and removes any velocity from the Spring. By doing
-    // this you can allow the SpringListener to manage the position
+    // This moves the Spring to a new position `n`, sets the endValue
+    // to `n`, and removes any velocity from the `Spring`. By doing
+    // this you can allow the `SpringListener` to manage the position
     // of UI elements attached to the spring even when moving without
-    // animation. For example, when dragging an elements you can update
-    // the position of an attached view through a spring by calling
-    // setCurrentValue(x).setAtRest(). When the gesture ends you
-    // can update the Springs velocity and endValue without calling
-    // setAtRest to cause it to naturally animate the UI element to
-    // the resting position taking into account existing velocity. The
-    // codepath for synchronous movement and spring driven animation can
+    // animation. For example, when dragging an element you can
+    // update the position of an attached view through a spring
+    // by calling `spring.setCurrentValue(x).setAtRest()`. When
+    // the gesture ends you can update the Springs
+    // velocity and endValue without calling setAtRest
+    // `spring.setVelocity(gestureEndVelocity).setEndValue(flingTarget)`
+    // to cause it to naturally animate the UI element to the resting
+    // position taking into account existing velocity. The codepath for
+    // synchronous movement and spring driven animation can
     // be unified using this technique.
     setCurrentValue: function(currentValue) {
       this._startValue = currentValue;
@@ -474,10 +479,10 @@
     // Set the current velocity of the Spring. As previously mentioned,
     // this can be useful when you are performing a direct manipulation
     // gesture. When a UI element is released you may call setVelocity
-    // on its animation Spring soLVER_TIMESTEP_SEC that the Spring
-    // continues with the same velocity as the gesture ended with. The
-    // friction, tension, and displacement of the Spring will then
-    // govern its motion to return to rest in a natural feeling curve.
+    // on its animation Spring so that the Spring continues with the
+    // same velocity as the gesture ended with. The friction, tension,
+    // and displacement of the Spring will then govern its motion to
+    // return to rest on a natural feeling curve.
     setVelocity: function(velocity) {
       this._currentState.velocity = velocity;
       return this;
@@ -501,8 +506,8 @@
     },
 
     // Set a threshold value for displacement below which the Spring
-    // will be considered to be not displaced or at its resting
-    // endValue.
+    // will be considered to be not displaced i.e. at its resting
+    // `endValue`.
     setRestDisplacementThreshold: function(displacementFromRestThreshold) {
       this._displacementFromRestThreshold = displacementFromRestThreshold;
     },
@@ -729,8 +734,8 @@
   // ------------
   // **SpringConfig** maintains a set of tension and friction constants
   // for a Spring. You can use fromOrigamiTensionAndFriction to convert
-  // values from the Origami Design tool directly to Rebound spring
-  // constants.
+  // values from the [Origami](http://facebook.github.io/origami/)
+  // design tool directly to Rebound spring constants.
   var SpringConfig = rebound.SpringConfig =
     function SpringConfig(tension, friction) {
       this.tension = tension;
@@ -785,7 +790,7 @@
     // motion of a Spring to a range of UI property values. For example a
     // spring moving from position 0 to 1 could be interpolated to move a
     // view from pixel 300 to 350 and scale it from 0.5 to 1. The current
-    // position of the Spring just needs to be run through this method
+    // position of the `Spring` just needs to be run through this method
     // taking its input range in the _from_ parameters with the property
     // animation range in the _to_ parameters.
     mapValueInRange: function(value, fromLow, fromHigh, toLow, toHigh) {
@@ -813,6 +818,7 @@
       cancelAnimationFrame(id);
   }
 
+  // Cross browser/node timer functions.
   function compatRequestAnimationFrame(func) {
     var meth;
     if (typeof process != 'undefined') {
