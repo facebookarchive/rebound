@@ -134,6 +134,10 @@ a.app_link {
   background-image: url(../images/skitch.png);
 }
 
+.logo.slingshot {
+  background-image: url(../images/slingshot.png);
+}
+
 @media (-webkit-min-device-pixel-ratio: 2),
 (min--moz-device-pixel-ratio: 2),
 (min-resolution: 2dppx),
@@ -169,6 +173,10 @@ a.app_link {
 
   .logo.skitch {
     background-image: url(../images/skitch_2x.png);
+  }
+
+  .logo.slingshot {
+    background-image: url(../images/slingshot_2x.png);
   }
 
 }
