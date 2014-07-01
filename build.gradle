@@ -5,15 +5,16 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.7.1+'
+        classpath 'com.android.tools.build:gradle:0.12.+'
     }
 }
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
+import com.android.builder.core.BuilderConstants
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.0.0"
+    buildToolsVersion "19.1.0"
 
     defaultConfig {
         minSdkVersion 11
@@ -30,7 +31,8 @@ android {
 
 // Create jar for distribution.
 android.libraryVariants.all { variant ->
-    if (name.equals(com.android.builder.BuilderConstants.RELEASE)) {
+    def name = variant.buildType.name
+    if (name.equals(BuilderConstants.RELEASE)) {
 
         def task = project.tasks.create "reboundDistJar", Jar
         task.dependsOn variant.javaCompile
@@ -41,7 +43,7 @@ android.libraryVariants.all { variant ->
 }
 
 task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.allJava
+    source = android.sourceSets.main.java
 }
 
 task androidJavadocsJar(type: Jar) {
@@ -51,7 +53,7 @@ task androidJavadocsJar(type: Jar) {
 
 task androidSourcesJar(type: Jar) {
     classifier = 'sources'
-    from android.sourceSets.main.allSource
+    from android.sourceSets.main.java, android.sourceSets.main.res
 }
 
 artifacts {
