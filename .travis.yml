@@ -4,26 +4,26 @@ env:
   matrix:
     - ANDROID_SDKS=android-19,sysimg-19  ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
 before_install:
-  # Install base Android SDK
+  # Install base Android SDK.
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null; fi
-  - wget http://dl.google.com/android/android-sdk_r22.3-linux.tgz
-  - tar xzf android-sdk_r22.3-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r23-linux.tgz
+  - tar xzf android-sdk_r23-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
   # Gradle
-  - wget http://services.gradle.org/distributions/gradle-1.8-bin.zip
-  - unzip gradle-1.8-bin.zip
-  - export GRADLE_HOME=$PWD/gradle-1.8
+  - wget http://services.gradle.org/distributions/gradle-2.0-bin.zip
+  - unzip gradle-2.0-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-2.0
   - export PATH=$GRADLE_HOME/bin:$PATH
 
-  # install android build tools
-  - wget https://dl-ssl.google.com/android/repository/build-tools_r19-linux.zip
-  - unzip build-tools_r19-linux.zip -d $ANDROID_HOME
+  # install android build tools.
+  - wget https://dl-ssl.google.com/android/repository/build-tools_r19.1-linux.zip
+  - unzip build-tools_r19.1-linux.zip -d $ANDROID_HOME
   - mkdir -p $ANDROID_HOME/build-tools/
-  - mv $ANDROID_HOME/android-4.4 $ANDROID_HOME/build-tools/19
-  - ls -la $ANDROID_HOME/build-tools/19
+  - mv $ANDROID_HOME/android-4.4.2 $ANDROID_HOME/build-tools/19.1
+  - ls -la $ANDROID_HOME/build-tools/19.1
   - echo $ANDROID_HOME
 
   # Install required components.
