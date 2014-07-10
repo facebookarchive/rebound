@@ -90,4 +90,8 @@ var example1 = function() {
 
 }
 
+var show = function(id, value) {
+  document.getElementById(id).innerHTML = value;
+}
+
 document.addEventListener('DOMContentLoaded', example1);
