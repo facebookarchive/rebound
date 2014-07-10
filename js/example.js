@@ -91,7 +91,8 @@ var example1 = function() {
 }
 
 var show = function(id, value) {
-  document.getElementById(id).innerHTML = value;
+  if(value < 10) document.getElementById(id).innerHTML = "0" + value;
+  else document.getElementById(id).innerHTML = value;
 }
 
 document.addEventListener('DOMContentLoaded', example1);
