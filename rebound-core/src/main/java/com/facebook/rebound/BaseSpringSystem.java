@@ -31,8 +31,8 @@ public class BaseSpringSystem {
   private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
   private final SpringClock mClock;
   private final SpringLooper mSpringLooper;
+  private final ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
   private long mLastTimeMillis = -1;
-  private ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
   private boolean mIdle = true;
 
   /**
