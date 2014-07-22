@@ -259,10 +259,9 @@ public class Spring {
    * realTimeDelta.
    * The math is inlined inside the loop since it made a huge performance impact when there are
    * several springs being advanced.
-   * @param time clock time
    * @param realDeltaTime clock drift
    */
-  void advance(double time, double realDeltaTime) {
+  void advance(double realDeltaTime) {
 
     boolean isAtRest = isAtRest();
 

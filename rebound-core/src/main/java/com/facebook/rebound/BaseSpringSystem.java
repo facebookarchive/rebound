@@ -34,6 +34,7 @@ public class BaseSpringSystem {
   private final ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
   private long mLastTimeMillis = -1;
   private boolean mIdle = true;
+  private static float sSpeedScale = 1.0f;
 
   /**
    * create a new BaseSpringSystem
@@ -135,7 +136,7 @@ public class BaseSpringSystem {
     for (Spring spring : mActiveSprings) {
       // advance time in seconds
       if (spring.systemShouldAdvance()) {
-        spring.advance(time / 1000.0, deltaTime / 1000.0);
+        spring.advance(deltaTime / 1000.0 / sSpeedScale);
       } else {
         mActiveSprings.remove(spring);
       }
@@ -208,8 +209,23 @@ public class BaseSpringSystem {
     mListeners.removeListener(listenerToRemove);
   }
 
+
   public void removeAllListeners() {
     mListeners.clear();
+  }
+
+
+  /**
+   * Set the speed scale to apply to all spring systems for debugging animations
+   * Setting the scale factor to 2 will make the spring 2x slower
+   * @param speedScale The scale factor to apply to the speed.
+   */
+  public static void setSpringSpeedScale(float speedScale) {
+    sSpeedScale = speedScale;
+  }
+
+  public static float getSpringSpeedScale() {
+    return sSpeedScale;
   }
 }
 
