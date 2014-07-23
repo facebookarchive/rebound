@@ -76,23 +76,29 @@ var example1 = function() {
   });
 
   var frictionControl = document.getElementById('friction');
+  var frictionValue = document.getElementById('friction_value');
   var tensionControl = document.getElementById('tension');
+  var tensionValue = document.getElementById('tension_value');
 
-  frictionControl.addEventListener('change', function() {
+
+  var onFrictionChange = function() {
     springConfig.friction =
       QcValueConverter.frictionFromQcValue(frictionControl.value);
-  });
+    frictionValue.innerHTML = frictionControl.value;
+  };
 
-  tensionControl.addEventListener('change', function() {
+  var onTensionChange = function() {
     springConfig.tension =
       QcValueConverter.tensionFromQcValue(tensionControl.value);
-  });
+    tensionValue.innerHTML = tensionControl.value;
+  };
 
-}
+  frictionControl.addEventListener('change', onFrictionChange);
+  frictionControl.addEventListener('input', onFrictionChange);
 
-var show = function(id, value) {
-  if(value < 10) document.getElementById(id).innerHTML = "0" + value;
-  else document.getElementById(id).innerHTML = value;
-}
+  tensionControl.addEventListener('change', onTensionChange);
+  tensionControl.addEventListener('input', onTensionChange);
+};
+
 
 document.addEventListener('DOMContentLoaded', example1);

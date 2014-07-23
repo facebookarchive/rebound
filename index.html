@@ -24,9 +24,9 @@
 
     <div class="section_title">About</div>
     <p>
-    <a href="http://github.com/facebook/rebound" target="_blank">Rebound</a> is a 
+    <a href="http://github.com/facebook/rebound" target="_blank">Rebound</a> is a
     java library that models spring dynamics. Rebound spring
-    models can be used to create animations that feel natural by introducing 
+    models can be used to create animations that feel natural by introducing
     real world physics to your application.
     </p>
     <p>
@@ -57,7 +57,7 @@
 
       @Override
       public void onSpringUpdate(Spring spring) {
-        // You can observe the updates in the spring 
+        // You can observe the updates in the spring
         // state by asking its current value in onSpringUpdate.
         float value = (float) spring.getCurrentValue();
         float scale = 1f - (value * 0.5f);
@@ -83,13 +83,19 @@
         <div class="pill">Press and Hold</div>
       </div>
       <div class="controls">
-        <label for="tension">tension : <span id="tension-value">40</span></label><input type="range" id="tension" name="tension" min="1" max="100" value="40" oninput="show('tension-value', this.value)" onchange="show('tension-value', this.value)"/><br /><br />
-        <label for="friction">friction : <span id="friction-value">03</span></label><input type="range" id="friction" name="friction" min="1" max="30" value="3" oninput="show('friction-value', this.value)" onchange="show('friction-value', this.value)"/>
+        <div>
+          <label for="tension">tension : <span id="tension_value">40</span></label>
+          <input type="range" id="tension" name="tension" min="1" max="100" value="40" />
+        </div>
+        <div>
+          <label for="friction">friction : <span id="friction_value">3</span></label>
+          <input type="range" id="friction" name="friction" min="1" max="30" value="3" />
+        </div>
       </div>
     </div>
     <div class="section_title">Download</div>
     <p>
-    To include Rebound in your project, grab the latest prebuilt Jar file. 
+    To include Rebound in your project, grab the latest prebuilt Jar file.
     <a class="download_link" href="https://github.com/facebook/rebound/releases/latest" target="_blank">↓ Download Jar v0.3.3</a>
     </p>
     <p>
@@ -143,7 +149,7 @@
 
     <div class="section_title">Support</div>
     <p>
-    Join the discussion over at <a href="https://www.facebook.com/groups/rebound.lib/" target="_blank">facebook.com/groups/rebound.lib</a> to 
+    Join the discussion over at <a href="https://www.facebook.com/groups/rebound.lib/" target="_blank">facebook.com/groups/rebound.lib</a> to
     report bugs, request features or show off your project and follow <a href="http://twitter.com/rebound_lib" target="_blank">@rebound_lib</a>
     on twitter for project updates.
     </p>
@@ -178,7 +184,7 @@
         <a href="http://inflikr.co" class="logo inflikr" target="_blank"></a>
         <p class="description">
           <a class="app_link" href="http://inflikr.co" target="_blank">Inflikr</a><br />
-          Inflikr app use Rebound to drive most of its animations like photo pager, swipe up for detail, swipe to dismiss, sharing... 
+          Inflikr app use Rebound to drive most of its animations like photo pager, swipe up for detail, swipe to dismiss, sharing...
         </p>
       </div>
       <div class="usage">
@@ -217,16 +223,16 @@
     All rights reserved.
     </p>
     <p>
-    Redistribution and use in source and binary forms, with or without 
+    Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
     </p>
     <p>
-    * Redistributions of source code must retain the above copyright notice, 
+    * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
     </p>
     <p>
-    * Redistributions in binary form must reproduce the above copyright notice, 
-    this list of conditions and the following disclaimer in the documentation 
+    * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
     and/or other materials provided with the distribution.
     </p>
     <p>
