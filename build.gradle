@@ -70,6 +70,7 @@ task smokeTest(dependsOn: [
   'rebound-android:check',
   'rebound-android-example:assembleDebug',
   'rebound-android-origami-example:assembleDebug',
+  'rebound-android-playground:assembleDebug',
   'reboundDistJar'
 ])
 

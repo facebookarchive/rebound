@@ -26,6 +26,7 @@ public class Spring {
   private static final double SOLVER_TIMESTEP_SEC = 0.001;
   private SpringConfig mSpringConfig;
   private boolean mOvershootClampingEnabled;
+  private boolean mIsCoasting;
 
   // storage for the current and prior physics state while integration is occurring
   private static class PhysicsState {
@@ -181,7 +182,11 @@ public class Spring {
    * @return the spring for chaining
    */
   public Spring setVelocity(double velocity) {
+    if (velocity == mCurrentState.velocity) {
+      return this;
+    }
     mCurrentState.velocity = velocity;
+    mSpringSystem.activateSpring(this.getId());
     return this;
   }
 
@@ -252,8 +257,9 @@ public class Spring {
    * @return true if the spring is overshooting its target
    */
   public boolean isOvershooting() {
-    return (mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
-        (mStartValue > mEndValue && getCurrentValue() < mEndValue);
+    return mSpringConfig.tension > 0 &&
+           ((mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
+           (mStartValue > mEndValue && getCurrentValue() < mEndValue));
   }
 
   /**
@@ -369,8 +375,13 @@ public class Spring {
     // snapped to its end value.
     if (isAtRest() || (mOvershootClampingEnabled && isOvershooting())) {
       // Don't call setCurrentValue because that forces a call to onSpringUpdate
-      mStartValue = mEndValue;
-      mCurrentState.position = mEndValue;
+      if (tension > 0) {
+        mStartValue = mEndValue;
+        mCurrentState.position = mEndValue;
+      } else {
+        mEndValue = mCurrentState.position;
+        mStartValue = mEndValue;
+      }
       setVelocity(0);
       isAtRest = true;
     }
@@ -441,7 +452,8 @@ public class Spring {
    */
   public boolean isAtRest() {
     return Math.abs(mCurrentState.velocity) <= mRestSpeedThreshold &&
-        getDisplacementDistanceForState(mCurrentState) <= mDisplacementFromRestThreshold;
+        (getDisplacementDistanceForState(mCurrentState) <= mDisplacementFromRestThreshold ||
+         mSpringConfig.tension == 0);
   }
 
   /**
