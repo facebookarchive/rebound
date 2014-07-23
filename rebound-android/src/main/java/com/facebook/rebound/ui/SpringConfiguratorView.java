@@ -20,9 +20,8 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -31,10 +30,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.facebook.rebound.OrigamiValueConverter;
+import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
 import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringConfigRegistry;
-import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 
 import java.text.DecimalFormat;
@@ -49,6 +48,7 @@ import static com.facebook.rebound.ui.Util.*;
  * within an Application. Each registered Spring can be accessed by its id and its tension and
  * friction properties can be edited while the user tests the effected UI live.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SpringConfiguratorView extends FrameLayout {
 
   private static final int MAX_SEEKBAR_VAL = 100000;
@@ -57,17 +57,19 @@ public class SpringConfiguratorView extends FrameLayout {
   private static final float MIN_FRICTION = 0;
   private static final float MAX_FRICTION = 50;
   private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.#");
+  private static final int mTextColor = Color.argb(255, 225, 225, 225);
 
-  private final SpinnerAdapter spinnerAdapter;
+  private final ArrayAdapter<String> mSpinnerAdapter;
+  private final ArrayAdapter<Integer> mSpeedAdapter;
   private final List<SpringConfig> mSpringConfigs = new ArrayList<SpringConfig>();
   private final Spring mRevealerSpring;
   private final float mStashPx;
   private final float mRevealPx;
-  private final SpringConfigRegistry springConfigRegistry;
-  private final int mTextColor = Color.argb(255, 225, 225, 225);
+  private final SpringConfigRegistry mSpringConfigRegistry;
   private SeekBar mTensionSeekBar;
   private SeekBar mFrictionSeekBar;
   private Spinner mSpringSelectorSpinner;
+  private Spinner mSpeedSpinner;
   private TextView mFrictionLabel;
   private TextView mTensionLabel;
   private SpringConfig mSelectedSpringConfig;
@@ -80,24 +82,26 @@ public class SpringConfiguratorView extends FrameLayout {
     this(context, attrs, 0);
   }
 
-  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   public SpringConfiguratorView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
 
     SpringSystem springSystem = SpringSystem.create();
-    springConfigRegistry = SpringConfigRegistry.getInstance();
-    spinnerAdapter = new SpinnerAdapter(context);
+    mSpringConfigRegistry = SpringConfigRegistry.getInstance();
+    mSpinnerAdapter = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item);
+    mSpeedAdapter = new ArrayAdapter<Integer>(
+            context, android.R.layout.simple_spinner_item, new Integer[] {1, 2, 4, 6, 10});
+    mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+    mSpeedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
     Resources resources = getResources();
     mRevealPx = dpToPx(40, resources);
     mStashPx = dpToPx(280, resources);
 
     mRevealerSpring = springSystem.createSpring();
-    SpringListener revealerSpringListener = new RevealerSpringListener();
     mRevealerSpring
         .setCurrentValue(1)
         .setEndValue(1)
-        .addListener(revealerSpringListener);
+        .addListener(new RevealerSpringListener());
 
     addView(generateHierarchy(context));
 
@@ -108,8 +112,10 @@ public class SpringConfiguratorView extends FrameLayout {
     mFrictionSeekBar.setMax(MAX_SEEKBAR_VAL);
     mFrictionSeekBar.setOnSeekBarChangeListener(seekbarListener);
 
-    mSpringSelectorSpinner.setAdapter(spinnerAdapter);
+    mSpringSelectorSpinner.setAdapter(mSpinnerAdapter);
+    mSpeedSpinner.setAdapter(mSpeedAdapter);
     mSpringSelectorSpinner.setOnItemSelectedListener(new SpringSelectedListener());
+    mSpeedSpinner.setOnItemSelectedListener(new SpeedSelectedListener());
     refreshSpringConfigurations();
 
     this.setTranslationY(mStashPx);
@@ -144,7 +150,7 @@ public class SpringConfiguratorView extends FrameLayout {
       container.setBackgroundColor(Color.argb(100, 0, 0, 0));
       root.addView(container);
 
-        mSpringSelectorSpinner = new Spinner(context, Spinner.MODE_DIALOG);
+        mSpringSelectorSpinner = new Spinner(context);
         params = createMatchWrapParams();
         params.gravity = Gravity.TOP;
         params.setMargins(tenPx, tenPx, tenPx, 0);
@@ -189,6 +195,13 @@ public class SpringConfiguratorView extends FrameLayout {
           seekWrapper.setOrientation(LinearLayout.HORIZONTAL);
           linearLayout.addView(seekWrapper);
 
+          mSpeedSpinner = new Spinner(context);
+          params = createMatchWrapParams();
+          params.gravity = Gravity.TOP;
+          params.setMargins(tenPx, tenPx, tenPx, 0);
+          mSpeedSpinner.setLayoutParams(params);
+          linearLayout.addView(mSpeedSpinner);
+
             mFrictionSeekBar = new SeekBar(context);
             mFrictionSeekBar.setLayoutParams(tableLayoutParams);
             seekWrapper.addView(mFrictionSeekBar);
@@ -227,9 +240,9 @@ public class SpringConfiguratorView extends FrameLayout {
    * reload the springs from the registry and update the UI
    */
   public void refreshSpringConfigurations() {
-    Map<SpringConfig, String> springConfigMap = springConfigRegistry.getAllSpringConfig();
+    Map<SpringConfig, String> springConfigMap = mSpringConfigRegistry.getAllSpringConfig();
 
-    spinnerAdapter.clear();
+    mSpinnerAdapter.clear();
     mSpringConfigs.clear();
 
     for (Map.Entry<SpringConfig, String> entry : springConfigMap.entrySet()) {
@@ -237,12 +250,11 @@ public class SpringConfiguratorView extends FrameLayout {
         continue;
       }
       mSpringConfigs.add(entry.getKey());
-      spinnerAdapter.add(entry.getValue());
+      mSpinnerAdapter.add(entry.getValue());
     }
     // Add the default config in last.
     mSpringConfigs.add(SpringConfig.defaultConfig);
-    spinnerAdapter.add(springConfigMap.get(SpringConfig.defaultConfig));
-    spinnerAdapter.notifyDataSetChanged();
+    mSpinnerAdapter.add(springConfigMap.get(SpringConfig.defaultConfig));
     if (mSpringConfigs.size() > 0) {
       mSpringSelectorSpinner.setSelection(0);
     }
@@ -251,13 +263,25 @@ public class SpringConfiguratorView extends FrameLayout {
   private class SpringSelectedListener implements AdapterView.OnItemSelectedListener {
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-      mSelectedSpringConfig = mSpringConfigs.get(i);
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+      mSelectedSpringConfig = mSpringConfigs.get(position);
       updateSeekBarsForSpringConfig(mSelectedSpringConfig);
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+    }
+  }
+
+  private class SpeedSelectedListener implements AdapterView.OnItemSelectedListener {
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+      SpringSystem.setSpringSpeedScale(mSpeedAdapter.getItem(position));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
     }
   }
 
@@ -329,12 +353,10 @@ public class SpringConfiguratorView extends FrameLayout {
 
   private void togglePosition() {
     double currentValue = mRevealerSpring.getEndValue();
-    mRevealerSpring
-        .setEndValue(currentValue == 1 ? 0 : 1);
+    mRevealerSpring.setEndValue(currentValue == 1 ? 0 : 1);
   }
 
-  private class RevealerSpringListener implements SpringListener {
-
+  private class RevealerSpringListener extends SimpleSpringListener {
     @Override
     public void onSpringUpdate(Spring spring) {
       float val = (float) spring.getCurrentValue();
@@ -344,76 +366,5 @@ public class SpringConfiguratorView extends FrameLayout {
       float yTranslate = (val * range) + minTranslate;
       SpringConfiguratorView.this.setTranslationY(yTranslate);
     }
-
-    @Override
-    public void onSpringAtRest(Spring spring) {
-    }
-
-    @Override
-    public void onSpringActivate(Spring spring) {
-    }
-
-    @Override
-    public void onSpringEndStateChange(Spring spring) {
-    }
-  }
-
-  private class SpinnerAdapter extends BaseAdapter {
-
-    private final Context mContext;
-    private final List<String> mStrings;
-
-    public SpinnerAdapter(Context context) {
-      mContext = context;
-      mStrings = new ArrayList<String>();
-    }
-
-    @Override
-    public int getCount() {
-      return mStrings.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-      return mStrings.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-      return position;
-    }
-
-    public void add(String string) {
-      mStrings.add(string);
-      notifyDataSetChanged();
-    }
-
-    /**
-     * Remove all elements from the list.
-     */
-    public void clear() {
-      mStrings.clear();
-      notifyDataSetChanged();
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-      TextView textView;
-      if (convertView == null) {
-        textView = new TextView(mContext);
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT);
-        textView.setLayoutParams(params);
-        int twelvePx = dpToPx(12, getResources());
-        textView.setPadding(twelvePx, twelvePx, twelvePx, twelvePx);
-        textView.setTextColor(mTextColor);
-      } else {
-        textView = (TextView) convertView;
-      }
-      textView.setText(mStrings.get(position));
-      return textView;
-    }
   }
 }
-

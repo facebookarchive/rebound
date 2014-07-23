@@ -217,7 +217,7 @@ public class BaseSpringSystem {
 
   /**
    * Set the speed scale to apply to all spring systems for debugging animations
-   * Setting the scale factor to 2 will make the spring 2x slower
+   * Example: Setting the scale factor to 2 will make the spring 2x slower
    * @param speedScale The scale factor to apply to the speed.
    */
   public static void setSpringSpeedScale(float speedScale) {
