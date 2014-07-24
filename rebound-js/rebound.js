@@ -823,13 +823,13 @@
   function compatRequestAnimationFrame(func) {
     var meth;
     if (typeof process != 'undefined') {
-      meth = process.nextTick;
+      meth = setImmediate;
     } else {
       meth = window.requestAnimationFrame ||
-      window.webkitRequestAnimationFrame ||
-      window.mozRequestAnimationFrame ||
-      window.msRequestAnimationFrame ||
-      window.oRequestAnimationFrame;
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        window.oRequestAnimationFrame;
     }
     return meth(func);
   }
