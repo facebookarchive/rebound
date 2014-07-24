@@ -20,7 +20,7 @@ import android.view.Choreographer;
  * available. It uses Android's {@link Choreographer} when available, otherwise it uses a
  * {@link Handler}.
  */
-public abstract class AndroidSpringLooperFactory {
+abstract class AndroidSpringLooperFactory {
 
   /**
    * Create an Android {@link com.facebook.rebound.SpringLooper} for the detected Android platform.

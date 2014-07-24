@@ -10,9 +10,18 @@
 
 package com.facebook.rebound;
 
-public class SpringClock {
-  public long now() {
-    return System.currentTimeMillis();
-  }
+public interface SpringClock {
+  /**
+   * The current time for the {@link BaseSpringSystem} to use when iterating over the springs.
+   * Ideally this method would use a monotonic clock.
+   * An example of this method would be:
+   *
+   * @Override
+   * public long now() {
+   *   return System.nanoTime() / 1000000;
+   * }
+   *
+   * @return the current clock time in millis
+   */
+  long now();
 }
-

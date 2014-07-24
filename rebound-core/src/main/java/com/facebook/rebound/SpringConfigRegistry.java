@@ -19,13 +19,10 @@ import java.util.Map;
  */
 public class SpringConfigRegistry {
 
-  private static SpringConfigRegistry instance;
+  private static final SpringConfigRegistry INSTANCE = new SpringConfigRegistry(true);
 
   public static SpringConfigRegistry getInstance() {
-    if (instance == null) {
-      instance = new SpringConfigRegistry(true);
-    }
-    return instance;
+    return INSTANCE;
   }
 
   private final Map<SpringConfig, String> mSpringConfigMap;
