@@ -22,7 +22,7 @@
 .content {
   width: 600px;
   margin: auto;
-  padding: 20px; 
+  padding: 20px;
   position: relative;
   margin-bottom: 100px;
 }
@@ -138,6 +138,10 @@ a.app_link {
   background-image: url(../images/slingshot.png);
 }
 
+.logo.mirage {
+  background-image: url(../images/mirage.png);
+}
+
 @media (-webkit-min-device-pixel-ratio: 2),
 (min--moz-device-pixel-ratio: 2),
 (min-resolution: 2dppx),
@@ -177,6 +181,10 @@ a.app_link {
 
   .logo.slingshot {
     background-image: url(../images/slingshot_2x.png);
+  }
+
+  .logo.mirage {
+    background-image: url(../images/mirage_2x.png);
   }
 
 }
