@@ -46,28 +46,28 @@
     </p>
     <div class="code">
     {% highlight java %}
-    // Create a system to run the physics loop for a set of springs.
-    SpringSystem springSystem = SpringSystem.create();
+// Create a system to run the physics loop for a set of springs.
+SpringSystem springSystem = SpringSystem.create();
 
-    // Add a spring to the system.
-    Spring spring = springSystem.createSpring();
+// Add a spring to the system.
+Spring spring = springSystem.createSpring();
 
-    // Add a listener to observe the motion of the spring.
-    spring.addListener(new SimpleSpringListener() {
+// Add a listener to observe the motion of the spring.
+spring.addListener(new SimpleSpringListener() {
 
-      @Override
-      public void onSpringUpdate(Spring spring) {
-        // You can observe the updates in the spring
-        // state by asking its current value in onSpringUpdate.
-        float value = (float) spring.getCurrentValue();
-        float scale = 1f - (value * 0.5f);
-        myView.setScaleX(scale);
-        myView.setScaleY(scale);
-      }
-    });
+  @Override
+  public void onSpringUpdate(Spring spring) {
+    // You can observe the updates in the spring
+    // state by asking its current value in onSpringUpdate.
+    float value = (float) spring.getCurrentValue();
+    float scale = 1f - (value * 0.5f);
+    myView.setScaleX(scale);
+    myView.setScaleY(scale);
+  }
+});
 
-    // Set the spring in motion; moving from 0 to 1
-    spring.setEndValue(1);
+// Set the spring in motion; moving from 0 to 1
+spring.setEndValue(1);
     {% endhighlight %}
     </div>
 
@@ -103,21 +103,21 @@
     </p>
     <div class="code">
     {% highlight groovy %}
-    // Gradle dependency on Rebound
-    dependencies {
-      compile 'com.facebook.rebound:rebound:0.3.4'
-    }
+// Gradle dependency on Rebound
+dependencies {
+  compile 'com.facebook.rebound:rebound:0.3.4'
+}
     {% endhighlight %}
     </div>
     <br />
     <div class="code">
     {% highlight xml %}
-    <!-- Maven dependency on Rebound -->
-    <dependency>
-      <groupId>com.facebook.rebound</groupId>
-      <artifactId>rebound</artifactId>
-      <version>0.3.4</version>
-    </dependency>
+  <!-- Maven dependency on Rebound -->
+<dependency>
+  <groupId>com.facebook.rebound</groupId>
+  <artifactId>rebound</artifactId>
+  <version>0.3.4</version>
+</dependency>
     {% endhighlight %}
     </div>
     </p>
@@ -128,22 +128,22 @@
     </p>
     <div class="code">
     {% highlight bash %}
-    cd $REBOUND_CHECKOUT
+cd $REBOUND_CHECKOUT
 
-    # build the core java library
-    ./gradlew rebound-core:assemble
+# build the core java library
+./gradlew rebound-core:assemble
 
-    # run core library tests
-    ./gradlew rebound-core:check
+# run core library tests
+./gradlew rebound-core:check
 
-    # build the Android distribution Jar
-    ./gradlew reboundDistJar
+# build the Android distribution Jar
+./gradlew reboundDistJar
 
-    # install the simple example app
-    ./gradlew installExample
+# install the simple example app
+./gradlew installExample
 
-    # install the origami example app
-    ./gradlew installOrigamiExample
+# install the origami example app
+./gradlew installOrigamiExample
     {% endhighlight %}
     </div>
 
