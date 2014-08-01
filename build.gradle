@@ -85,7 +85,7 @@ if (!project.hasProperty('sonatypeRepo') ||
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-version = "0.3.3"
+version = "0.3.4"
 group = "com.facebook.rebound"
 
 signing {
