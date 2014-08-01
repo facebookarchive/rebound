@@ -11,11 +11,11 @@ can be used to drive a wide variety of animations. The simplicity of Rebound
 makes it easy to integrate and use as a building block for creating more
 complex components like pagers, toggles, and scrollers.
 
-There is also a [Javascript version](https://github.com/facebook/rebound).
-
 For examples and usage instructions head over to:
 
-<a href="http://facebook.github.io/rebound">facebook.github.io/rebound</a>
+[facebook.github.io/rebound](http://facebook.github.io/rebound)
+
+If you are looking to build springy animations for the web, check out the [Javascript version](https://github.com/facebook/rebound-js).
 
 ##License
 
