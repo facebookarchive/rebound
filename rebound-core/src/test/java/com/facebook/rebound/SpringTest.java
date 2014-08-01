@@ -172,7 +172,7 @@ public class SpringTest {
    * push a Spring out of rest right after having gone to rest.
    */
   @Test
-  public void testSpringNoActivateAfterRest() {
+  public void testSpringDoesNotActivateAfterRest() {
     SpringListener listener = spy(new SimpleSpringListener());
     mSpring.addListener(listener);
     mSpring
@@ -204,7 +204,7 @@ public class SpringTest {
   }
 
   @Test
-  public void testSpringNoActivateAfterSetAtRestCall() {
+  public void testSpringDoesNotActivateAfterSetAtRestCall() {
     SpringListener listener = spy(new SimpleSpringListener());
     mSpring.addListener(listener);
     mSpring
@@ -295,7 +295,7 @@ public class SpringTest {
   }
 
   @Test
-  public void testSpringBehaviorWhenUpdatingEndStateButAndNotAtRest() {
+  public void testSpringBehaviorWhenUpdatingEndStateWhileNotAtRest() {
     SpringListener listener = spy(new SimpleSpringListener());
     mSpring
         .setCurrentValue(1)
@@ -321,6 +321,47 @@ public class SpringTest {
     inOrder.verify(listener, times(66)).onSpringUpdate(mSpring);
     inOrder.verify(listener).onSpringAtRest(mSpring);
     inOrder.verify(listener, never()).onSpringUpdate(mSpring);
+  }
+
+  @Test
+  public void testCanAddListenersWhileIterating() {
+    Spring spring = createTestSpring()
+      .addListener(new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        spring.addListener(new SimpleSpringListener());
+      }
+    });
+    iterateUntilRest(spring);
+  }
+
+  @Test
+  public void testCanRemoveListenersWhileIterating() {
+    final SpringListener nextListener = new SimpleSpringListener();
+    Spring spring = createTestSpring()
+        .addListener(new SimpleSpringListener() {
+          @Override
+          public void onSpringUpdate(Spring spring) {
+            spring.removeListener(nextListener);
+          }
+        })
+        .addListener(nextListener);
+    iterateUntilRest(spring);
+  }
+
+  private Spring createTestSpring () {
+    return new Spring(mSpringSystem)
+        .setSpringConfig(new SpringConfig(TENSION, FRICTION))
+        .setEndValue(END_VALUE);
+  }
+
+  private void iterateUntilRest(Spring spring) {
+    int i = 0;
+    int simulatedMsPerFrame = 16;
+    while (!spring.isAtRest() ) {
+      spring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      i += simulatedMsPerFrame;
+    }
   }
 
 }

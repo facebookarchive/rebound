@@ -10,6 +10,8 @@
 
 package com.facebook.rebound;
 
+import java.util.concurrent.CopyOnWriteArraySet;
+
 /**
  * Classical spring implementing Hooke's law with configurable friction and tension.
  */
@@ -43,7 +45,7 @@ public class Spring {
   // thresholds for determining when the spring is at rest
   private double mRestSpeedThreshold = 0.005;
   private double mDisplacementFromRestThreshold = 0.005;
-  private ReentrantCallback<SpringListener> mListeners = new ReentrantCallback<SpringListener>();
+  private CopyOnWriteArraySet<SpringListener> mListeners = new CopyOnWriteArraySet<SpringListener>();
   private double mTimeAccumulator = 0;
 
   private final BaseSpringSystem mSpringSystem;
@@ -474,7 +476,7 @@ public class Spring {
     if (newListener == null) {
       throw new IllegalArgumentException("newListener is required");
     }
-    mListeners.addListener(newListener);
+    mListeners.add(newListener);
     return this;
   }
 
@@ -487,7 +489,7 @@ public class Spring {
     if (listenerToRemove == null) {
       throw new IllegalArgumentException("listenerToRemove is required");
     }
-    mListeners.removeListener(listenerToRemove);
+    mListeners.remove(listenerToRemove);
     return this;
   }
 
