@@ -180,6 +180,45 @@ public class SpringSystemTest {
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
 
+  @Test
+  public void testCanAddListenersWhileIterating() {
+    when(mMockSpring.systemShouldAdvance()).thenReturn(true, false, false);
+    mSpringSystemSpy.addListener(new SimpleSpringSystemListener() {
+      @Override
+      public void onAfterIntegrate(BaseSpringSystem springSystem) {
+        springSystem.addListener(new SimpleSpringSystemListener());
+      }
+    });
+    mSpringSystemSpy.addListener(new SimpleSpringSystemListener());
+    mSpringSystemSpy.loop();
+  }
 
+  @Test
+  public void testCanRemoveListenersWhileIterating() {
+    when(mMockSpring.systemShouldAdvance()).thenReturn(true, false, false);
+    final SimpleSpringSystemListener nextListener = new SimpleSpringSystemListener();
+    mSpringSystemSpy
+        .addListener(new SimpleSpringSystemListener() {
+          @Override
+          public void onAfterIntegrate(BaseSpringSystem springSystem) {
+            springSystem.removeListener(nextListener);
+          }
+        });
+    mSpringSystemSpy
+        .addListener(nextListener);
+    mSpringSystemSpy.loop();
+  }
+
+  private class SimpleSpringSystemListener implements SpringSystemListener {
+    @Override
+    public void onBeforeIntegrate(BaseSpringSystem springSystem) {
+
+    }
+
+    @Override
+    public void onAfterIntegrate(BaseSpringSystem springSystem) {
+
+    }
+  }
 }
 

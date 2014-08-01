@@ -31,7 +31,7 @@ public class BaseSpringSystem {
   private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
   private final SpringClock mClock;
   private final SpringLooper mSpringLooper;
-  private final ReentrantCallback<SpringSystemListener> mListeners = new ReentrantCallback<SpringSystemListener>();
+  private final CopyOnWriteArraySet<SpringSystemListener> mListeners = new CopyOnWriteArraySet<SpringSystemListener>();
   private long mLastTimeMillis = -1;
   private boolean mIdle = true;
 
@@ -198,14 +198,14 @@ public class BaseSpringSystem {
     if (newListener == null) {
       throw new IllegalArgumentException("newListener is required");
     }
-    mListeners.addListener(newListener);
+    mListeners.add(newListener);
   }
 
   public void removeListener(SpringSystemListener listenerToRemove) {
     if (listenerToRemove == null) {
       throw new IllegalArgumentException("listenerToRemove is required");
     }
-    mListeners.removeListener(listenerToRemove);
+    mListeners.remove(listenerToRemove);
   }
 
   public void removeAllListeners() {
