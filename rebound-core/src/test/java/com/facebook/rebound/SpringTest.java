@@ -134,7 +134,7 @@ public class SpringTest {
     double[] positionValues = new double[100];
     double[] velocityValues = new double[100];
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame / 1000.0);
+      mSpring.advance(simulatedMsPerFrame / 1000.0);
       positionValues[i / simulatedMsPerFrame] = mSpring.getCurrentValue();
       velocityValues[i / simulatedMsPerFrame] = mSpring.getVelocity();
       i+=simulatedMsPerFrame;
@@ -156,7 +156,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 
@@ -191,7 +191,7 @@ public class SpringTest {
     float totalTime = 0;
     for (int i = 0; i < frameTimes.length; ++i) {
       totalTime += frameTimes[i];
-      mSpring.advance(totalTime, frameTimes[i]);
+      mSpring.advance(frameTimes[i]);
     }
 
     inOrder.verify(listener).onSpringEndStateChange(mSpring);
@@ -226,7 +226,7 @@ public class SpringTest {
     float totalTime = 0;
     for (int i = 0; i < frameTimes.length; ++i) {
       totalTime += frameTimes[i];
-      mSpring.advance(totalTime, frameTimes[i]);
+      mSpring.advance(frameTimes[i]);
       if ((i + 1) == numOfFrameBeforeStop) {
         mSpring.setAtRest();
       }
@@ -255,7 +255,7 @@ public class SpringTest {
     double[] positionValues = new double[12];
     double[] velocityValues = new double[12];
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame / 1000.0);
+      mSpring.advance(simulatedMsPerFrame / 1000.0);
       if (mSpring.getCurrentValue() > 1) {
         positionValues[i / simulatedMsPerFrame] = 1;
         velocityValues[i / simulatedMsPerFrame] = 0;
@@ -283,7 +283,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 
@@ -312,7 +312,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 

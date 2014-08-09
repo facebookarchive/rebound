@@ -79,7 +79,7 @@ public class SpringSystemTest {
     when(mMockSpring.systemShouldAdvance()).thenReturn(true, false);
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
     verify(mSpringSystemSpy).advance(1, 1);
-    verify(mMockSpring).advance(0.001,0.001);
+    verify(mMockSpring).advance(0.001);
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
 
@@ -93,19 +93,19 @@ public class SpringSystemTest {
 
     inOrder.verify(mSpringSystemSpy).loop();
     inOrder.verify(mSpringSystemSpy).advance(1L, 1L);
-    inOrder.verify(mMockSpring).advance(0.001, 0.001);
+    inOrder.verify(mMockSpring).advance(0.001);
 
     inOrder.verify(mSpringSystemSpy).loop();
     inOrder.verify(mSpringSystemSpy).advance(2L, 1L);
-    inOrder.verify(mMockSpring).advance(0.002, 0.001);
+    inOrder.verify(mMockSpring).advance(0.001);
 
     inOrder.verify(mSpringSystemSpy).loop();
     inOrder.verify(mSpringSystemSpy).advance(3L, 1L);
-    inOrder.verify(mMockSpring).advance(0.003, 0.001);
+    inOrder.verify(mMockSpring).advance(0.001);
 
     inOrder.verify(mSpringSystemSpy).loop();
     inOrder.verify(mSpringSystemSpy).advance(4L, 1L);
-    inOrder.verify(mMockSpring, never()).advance(0.004, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(0.001);
 
     inOrder.verify(mSpringSystemSpy, never()).loop();
     inOrder.verify(mSpringSystemSpy, never()).advance(5L, 1L);
@@ -154,29 +154,29 @@ public class SpringSystemTest {
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
     inOrder.verify(mSpringSystemSpy).advance(1L, 1L);
     inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring).advance(0.001, 0.001);
+    inOrder.verify(mMockSpring).advance(0.001);
 
     inOrder.verify(mSpringSystemSpy).advance(2L, 1L);
     inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.002, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(0.001);
     assertTrue(mSpringSystemSpy.getIsIdle());
 
     mSpringSystemSpy.loop();
     inOrder.verify(mSpringSystemSpy).advance(3L, 1L);
     inOrder.verify(mMockSpring, never()).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.003, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(0.001);
     assertTrue(mSpringSystemSpy.getIsIdle());
 
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
     inOrder.verify(mSpringSystemSpy).advance(4L, 1L);
     inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.004, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(0.001);
     assertTrue(mSpringSystemSpy.getIsIdle());
 
     mSpringSystemSpy.loop();
     inOrder.verify(mSpringSystemSpy).advance(5L, 1L);
     inOrder.verify(mMockSpring, never()).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.005, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(0.001);
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
 
