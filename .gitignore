@@ -4,6 +4,7 @@
 gen
 local.properties
 buck-*
+.buckd
 out
 build
 .DS_Store

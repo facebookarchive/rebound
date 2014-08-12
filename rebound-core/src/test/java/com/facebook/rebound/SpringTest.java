@@ -14,7 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
@@ -134,7 +140,7 @@ public class SpringTest {
     double[] positionValues = new double[100];
     double[] velocityValues = new double[100];
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame / 1000.0);
+      mSpring.advance(simulatedMsPerFrame / 1000.0);
       positionValues[i / simulatedMsPerFrame] = mSpring.getCurrentValue();
       velocityValues[i / simulatedMsPerFrame] = mSpring.getVelocity();
       i+=simulatedMsPerFrame;
@@ -156,7 +162,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 
@@ -188,10 +194,8 @@ public class SpringTest {
         0.018f, 0.017f, 0.032f, 0.014f, 0.016f, 0.033f, 0.017f, 0.016f, 0.036f
     };
 
-    float totalTime = 0;
-    for (int i = 0; i < frameTimes.length; ++i) {
-      totalTime += frameTimes[i];
-      mSpring.advance(totalTime, frameTimes[i]);
+    for (float frameTime : frameTimes) {
+      mSpring.advance(frameTime);
     }
 
     inOrder.verify(listener).onSpringEndStateChange(mSpring);
@@ -223,10 +227,8 @@ public class SpringTest {
         0.018f, 0.017f, 0.032f, 0.014f, 0.016f, 0.033f, 0.017f, 0.016f, 0.036f
     };
 
-    float totalTime = 0;
     for (int i = 0; i < frameTimes.length; ++i) {
-      totalTime += frameTimes[i];
-      mSpring.advance(totalTime, frameTimes[i]);
+      mSpring.advance(frameTimes[i]);
       if ((i + 1) == numOfFrameBeforeStop) {
         mSpring.setAtRest();
       }
@@ -255,7 +257,7 @@ public class SpringTest {
     double[] positionValues = new double[12];
     double[] velocityValues = new double[12];
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame / 1000.0);
+      mSpring.advance(simulatedMsPerFrame / 1000.0);
       if (mSpring.getCurrentValue() > 1) {
         positionValues[i / simulatedMsPerFrame] = 1;
         velocityValues[i / simulatedMsPerFrame] = 0;
@@ -283,7 +285,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 
@@ -312,7 +314,7 @@ public class SpringTest {
     int simulatedMsPerFrame = 16;
     int runtime = simulatedMsPerFrame * 3000;
     while (i < runtime) {
-      mSpring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
+      mSpring.advance(simulatedMsPerFrame /1000.0);
       i += simulatedMsPerFrame;
     }
 
@@ -326,6 +328,7 @@ public class SpringTest {
   @Test
   public void testCanAddListenersWhileIterating() {
     Spring spring = createTestSpring()
+      .setEndValue(END_VALUE)
       .addListener(new SimpleSpringListener() {
       @Override
       public void onSpringUpdate(Spring spring) {
@@ -339,6 +342,7 @@ public class SpringTest {
   public void testCanRemoveListenersWhileIterating() {
     final SpringListener nextListener = new SimpleSpringListener();
     Spring spring = createTestSpring()
+        .setEndValue(END_VALUE)
         .addListener(new SimpleSpringListener() {
           @Override
           public void onSpringUpdate(Spring spring) {
@@ -349,18 +353,83 @@ public class SpringTest {
     iterateUntilRest(spring);
   }
 
+  @Test
+  public void testSettingVelocityTriggersIteration() {
+
+    List<Double> expectedValues = new ArrayList<Double>();
+    Collections.addAll(expectedValues,
+        12.939654049942755, 22.577876614612844, 28.54783297480804, 31.509232428471236,
+        32.10098439026363, 30.914342688053463, 28.475499622860113, 25.236032817414525,
+        21.56962941080124, 17.77360771096671, 14.073901757184718, 10.632348970485324,
+        7.555308642976277, 4.902826584083833, 2.6977393197080004, 0.9342733116071972,
+        -0.41416327060194336, -1.3881785731030014, -2.0366693731801266, -2.412175708003395,
+        -2.567269005820985, -2.551885441954701, -2.4114915851846606, -2.185956917644723,
+        -1.9090049430690101, -1.608118968920348, -1.3047881389601688, -1.0149920820059835,
+        -0.7498371186711879, -0.5162721253093042, -0.3178269743126781, -0.15533029140660962,
+        -0.027575656442567317, 0.06808392556148704, 0.13522454097952807, 0.17792698196814632,
+        0.2004380871345706, 0.20691246148636744, 0.20122656573017264, 0.1868556051535494,
+        0.16680298130501897, 0.14357209517052433, 0.1191708257094987, 0.09513989179074418,
+        0.0725974025569678, 0.05229309978864437, 0.03466700870434143, 0.019908375738852607,
+        0.008011837724304135, -0.0011712921133166356, -0.007887934682286893, -0.012445007796290883,
+        -0.015178178515461428, -0.01642735293911623, -0.016518376724730492, -0.01575024362102694,
+        -0.014387014983916622, -0.012653623953639396, -0.01073475814439276, -0.008776070347631434,
+        -0.006887045763082467, -0.005144946527506555, -0.003599351673633401, -0.0022769068585264973,
+        -0.00118598868985456, -3.2107017314128447E-4, 3.333551226580478E-4, 7.993729400056721E-4,
+        0.0011028068129919262, 0.001270932409643302, 0.0);
+
+    final List<Double> actualValues = new ArrayList<Double>();
+    SpringListener listener = new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        actualValues.add(spring.getCurrentValue());
+      }
+    };
+    Spring spring = createTestSpring().addListener(listener);
+    spring.setVelocity(1000);
+    iterateUntilRest(spring);
+
+    assertThat(actualValues, is(expectedValues));
+  }
+
+  @Test
+  public void testSettingCurrentPositionTriggersIteration() {
+
+    List<Double> expectedValues = new ArrayList<Double>();
+    Collections.addAll(expectedValues,
+        1.0, 0.9769932005557715, 0.9107271512877068, 0.8157786676931283, 0.7044678629533047,
+        0.5867126710189403, 0.47015702489116307, 0.36038042531129016, 0.261156966845248,
+        0.17473775829560714, 0.10213632352725191, 0.043401769365927934, -0.002130886168309641,
+        -0.03561989664068272, -0.05852891121737896, -0.07247290518279491, -0.07909684588748486,
+        -0.07998464847076281, -0.07659508512043615, -0.07022082321273125, -0.061966600693927947,
+        -0.052742625703973076, -0.04326954333812012, -0.03409168618938477, -0.025595767119455923,
+        -0.01803264238692162, -0.011540239761078923, -0.006166186811482669, -0.0018890737087958408,
+        0.0013623667255423287, 0.0036925856408489555, 0.005225237487373128, 0.006091893160832346,
+        0.006423311557232353, 0.006343040255727984, 0.005963058372530052, 0.005381146583670259,
+        0.004679664549915674, 0.003925428631431925, 0.003170407646874172, 0.0024529870525211365,
+        0.0017995886097055978, 0.001226470450320867, 7.415692258700482E-4, 3.462801551103353E-4,
+        3.710123662101473E-5, -1.9290591003037256E-4, -3.528643770514182E-4, 0.0);
+
+    final List<Double> actualValues = new ArrayList<Double>();
+    SpringListener listener = new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        actualValues.add(spring.getCurrentValue());
+      }
+    };
+    Spring spring = createTestSpring().addListener(listener);
+    spring.setCurrentValue(1);
+    iterateUntilRest(spring);
+    assertThat(actualValues, is(expectedValues));
+  }
+
   private Spring createTestSpring () {
-    return new Spring(mSpringSystem)
-        .setSpringConfig(new SpringConfig(TENSION, FRICTION))
-        .setEndValue(END_VALUE);
+    return new Spring(mSpringSystem).setSpringConfig(new SpringConfig(TENSION, FRICTION));
   }
 
   private void iterateUntilRest(Spring spring) {
-    int i = 0;
     int simulatedMsPerFrame = 16;
     while (!spring.isAtRest() ) {
-      spring.advance(i / 1000.0, simulatedMsPerFrame /1000.0);
-      i += simulatedMsPerFrame;
+      spring.advance(simulatedMsPerFrame /1000.0);
     }
   }
 

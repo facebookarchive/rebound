@@ -13,6 +13,7 @@ package com.facebook.rebound;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Choreographer;
 
 /**
@@ -43,6 +44,7 @@ abstract class AndroidSpringLooperFactory {
     private final Handler mHandler;
     private final Runnable mLooperRunnable;
     private boolean mStarted;
+    private long mLastTime;
 
     /**
      * @return an Android spring looper using a new {@link Handler} instance
@@ -59,7 +61,8 @@ abstract class AndroidSpringLooperFactory {
           if (!mStarted || mSpringSystem == null) {
             return;
           }
-          mSpringSystem.loop();
+          long currentTime = SystemClock.uptimeMillis();
+          mSpringSystem.loop(currentTime - mLastTime);
           mHandler.post(mLooperRunnable);
         }
       };
@@ -67,7 +70,11 @@ abstract class AndroidSpringLooperFactory {
 
     @Override
     public void start() {
+      if (mStarted) {
+        return;
+      }
       mStarted = true;
+      mLastTime = SystemClock.uptimeMillis();
       mHandler.removeCallbacks(mLooperRunnable);
       mHandler.post(mLooperRunnable);
     }
@@ -89,6 +96,7 @@ abstract class AndroidSpringLooperFactory {
     private final Choreographer mChoreographer;
     private final Choreographer.FrameCallback mFrameCallback;
     private boolean mStarted;
+    private long mLastTime;
 
     /**
      * @return an Android spring choreographer using the system {@link Choreographer}
@@ -105,7 +113,9 @@ abstract class AndroidSpringLooperFactory {
           if (!mStarted || mSpringSystem == null) {
             return;
           }
-          mSpringSystem.loop();
+          long currentTime = SystemClock.uptimeMillis();
+          mSpringSystem.loop(currentTime - mLastTime);
+          mLastTime = currentTime;
           mChoreographer.postFrameCallback(mFrameCallback);
         }
       };
@@ -113,7 +123,11 @@ abstract class AndroidSpringLooperFactory {
 
     @Override
     public void start() {
+      if (mStarted) {
+        return;
+      }
       mStarted = true;
+      mLastTime = SystemClock.uptimeMillis();
       mChoreographer.removeFrameCallback(mFrameCallback);
       mChoreographer.postFrameCallback(mFrameCallback);
     }

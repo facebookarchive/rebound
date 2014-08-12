@@ -1,12 +1,12 @@
 /*
- *  Copyright (c) 2013, Facebook, Inc.
- *  All rights reserved.
- *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
- *
- */
+*  Copyright (c) 2013, Facebook, Inc.
+*  All rights reserved.
+*
+*  This source code is licensed under the BSD-style license found in the
+*  LICENSE file in the root directory of this source tree. An additional grant
+*  of patent rights can be found in the PATENTS file in the same directory.
+*
+*/
 
 package com.facebook.rebound;
 
@@ -20,40 +20,14 @@ import static org.mockito.Mockito.*;
 public class SpringSystemTest {
 
   private BaseSpringSystem mSpringSystemSpy;
+  private SynchronousLooper mSynchronousLooper;
   private Spring mMockSpring;
 
   @Before
   public void beforeEach() {
-    SpringLooper testSpringLooper = new SpringLooper() {
-      private boolean mStarted;
-
-      @Override
-      public void start() {
-        if (mStarted) {
-          return;
-        }
-        mStarted = true;
-        while (mStarted) {
-          mSpringSystemSpy.loop();
-        }
-      }
-
-      @Override
-      public void stop() {
-        mStarted = false;
-      }
-    };
-    SpringClock clockSpy = spy(new SpringClock() {
-      private int time = 0;
-      @Override
-      public long now() {
-        return time++;
-      }
-    });
-    when(clockSpy.now()).thenReturn(1L, 2L, 3L, 4L, 5L);
-    mSpringSystemSpy = spy(new BaseSpringSystem(
-        clockSpy,
-        testSpringLooper));
+    mSynchronousLooper = new SynchronousLooper();
+    mSpringSystemSpy = spy(new BaseSpringSystem(mSynchronousLooper));
+    mSynchronousLooper.setSpringSystem(mSpringSystemSpy);
     // NB: make sure the runnable calls the spy
     mMockSpring = mock(Spring.class);
     when(mMockSpring.getId()).thenReturn("spring_id");
@@ -78,8 +52,8 @@ public class SpringSystemTest {
     mSpringSystemSpy.registerSpring(mMockSpring);
     when(mMockSpring.systemShouldAdvance()).thenReturn(true, false);
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
-    verify(mSpringSystemSpy).advance(1, 1);
-    verify(mMockSpring).advance(0.001,0.001);
+    verify(mSpringSystemSpy, times(2)).advance(mSynchronousLooper.getTimeStep());
+    verify(mMockSpring, times(1)).advance(mSynchronousLooper.getTimeStep() / 1000);
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
 
@@ -91,24 +65,16 @@ public class SpringSystemTest {
     mSpringSystemSpy.registerSpring(mMockSpring);
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
 
-    inOrder.verify(mSpringSystemSpy).loop();
-    inOrder.verify(mSpringSystemSpy).advance(1L, 1L);
-    inOrder.verify(mMockSpring).advance(0.001, 0.001);
+    double stepMillis = mSynchronousLooper.getTimeStep();
+    double stepSeconds = mSynchronousLooper.getTimeStep() / 1000;
 
-    inOrder.verify(mSpringSystemSpy).loop();
-    inOrder.verify(mSpringSystemSpy).advance(2L, 1L);
-    inOrder.verify(mMockSpring).advance(0.002, 0.001);
-
-    inOrder.verify(mSpringSystemSpy).loop();
-    inOrder.verify(mSpringSystemSpy).advance(3L, 1L);
-    inOrder.verify(mMockSpring).advance(0.003, 0.001);
-
-    inOrder.verify(mSpringSystemSpy).loop();
-    inOrder.verify(mSpringSystemSpy).advance(4L, 1L);
-    inOrder.verify(mMockSpring, never()).advance(0.004, 0.001);
-
-    inOrder.verify(mSpringSystemSpy, never()).loop();
-    inOrder.verify(mSpringSystemSpy, never()).advance(5L, 1L);
+    inOrder.verify(mSpringSystemSpy, times(1)).advance(stepMillis);
+    inOrder.verify(mMockSpring, times(1)).advance(stepSeconds);
+    inOrder.verify(mSpringSystemSpy, times(1)).advance(stepMillis);
+    inOrder.verify(mMockSpring, times(1)).advance(stepSeconds);
+    inOrder.verify(mSpringSystemSpy, times(1)).advance(stepMillis);
+    inOrder.verify(mMockSpring, times(1)).advance(stepSeconds);
+    inOrder.verify(mSpringSystemSpy, times(1)).advance(stepMillis); // one extra pass through the system
 
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
@@ -151,38 +117,41 @@ public class SpringSystemTest {
     mSpringSystemSpy.registerSpring(mMockSpring);
     assertTrue(mSpringSystemSpy.getIsIdle());
 
-    mSpringSystemSpy.activateSpring(mMockSpring.getId());
-    inOrder.verify(mSpringSystemSpy).advance(1L, 1L);
-    inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring).advance(0.001, 0.001);
-
-    inOrder.verify(mSpringSystemSpy).advance(2L, 1L);
-    inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.002, 0.001);
-    assertTrue(mSpringSystemSpy.getIsIdle());
-
-    mSpringSystemSpy.loop();
-    inOrder.verify(mSpringSystemSpy).advance(3L, 1L);
-    inOrder.verify(mMockSpring, never()).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.003, 0.001);
-    assertTrue(mSpringSystemSpy.getIsIdle());
+    double stepMillis = mSynchronousLooper.getTimeStep();
+    double stepSeconds = mSynchronousLooper.getTimeStep() / 1000;
 
     mSpringSystemSpy.activateSpring(mMockSpring.getId());
-    inOrder.verify(mSpringSystemSpy).advance(4L, 1L);
+    inOrder.verify(mSpringSystemSpy).advance(stepMillis);
     inOrder.verify(mMockSpring).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.004, 0.001);
+    inOrder.verify(mMockSpring).advance(stepSeconds);
+
+    inOrder.verify(mSpringSystemSpy).advance(stepMillis);
+    inOrder.verify(mMockSpring).systemShouldAdvance();
+    inOrder.verify(mMockSpring, never()).advance(stepSeconds);
     assertTrue(mSpringSystemSpy.getIsIdle());
 
-    mSpringSystemSpy.loop();
-    inOrder.verify(mSpringSystemSpy).advance(5L, 1L);
+    mSpringSystemSpy.loop(stepMillis);
+    inOrder.verify(mSpringSystemSpy).advance(stepMillis);
     inOrder.verify(mMockSpring, never()).systemShouldAdvance();
-    inOrder.verify(mMockSpring, never()).advance(0.005, 0.001);
+    inOrder.verify(mMockSpring, never()).advance(stepSeconds);
+    assertTrue(mSpringSystemSpy.getIsIdle());
+
+    mSpringSystemSpy.activateSpring(mMockSpring.getId());
+    inOrder.verify(mSpringSystemSpy).advance(stepMillis);
+    inOrder.verify(mMockSpring).systemShouldAdvance();
+    inOrder.verify(mMockSpring, never()).advance(stepSeconds);
+    assertTrue(mSpringSystemSpy.getIsIdle());
+
+    mSpringSystemSpy.loop(stepMillis);
+    inOrder.verify(mSpringSystemSpy).advance(stepMillis);
+    inOrder.verify(mMockSpring, never()).systemShouldAdvance();
+    inOrder.verify(mMockSpring, never()).advance(stepSeconds);
     assertTrue(mSpringSystemSpy.getIsIdle());
   }
 
   @Test
   public void testCanAddListenersWhileIterating() {
-    when(mMockSpring.systemShouldAdvance()).thenReturn(true, false, false);
+    when(mMockSpring.systemShouldAdvance()).thenReturn(true, false);
     mSpringSystemSpy.addListener(new SimpleSpringSystemListener() {
       @Override
       public void onAfterIntegrate(BaseSpringSystem springSystem) {
@@ -190,12 +159,12 @@ public class SpringSystemTest {
       }
     });
     mSpringSystemSpy.addListener(new SimpleSpringSystemListener());
-    mSpringSystemSpy.loop();
+    mSpringSystemSpy.loop(1);
   }
 
   @Test
   public void testCanRemoveListenersWhileIterating() {
-    when(mMockSpring.systemShouldAdvance()).thenReturn(true, false, false);
+    when(mMockSpring.systemShouldAdvance()).thenReturn(true, true, false);
     final SimpleSpringSystemListener nextListener = new SimpleSpringSystemListener();
     mSpringSystemSpy
         .addListener(new SimpleSpringSystemListener() {
@@ -206,7 +175,9 @@ public class SpringSystemTest {
         });
     mSpringSystemSpy
         .addListener(nextListener);
-    mSpringSystemSpy.loop();
+    mSpringSystemSpy.loop(1);
+    mSpringSystemSpy.loop(1);
+    mSpringSystemSpy.loop(1);
   }
 
   private class SimpleSpringSystemListener implements SpringSystemListener {
