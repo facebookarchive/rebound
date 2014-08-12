@@ -111,6 +111,7 @@ public class Spring {
   public Spring setCurrentValue(double currentValue) {
     mStartValue = currentValue;
     mCurrentState.position = currentValue;
+    mSpringSystem.activateSpring(this.getId());
     for (SpringListener listener : mListeners) {
       listener.onSpringUpdate(this);
     }
@@ -182,6 +183,7 @@ public class Spring {
    */
   public Spring setVelocity(double velocity) {
     mCurrentState.velocity = velocity;
+    mSpringSystem.activateSpring(this.getId());
     return this;
   }
 
@@ -264,7 +266,7 @@ public class Spring {
    * @param time clock time
    * @param realDeltaTime clock drift
    */
-  void advance(double time, double realDeltaTime) {
+  void advance(double realDeltaTime) {
 
     boolean isAtRest = isAtRest();
 

@@ -12,11 +12,11 @@ public class SpringSystem extends BaseSpringSystem {
    * @return the SpringSystem
    */
   public static SpringSystem create() {
-    return new SpringSystem(new AndroidClock(), AndroidSpringLooperFactory.createSpringLooper());
+    return new SpringSystem(AndroidSpringLooperFactory.createSpringLooper());
   }
 
-  private SpringSystem(SpringClock clock, SpringLooper springLooper) {
-    super(clock, springLooper);
+  private SpringSystem(SpringLooper springLooper) {
+    super(springLooper);
   }
 
 }
