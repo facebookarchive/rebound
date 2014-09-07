@@ -1,10 +1,11 @@
 [alias]
-  core    = //rebound-core:src
-  test    = //rebound-core:test
-  android = //rebound-android:src
-  app     = //rebound-android-example:bin
-  origami = //rebound-android-origami-example:bin
-  rebound = //:rebound
+  android    = //rebound-android:src
+  app        = //rebound-android-example:bin
+  core       = //rebound-core:src
+  origami    = //rebound-android-origami-example:bin
+  playground = //rebound-android-playground:bin
+  rebound    = //:rebound
+  test       = //rebound-core:test
 
 [project]
   ignore = .git
