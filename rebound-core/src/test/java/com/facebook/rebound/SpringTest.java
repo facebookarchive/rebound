@@ -392,7 +392,24 @@ public class SpringTest {
   }
 
   @Test
-  public void testSettingCurrentPositionTriggersIteration() {
+  public void testSetCurrentValueSetsAtRestByDefault() {
+    List<Double> expectedValues = new ArrayList<Double>();
+    Collections.addAll(expectedValues, 1.0);
+    final List<Double> actualValues = new ArrayList<Double>();
+    SpringListener listener = new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        actualValues.add(spring.getCurrentValue());
+      }
+    };
+    Spring spring = createTestSpring().addListener(listener);
+    spring.setCurrentValue(1);
+    iterateUntilRest(spring);
+    assertThat(actualValues, is(expectedValues));
+  }
+
+  @Test
+  public void testSettingCurrentValueWithoutSettingAtRestTriggersIteration() {
 
     List<Double> expectedValues = new ArrayList<Double>();
     Collections.addAll(expectedValues,
@@ -417,7 +434,36 @@ public class SpringTest {
       }
     };
     Spring spring = createTestSpring().addListener(listener);
-    spring.setCurrentValue(1);
+    spring.setCurrentValue(1, false);
+    iterateUntilRest(spring);
+    assertThat(actualValues, is(expectedValues));
+  }
+
+  @Test
+  public void testSpringMotionWithNoFriction() {
+    List<Double> expectedValues = new ArrayList<Double>();
+    Collections.addAll(expectedValues,
+        13.051881339165476, 23.427268966531795, 31.082861473588856, 36.73162359593332,
+        40.89962411129771, 43.975028583962526, 46.24424919361015, 47.918618279373895,
+        49.15406970416802, 50.06566096322999, 50.73828847971584, 51.234594001995085,
+        51.600798424811074, 51.87100633761877, 52.07038218235174, 52.21749381594507,
+        52.32604173340962, 52.40613499386828, 52.465232676446966, 52.50883854373434,
+        52.541013606764125, 52.56475432665734, 52.58227167481379, 52.59519704050676,
+        52.60473416203935, 52.6117712307992, 52.616963608453354, 52.620794860729475,
+        52.62362179185448, 52.62570767370448, 52.627246764294135, 52.62838239901053,
+        52.629220339426624, 52.629838622868284, 52.63029483002443, 52.630631447432044,
+        52.630879824244175, 52.631063091774045, 52.631198317712474, 52.6312980956406,
+        52.631371717869136 );
+
+    final List<Double> actualValues = new ArrayList<Double>();
+    Spring spring = createTestSpring().addListener(new SimpleSpringListener() {
+      @Override
+      public void onSpringUpdate(Spring spring) {
+        actualValues.add(spring.getCurrentValue());
+      }
+    });
+    spring.getSpringConfig().tension = 0;
+    spring.setVelocity(1000);
     iterateUntilRest(spring);
     assertThat(actualValues, is(expectedValues));
   }
