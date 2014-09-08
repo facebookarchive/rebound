@@ -26,6 +26,7 @@ public class Spring {
   private static final double SOLVER_TIMESTEP_SEC = 0.001;
   private SpringConfig mSpringConfig;
   private boolean mOvershootClampingEnabled;
+  private boolean mIsCoasting;
 
   // storage for the current and prior physics state while integration is occurring
   private static class PhysicsState {
