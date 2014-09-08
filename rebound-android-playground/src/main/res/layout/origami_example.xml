@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@android:color/black"
+  >
+  <ImageView
+    android:id="@+id/grid"
+    android:layout_width="320dp"
+    android:layout_height="568dp"
+    android:src="@drawable/grid"
+    android:layout_gravity="center"
+    android:scaleType="matrix"
+    />
+  <ImageView
+    android:id="@+id/selection"
+    android:layout_width="320dp"
+    android:layout_height="320dp"
+    android:src="@drawable/selected_photo"
+    android:layout_gravity="center"
+    />
+  <ImageView
+    android:id="@+id/feedback"
+    android:layout_width="320dp"
+    android:layout_height="58dp"
+    android:src="@drawable/feedback"
+    android:layout_gravity="bottom|center_horizontal"
+    />
+  <com.facebook.rebound.ui.SpringConfiguratorView
+    android:id="@+id/spring_configurator"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:visibility="invisible"
+    />
+</FrameLayout>
