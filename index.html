@@ -124,26 +124,20 @@ dependencies {
     <div class="section_title">Building</div>
     <p>
     You can use the included Gradle wrapper to build Rebound libraries and sample applications locally as well.
-    Check out the code from GitHub at <a href="http://github.com/facebook/rebound" target="_blank">github.com/facebook/rebound</a>.
+    Check out the code at <a href="http://github.com/facebook/rebound" target="_blank">github.com/facebook/rebound</a>.
     </p>
     <div class="code">
     {% highlight bash %}
 cd $REBOUND_CHECKOUT
 
-# build the core java library
-./gradlew rebound-core:assemble
-
-# run core library tests
-./gradlew rebound-core:check
+# install the Rebound playground app
+./gradlew installPlayground
 
 # build the Android distribution Jar
 ./gradlew reboundDistJar
 
-# install the simple example app
-./gradlew installExample
-
-# install the origami example app
-./gradlew installOrigamiExample
+# run core library tests
+./gradlew rebound-core:check
     {% endhighlight %}
     </div>
 
