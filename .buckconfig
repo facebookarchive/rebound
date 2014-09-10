@@ -2,7 +2,6 @@
   android    = //rebound-android:src
   app        = //rebound-android-example:bin
   core       = //rebound-core:src
-  origami    = //rebound-android-origami-example:bin
   playground = //rebound-android-playground:bin
   rebound    = //:rebound
   test       = //rebound-core:test
