@@ -96,7 +96,10 @@ public class CascadeEffectExample extends FrameLayout {
         postDelayed(new Runnable() {
           @Override
           public void run() {
-            mSpringChain.setControlSpringIndex(0).getControlSpring().setEndValue(0);
+            mSpringChain
+                .setControlSpringIndex(0)
+                .getControlSpring()
+                .setEndValue(0);
           }
         }, 500);
       }
@@ -117,9 +120,10 @@ public class CascadeEffectExample extends FrameLayout {
         mVelocityTracker.addMovement(event);
 
         int idx = mViews.indexOf(mLastDraggingView);
-        mSpringChain.setControlSpringIndex(idx);
-
-        mSpringChain.getControlSpring().setCurrentValue(mLastDownXlat);
+        mSpringChain
+            .setControlSpringIndex(idx)
+            .getControlSpring()
+            .setCurrentValue(mLastDownXlat);
         break;
       case MotionEvent.ACTION_MOVE: {
         final int pointerIndex = event.findPointerIndex(mActivePointerId);
@@ -128,7 +132,9 @@ public class CascadeEffectExample extends FrameLayout {
           view.getLocationOnScreen(location);
           float x = event.getX(pointerIndex) + location[0];
           float offset = x - mLastDownX + mLastDownXlat;
-          mSpringChain.getControlSpring().setCurrentValue(offset);
+          mSpringChain
+              .getControlSpring()
+              .setCurrentValue(offset);
           mVelocityTracker.addMovement(event);
         }
         break;
