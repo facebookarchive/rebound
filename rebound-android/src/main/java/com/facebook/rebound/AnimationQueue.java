@@ -102,8 +102,6 @@ public class AnimationQueue {
    */
   public void clearCallbacks() {
     mCallbacks.clear();
-//    mRunning = false;
-//    mChoreographer.removeFrameCallback(mChoreographerCallback);
   }
 
   /**

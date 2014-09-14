@@ -12,29 +12,49 @@ package com.facebook.rebound;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * SpringChain is a helper class for creating spring animations with multiple springs in a chain.
+ * Chains of springs can be used to create cascading animations that maintain individual physics
+ * state for each member of the chain. One spring in the chain is chosen to be the control spring.
+ * Springs before and after the control spring in the chain are pulled along by their predecessor.
+ * You can change which spring is the control spring at any point by calling
+ * {@link SpringChain#setControlSpringIndex(int)}.
+ */
 public class SpringChain implements SpringListener {
 
-  private final SpringSystem mSpringSystem;
-  private final CopyOnWriteArrayList<SpringListener> mListeners;
-  private final CopyOnWriteArrayList<Spring> mSprings;
-  private static final SpringConfig ATTACHMENT_SPRING = SpringConfig.fromOrigamiTensionAndFriction(70, 10);
-  private static final SpringConfig MAIN_SPRING = SpringConfig.fromOrigamiTensionAndFriction(40, 6);
-  private int mControlSpringIndex;
+  // The main spring config defines the tension and friction for the control spring. Keeping these
+  // values separate allows the behavior of the trailing springs to be different than that of the
+  // control point.
+  private static final SpringConfig MAIN_SPRING_CONFIG =
+      SpringConfig.fromOrigamiTensionAndFriction(40, 6);
+  // The attachment spring config defines the tension and friction for the rest of the springs in
+  // the chain.
+  private static final SpringConfig ATTACHMENT_SPRING_CONFIG =
+      SpringConfig.fromOrigamiTensionAndFriction(70, 10);
 
+  /**
+   * Add these spring configs to the registry to support live tuning through the
+   * {@link com.facebook.rebound.ui.SpringConfiguratorView}
+   */
   static {
-    SpringConfigRegistry.getInstance().addSpringConfig(MAIN_SPRING, "main spring");
-    SpringConfigRegistry.getInstance().addSpringConfig(ATTACHMENT_SPRING, "attachment spring");
+    SpringConfigRegistry registry = SpringConfigRegistry.getInstance();
+    registry.addSpringConfig(MAIN_SPRING_CONFIG, "main spring");
+    registry.addSpringConfig(ATTACHMENT_SPRING_CONFIG, "attachment spring");
   }
 
+  /**
+   * Static factor method for creating a new SpringChain.
+   * @return the newly created SpringChain
+   */
   public static SpringChain create() {
     return new SpringChain();
   }
 
-  public SpringChain() {
-    mSpringSystem = SpringSystem.create();
-    mListeners = new CopyOnWriteArrayList<SpringListener>();
-    mSprings = new CopyOnWriteArrayList<Spring>();
-  }
+  private final SpringSystem mSpringSystem = SpringSystem.create();
+  private final CopyOnWriteArrayList<SpringListener> mListeners =
+      new CopyOnWriteArrayList<SpringListener>();
+  private final CopyOnWriteArrayList<Spring> mSprings = new CopyOnWriteArrayList<Spring>();
+  private int mControlSpringIndex = -1;
 
   /**
    * Add a spring to the chain that will callback to the provided listener.
@@ -47,7 +67,7 @@ public class SpringChain implements SpringListener {
     Spring spring = mSpringSystem
         .createSpring()
         .addListener(this)
-        .setSpringConfig(ATTACHMENT_SPRING);
+        .setSpringConfig(ATTACHMENT_SPRING_CONFIG);
     mSprings.add(spring);
     mListeners.add(listener);
     return this;
@@ -57,14 +77,18 @@ public class SpringChain implements SpringListener {
    * Set the index of the control spring. This spring will drive the positions of all the springs
    * before and after it in the list when moved.
    * @param i the index to use for the control spring
-   * @return this SpringChain for chaining
+   * @return this SpringChain
    */
   public SpringChain setControlSpringIndex(int i) {
     mControlSpringIndex = i;
-    for (Spring spring : mSpringSystem.getAllSprings()) {
-      spring.setSpringConfig(ATTACHMENT_SPRING);
+    Spring controlSpring = mSprings.get(mControlSpringIndex);
+    if (controlSpring == null) {
+      return null;
     }
-    getControlSpring().setSpringConfig(MAIN_SPRING);
+    for (Spring spring : mSpringSystem.getAllSprings()) {
+      spring.setSpringConfig(ATTACHMENT_SPRING_CONFIG);
+    }
+    getControlSpring().setSpringConfig(MAIN_SPRING_CONFIG);
     return this;
   }
 
@@ -77,6 +101,10 @@ public class SpringChain implements SpringListener {
     return mSprings.get(mControlSpringIndex);
   }
 
+  /**
+   * Retrieve the list of springs in the chain.
+   * @return the list of springs
+   */
   public List<Spring> getAllSprings() {
     return mSprings;
   }
