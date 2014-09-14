@@ -32,7 +32,7 @@ import com.facebook.rebound.playground.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CascadeEffectExample extends FrameLayout {
+public class SpringChainExample extends FrameLayout {
 
   private final SpringChain mSpringChain = SpringChain.create();
 
@@ -45,7 +45,7 @@ public class CascadeEffectExample extends FrameLayout {
   private int mActivePointerId;
   private VelocityTracker mVelocityTracker;
 
-  public CascadeEffectExample(Context context) {
+  public SpringChainExample(Context context) {
     super(context);
 
     LayoutInflater inflater = LayoutInflater.from(context);
