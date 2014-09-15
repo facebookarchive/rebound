@@ -53,7 +53,8 @@ public class SpringChainExample extends FrameLayout {
     addView(container);
     ViewGroup rootView = (ViewGroup) container.findViewById(R.id.root);
     int bgColor = Color.argb(255, 17, 148, 231);
-    rootView.setBackgroundColor(bgColor);
+    setBackgroundColor(bgColor);
+    rootView.setBackgroundResource(R.drawable.rebound_tiles);
 
     int startColor = Color.argb(255, 255, 64, 230);
     int endColor = Color.argb(255, 255, 230, 64);
