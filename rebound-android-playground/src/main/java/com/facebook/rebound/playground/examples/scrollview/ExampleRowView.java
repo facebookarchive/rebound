@@ -10,36 +10,24 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.facebook.rebound.playground.app;
+package com.facebook.rebound.playground.examples.scrollview;
 
 import android.content.Context;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.facebook.rebound.playground.R;
 
-public class RowView extends FrameLayout{
+public class ExampleRowView extends FrameLayout {
   private final TextView mTextView;
-  private final TextView mSubTextView;
 
-  public RowView(Context context) {
-    this(context, null);
-  }
-
-  public RowView(Context context, AttributeSet attrs) {
-    this(context, attrs, 0);
-  }
-
-  public RowView(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+  public ExampleRowView(Context context) {
+    super(context);
     LayoutInflater inflater = LayoutInflater.from(context);
-    View view = inflater.inflate(R.layout.row_view, this, false);
+    ViewGroup view = (ViewGroup) inflater.inflate(R.layout.example_row_view, this, false);
     mTextView = (TextView) view.findViewById(R.id.text_view);
-    mSubTextView = (TextView) view.findViewById(R.id.subtext_view);
-    setBackgroundResource(R.drawable.row_background);
     addView(view);
   }
 
@@ -47,7 +35,4 @@ public class RowView extends FrameLayout{
     mTextView.setText(text);
   }
 
-  public void setSubtext(String text) {
-    mSubTextView.setText(text);
-  }
 }
