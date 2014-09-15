@@ -32,7 +32,7 @@ import com.facebook.rebound.playground.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CascadeEffectExample extends FrameLayout {
+public class SpringChainExample extends FrameLayout {
 
   private final SpringChain mSpringChain = SpringChain.create();
 
@@ -45,7 +45,7 @@ public class CascadeEffectExample extends FrameLayout {
   private int mActivePointerId;
   private VelocityTracker mVelocityTracker;
 
-  public CascadeEffectExample(Context context) {
+  public SpringChainExample(Context context) {
     super(context);
 
     LayoutInflater inflater = LayoutInflater.from(context);
@@ -53,7 +53,8 @@ public class CascadeEffectExample extends FrameLayout {
     addView(container);
     ViewGroup rootView = (ViewGroup) container.findViewById(R.id.root);
     int bgColor = Color.argb(255, 17, 148, 231);
-    rootView.setBackgroundColor(bgColor);
+    setBackgroundColor(bgColor);
+    rootView.setBackgroundResource(R.drawable.rebound_tiles);
 
     int startColor = Color.argb(255, 255, 64, 230);
     int endColor = Color.argb(255, 255, 230, 64);

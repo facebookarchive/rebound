@@ -28,7 +28,8 @@ import android.widget.ListView;
 import com.facebook.rebound.SpringUtil;
 import com.facebook.rebound.playground.R;
 import com.facebook.rebound.playground.examples.BallExample;
-import com.facebook.rebound.playground.examples.CascadeEffectExample;
+import com.facebook.rebound.playground.examples.PhotoGalleryExample;
+import com.facebook.rebound.playground.examples.SpringChainExample;
 import com.facebook.rebound.playground.examples.OrigamiExample;
 import com.facebook.rebound.playground.examples.PhotoScaleExample;
 
@@ -43,7 +44,8 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
 
   static {
     SAMPLES.add(new Sample(PhotoScaleExample.class, "Photo Scale", "Scale a photo when you press and release"));
-    SAMPLES.add(new Sample(CascadeEffectExample.class, "Cascade Effect", "A Cascade Effect powered by a single spring"));
+    SAMPLES.add(new Sample(SpringChainExample.class, "SpringChain", "Drag any row in the list."));
+    SAMPLES.add(new Sample(PhotoGalleryExample.class, "Photo Gallery", "Tap on a photo to enlarge or minimize."));
     SAMPLES.add(new Sample(BallExample.class, "Inertia Ball", "Toss the ball around the screen and watch it settle"));
     SAMPLES.add(new Sample(OrigamiExample.class, "Origami Example", "Rebound port of an Origami composition"));
   }
