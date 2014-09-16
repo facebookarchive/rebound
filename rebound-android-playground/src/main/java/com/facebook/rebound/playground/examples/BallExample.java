@@ -12,6 +12,7 @@
 
 package com.facebook.rebound.playground.examples;
 
+import android.animation.ArgbEvaluator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -55,17 +56,9 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
   private float attractionThreshold = 200;
   private SpringConfig CONVERGING = SpringConfig.fromOrigamiTensionAndFriction(20, 3);
   private List<PointF> points = new ArrayList<PointF>();
-  private int[] colors = {
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor(),
-      Util.randomColor()
-  };
+  private ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+  private Integer startColor = Color.argb(255, 0, 255, 48);
+  private Integer endColor = Color.argb(255, 0, 228, 255);
 
   public BallExample(Context context) {
     this(context, null);
@@ -122,7 +115,9 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
       paint.setColor(Color.argb(255, 255, 255, 255));
       paint.setStyle(Paint.Style.FILL);
       canvas.drawCircle(point.x, point.y, attractionThreshold - 80, paint);
-      paint.setColor(colors[i]);
+      Integer color = (Integer) colorEvaluator.evaluate(
+          (i + 1) / (float) points.size(), startColor, endColor);
+      paint.setColor(color);
       paint.setStyle(Paint.Style.STROKE);
       paint.setStrokeWidth(20);
       canvas.drawCircle(point.x, point.y, attractionThreshold - 80, paint);
