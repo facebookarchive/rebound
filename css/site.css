@@ -143,6 +143,14 @@ a.app_link {
   background-image: url(../images/mirage.png);
 }
 
+.logo.evernote {
+  background-image: url(../images/evernote.png);
+}
+
+.logo.flow {
+  background-image: url(../images/flow.png);
+}
+
 @media (-webkit-min-device-pixel-ratio: 2),
 (min--moz-device-pixel-ratio: 2),
 (min-resolution: 2dppx),
@@ -186,6 +194,14 @@ a.app_link {
 
   .logo.mirage {
     background-image: url(../images/mirage_2x.png);
+  }
+
+  .logo.evernote {
+    background-image: url(../images/evernote_2x.png);
+  }
+
+  .logo.flow {
+    background-image: url(../images/flow_2x.png);
   }
 
 }
