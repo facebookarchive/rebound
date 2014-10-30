@@ -33,32 +33,37 @@ android {
 android.libraryVariants.all { variant ->
     def name = variant.buildType.name
     if (name.equals(BuilderConstants.RELEASE)) {
+        // Distribution Jar Task
+        def distJarTask = task reboundDistJar(type: Jar, dependsOn: variant.javaCompile) {
+            from variant.javaCompile.destinationDir
+        }
+        artifacts.add('archives', distJarTask)
 
-        def task = project.tasks.create "reboundDistJar", Jar
-        task.dependsOn variant.javaCompile
-        task.from variant.javaCompile.destinationDir
-        artifacts.add('archives', task)
+        // Javadocs Task
+        def javadocsTask = task androidJavadocs(type: Javadoc, dependsOn: variant.javaCompile) {
+            source = variant.javaCompile.source
+            def androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+            classpath = files(variant.javaCompile.classpath.files, androidJar)
+            options {
+                links "http://docs.oracle.com/javase/7/docs/api/"
+                linksOffline "http://d.android.com/reference","${android.sdkDirectory}/docs/reference"
+            }
+            exclude '**/BuildConfig.java'
+            exclude '**/R.java'
+        }
+        def javadocsJarTask = task androidJavadocsJar(type: Jar, dependsOn: javadocsTask) {
+            classifier = 'javadoc'
+            from javadocsTask.destinationDir
+        }
+        artifacts.add('archives', javadocsJarTask)
 
+        // Sources Jar Task
+        def sourcesJarTask = task androidSourcesJar(type: Jar) {
+            classifier = 'sources'
+            from variant.javaCompile.source
+        }
+        artifacts.add('archives', sourcesJarTask)
     }
-}
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java
-}
-
-task androidJavadocsJar(type: Jar) {
-    classifier = 'javadoc'
-    from androidJavadocs.destinationDir
-}
-
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java, android.sourceSets.main.res
-}
-
-artifacts {
-    archives androidSourcesJar
-    archives androidJavadocsJar
 }
 
 task installExample(dependsOn: 'rebound-android-example:installDebug')
