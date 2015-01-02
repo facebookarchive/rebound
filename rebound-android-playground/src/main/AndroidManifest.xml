@@ -12,6 +12,7 @@
         >
         <activity
             android:name="com.facebook.rebound.playground.app.PlaygroundActivity"
+            android:theme="@android:style/Theme.Holo.NoActionBar"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
