@@ -1,4 +1,6 @@
-#Rebound [![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound)
+#Rebound 
+[![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound) 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Rebound-blue.svg?style=flat)](https://android-arsenal.com/details/1/30)
 
 ##About
 
