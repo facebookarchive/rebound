@@ -39,38 +39,10 @@ public class MainActivity extends Activity {
   private FrameLayout mRootView;
   private Spring mScaleSpring;
   private View mImageView;
-  private View myView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-
-    // Create a system to run the physics loop for a set of springs.
-    SpringSystem springSystem = SpringSystem.create();
-
-    // Add a spring to the system.
-    Spring spring = springSystem.createSpring();
-
-    // Add a listener to observe the motion of the spring.
-    spring.addListener(new SimpleSpringListener() {
-
-      @Override
-      public void onSpringUpdate(Spring spring) {
-        // You can observe the updates in the spring
-        // state by asking its current value in onSpringUpdate.
-        float value = (float) spring.getCurrentValue();
-        float scale = 1f - (value * 0.5f);
-        myView.setScaleX(scale);
-        myView.setScaleY(scale);
-      }
-    });
-
-    // Set the spring in motion; moving from 0 to 1
-    spring.translateAnimated(1);
-
-
-
 
     setContentView(R.layout.main);
     mRootView = (FrameLayout) findViewById(R.id.root_view);
@@ -86,12 +58,12 @@ public class MainActivity extends Activity {
         switch (event.getAction()) {
           case MotionEvent.ACTION_DOWN:
             // When pressed start solving the spring to 1.
-            mScaleSpring.translateAnimated(1);
+            mScaleSpring.setEndValue(1);
             break;
           case MotionEvent.ACTION_UP:
           case MotionEvent.ACTION_CANCEL:
             // When released start solving the spring to 0.
-            mScaleSpring.translateAnimated(0);
+            mScaleSpring.setEndValue(0);
             break;
         }
         return true;

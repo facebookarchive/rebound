@@ -276,8 +276,9 @@ public class Spring {
    * @return true if the spring is overshooting its target
    */
   public boolean isOvershooting() {
-    return ((mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
-        (mStartValue > mEndValue && getCurrentValue() < mEndValue));
+    return mSpringConfig.tension > 0 &&
+           ((mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
+           (mStartValue > mEndValue && getCurrentValue() < mEndValue));
   }
 
   /**
@@ -393,7 +394,7 @@ public class Spring {
     // snapped to its end value.
     if (isAtRest() || (mOvershootClampingEnabled && isOvershooting())) {
       // Don't call setCurrentValue because that forces a call to onSpringUpdate
-      if (tension > 0 || (tension == 0 && isOvershooting())) {
+      if (tension > 0) {
         mStartValue = mEndValue;
         mCurrentState.position = mEndValue;
       } else {

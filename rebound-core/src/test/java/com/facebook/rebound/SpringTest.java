@@ -123,7 +123,7 @@ public class SpringTest {
   @Test
   public void testActivateSpringOnEndValueChange() {
     verify(mSpringSystem, never()).activateSpring(mSpring.getId());
-    mSpring.translateAnimated(1);
+    mSpring.setEndValue(1);
     verify(mSpringSystem).activateSpring(mSpring.getId());
   }
 
@@ -132,7 +132,7 @@ public class SpringTest {
     mSpring
         .setSpringConfig(new SpringConfig(TENSION, FRICTION))
         .setCurrentValue(START_VALUE)
-        .translateAnimated(END_VALUE);
+        .setEndValue(END_VALUE);
 
     int i = 0;
     int simulatedMsPerFrame = 16;
@@ -156,7 +156,7 @@ public class SpringTest {
     mSpring
         .setSpringConfig(new SpringConfig(TENSION, FRICTION))
         .setCurrentValue(START_VALUE)
-        .translateAnimated(END_VALUE);
+        .setEndValue(END_VALUE);
     int i = 0;
     InOrder inOrder = inOrder(listener);
     int simulatedMsPerFrame = 16;
@@ -186,7 +186,7 @@ public class SpringTest {
         .setRestSpeedThreshold(0.005f)
         .setRestDisplacementThreshold(0.005f)
         .setCurrentValue(0f)
-        .translateAnimated(1f);
+        .setEndValue(1f);
     InOrder inOrder = inOrder(listener);
 
     float[] frameTimes = new float[] {
@@ -216,7 +216,7 @@ public class SpringTest {
         .setRestSpeedThreshold(0.001f)
         .setRestDisplacementThreshold(0.001f)
         .setCurrentValue(0f)
-        .translateAnimated(45.f);
+        .setEndValue(45.f);
     InOrder inOrder = inOrder(listener);
 
     int numOfFrameBeforeStop = 5;
@@ -249,7 +249,7 @@ public class SpringTest {
         .setOvershootClampingEnabled(true)
         .setSpringConfig(new SpringConfig(TENSION, FRICTION))
         .setCurrentValue(START_VALUE)
-        .translateAnimated(END_VALUE);
+        .setEndValue(END_VALUE);
 
     int i = 0;
     int simulatedMsPerFrame = 16;
@@ -279,7 +279,7 @@ public class SpringTest {
         .setOvershootClampingEnabled(true)
         .setSpringConfig(new SpringConfig(TENSION, FRICTION))
         .setCurrentValue(START_VALUE)
-        .translateAnimated(END_VALUE);
+        .setEndValue(END_VALUE);
     int i = 0;
     InOrder inOrder = inOrder(listener);
     int simulatedMsPerFrame = 16;
@@ -302,12 +302,12 @@ public class SpringTest {
     mSpring
         .setCurrentValue(1)
         .setSpringConfig(new SpringConfig(TENSION, FRICTION))
-        .translateAnimated(END_VALUE)
+        .setEndValue(END_VALUE)
         .setVelocity(END_VALUE)
         .setAtRest();
     mSpring.addListener(listener);
     mSpring.setCurrentValue(START_VALUE);
-    mSpring.translateAnimated(END_VALUE);
+    mSpring.setEndValue(END_VALUE);
 
     int i = 0;
     InOrder inOrder = inOrder(listener);
@@ -328,7 +328,7 @@ public class SpringTest {
   @Test
   public void testCanAddListenersWhileIterating() {
     Spring spring = createTestSpring()
-      .translateAnimated(END_VALUE)
+      .setEndValue(END_VALUE)
       .addListener(new SimpleSpringListener() {
       @Override
       public void onSpringUpdate(Spring spring) {
@@ -342,7 +342,7 @@ public class SpringTest {
   public void testCanRemoveListenersWhileIterating() {
     final SpringListener nextListener = new SimpleSpringListener();
     Spring spring = createTestSpring()
-        .translateAnimated(END_VALUE)
+        .setEndValue(END_VALUE)
         .addListener(new SimpleSpringListener() {
           @Override
           public void onSpringUpdate(Spring spring) {
