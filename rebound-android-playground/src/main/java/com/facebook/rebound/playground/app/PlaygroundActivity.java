@@ -33,6 +33,13 @@ import com.facebook.rebound.playground.examples.SpringChainExample;
 import com.facebook.rebound.playground.examples.OrigamiExample;
 import com.facebook.rebound.playground.examples.SimpleExample;
 import com.facebook.rebound.playground.examples.SpringScrollViewExample;
+import com.facebook.rebound.playground.examples.ContentionExample;
+import com.facebook.rebound.playground.examples.ToggleExample;
+import com.facebook.rebound.playground.examples.fling.AnimatorExample;
+import com.facebook.rebound.playground.examples.fling.NaiveAnimator;
+import com.facebook.rebound.playground.examples.fling.ReboundExample;
+import com.facebook.rebound.playground.examples.fling.ReboundSimpleExample;
+import com.facebook.rebound.playground.examples.fling.ScrollerFlingExample;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -50,6 +57,13 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
     SAMPLES.add(new Sample(PhotoGalleryExample.class, "Photo Gallery", "Tap on a photo to enlarge or minimize."));
     SAMPLES.add(new Sample(BallExample.class, "Inertia Ball", "Toss the ball around the screen and watch it settle"));
     SAMPLES.add(new Sample(OrigamiExample.class, "Origami Example", "Rebound port of an Origami composition"));
+    SAMPLES.add(new Sample(AnimatorExample.class, "Fling Example", "Animator Example"));
+    SAMPLES.add(new Sample(NaiveAnimator.class, "Fling Example", "Naive Animator Example"));
+    SAMPLES.add(new Sample(ScrollerFlingExample.class, "Fling Example", "Scroller Example"));
+    SAMPLES.add(new Sample(ReboundSimpleExample.class, "Fling Example", "Rebound Simple Example"));
+    SAMPLES.add(new Sample(ReboundExample.class, "Fling Example", "Rebound Example"));
+    SAMPLES.add(new Sample(ContentionExample.class, "Contention Example", "Contention Example"));
+    SAMPLES.add(new Sample(ToggleExample.class, "Toggle Example", "Toggle Example"));
   }
 
   private ListView mListView;

@@ -30,7 +30,6 @@ import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringListener;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringSystemListener;
-import com.facebook.rebound.playground.app.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,14 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
   private final Spring xSpring;
   private final Spring ySpring;
   private final SpringSystem springSystem;
-  private final SpringConfig COASTING;
+  private final SpringConfig COASTING = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
+  private final SpringConfig CONVERGING = SpringConfig.fromOrigamiTensionAndFriction(20, 3);
+  private final float attractionThreshold = 200;
+  private final List<PointF> points = new ArrayList<PointF>();
+  private final ArgbEvaluator colorEvaluator = new ArgbEvaluator();
+  private final Integer startColor = Color.argb(255, 0, 255, 48);
+  private final Integer endColor = Color.argb(255, 0, 228, 255);
+
   private float x;
   private float y;
   private Paint paint;
@@ -53,12 +59,6 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
   private VelocityTracker velocityTracker;
   private float centerX;
   private float centerY;
-  private float attractionThreshold = 200;
-  private SpringConfig CONVERGING = SpringConfig.fromOrigamiTensionAndFriction(20, 3);
-  private List<PointF> points = new ArrayList<PointF>();
-  private ArgbEvaluator colorEvaluator = new ArgbEvaluator();
-  private Integer startColor = Color.argb(255, 0, 255, 48);
-  private Integer endColor = Color.argb(255, 0, 228, 255);
 
   public BallExample(Context context) {
     this(context, null);
@@ -70,8 +70,6 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
 
   public BallExample(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    COASTING = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
-    COASTING.tension = 0;
     setBackgroundColor(Color.WHITE);
 
     springSystem = SpringSystem.create();
