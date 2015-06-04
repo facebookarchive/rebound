@@ -27,10 +27,6 @@ android {
             java.srcDirs = ['rebound-core/src/main/java', 'rebound-android/src/main/java']
         }
     }
-
-    lintOptions {
-        abortOnError false
-    }
 }
 
 // Create jar for distribution.
