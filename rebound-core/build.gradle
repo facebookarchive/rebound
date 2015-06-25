@@ -1,5 +1,8 @@
 apply plugin: 'java'
 
 dependencies {
-    testCompile files('libs/hamcrest-core-1.3.jar', 'libs/junit-4.11.jar', 'libs/mockito-all-1.9.5.jar')
+    testCompile files(
+        'libs/hamcrest-core-1.3.jar',
+        'libs/junit-4.11.jar',
+        'libs/mockito-all-1.9.5.jar')
 }
