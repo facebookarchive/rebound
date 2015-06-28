@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <color name="row_active">#efefef</color>
+  <color name="blue">#1194e7</color>
+  <color name="blue_dark">#1085CE</color>
 </resources>
