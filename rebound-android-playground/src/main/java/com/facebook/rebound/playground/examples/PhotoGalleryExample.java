@@ -38,8 +38,8 @@ public class PhotoGalleryExample extends FrameLayout implements SpringListener {
   private static final int ROWS = 5;
   private static final int COLS = 4;
 
-  private final List<ImageView> mImageViews = new ArrayList<ImageView>();
-  private final List<Point> mPositions = new ArrayList<Point>();
+  private final List<ImageView> mImageViews = new ArrayList<>();
+  private final List<Point> mPositions = new ArrayList<>();
   private final SpringChain mSpringChain = SpringChain.create();
   private final Spring mSpring = SpringSystem
       .create()
@@ -52,44 +52,7 @@ public class PhotoGalleryExample extends FrameLayout implements SpringListener {
 
   public PhotoGalleryExample(Context context) {
     super(context);
-
-    int viewCount = ROWS * COLS;
-
-    for (int i = 0; i < viewCount; i++) {
-      final int j = i;
-
-      // Create the View.
-      final ImageView imageView = new ImageView(context);
-      mImageViews.add(imageView);
-      addView(imageView);
-      imageView.setAlpha(0f);
-      imageView.setBackgroundColor(Util.randomColor());
-      imageView.setLayerType(LAYER_TYPE_HARDWARE, null);
-
-      // Add an image for each view.
-      int res = getResources().getIdentifier("d" + (i % 11 + 1), "drawable", context.getPackageName());
-      imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-      imageView.setImageResource(res);
-
-      // Add a click listener to handle scaling up the view.
-      imageView.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-          int endValue = mSpring.getEndValue() == 0 ? 1 : 0;
-          imageView.bringToFront();
-          mActiveIndex = j;
-          mSpring.setEndValue(endValue);
-        }
-      });
-
-      // Add a spring to the SpringChain to do an entry animation.
-      mSpringChain.addSpring(new SimpleSpringListener() {
-        @Override
-        public void onSpringUpdate(Spring spring) {
-          render();
-        }
-      });
-    }
+    initializeImageViews(context);
 
     // Wait for layout.
     getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -97,16 +60,39 @@ public class PhotoGalleryExample extends FrameLayout implements SpringListener {
       public void onGlobalLayout() {
         layout();
         getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
         postOnAnimationDelayed(new Runnable() {
-          @Override
-          public void run() {
+          @Override public void run() {
             mSpringChain.setControlSpringIndex(0).getControlSpring().setEndValue(1);
           }
         }, 500);
       }
     });
 
+  }
+
+  private void initializeImageViews(Context context) {
+    int viewCount = ROWS * COLS;
+    for (int i = 0; i < viewCount; i++) {
+      // Create the View.
+      ImageView imageView = new ImageView(context);
+      mImageViews.add(imageView);
+      addView(imageView);
+      imageView.setAlpha(0f);
+      imageView.setBackgroundColor(Util.randomColor());
+      imageView.setLayerType(LAYER_TYPE_HARDWARE, null);
+
+      // Add an image for each view.
+      imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+      imageView.setImageResource(getResources().getIdentifier("d" + (i % 11 + 1),
+          "drawable", context.getPackageName()));
+      imageView.setTag(i);
+
+      // Add a click listener to handle scaling up the view.
+      imageView.setOnClickListener(onImageClick);
+
+      // Add a spring to the SpringChain to do an entry animation.
+      mSpringChain.addSpring(this);
+    }
   }
 
   private void render() {
@@ -177,23 +163,25 @@ public class PhotoGalleryExample extends FrameLayout implements SpringListener {
     }
   }
 
-  @Override
-  public void onSpringUpdate(Spring spring) {
+  @Override public void onSpringUpdate(Spring spring) {
     render();
   }
 
-  @Override
-  public void onSpringAtRest(Spring spring) {
+  @Override public void onSpringAtRest(Spring spring) { }
 
-  }
+  @Override public void onSpringActivate(Spring spring) { }
 
-  @Override
-  public void onSpringActivate(Spring spring) {
+  @Override public void onSpringEndStateChange(Spring spring) { }
 
-  }
+  private View.OnClickListener onImageClick = new OnClickListener() {
+    @Override public void onClick(View v) {
+      Object tag = v.getTag();
+      if(tag instanceof Integer) {
+        mImageViews.get((Integer) tag).bringToFront();
+        mActiveIndex = (Integer) tag;
+        mSpring.setEndValue(mSpring.getEndValue() == 0 ? 1 : 0);
+      }
+    }
+  };
 
-  @Override
-  public void onSpringEndStateChange(Spring spring) {
-
-  }
 }
