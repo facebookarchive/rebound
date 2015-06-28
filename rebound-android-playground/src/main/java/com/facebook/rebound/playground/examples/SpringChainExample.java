@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TableLayout;
 
@@ -36,29 +35,42 @@ public class SpringChainExample extends FrameLayout {
 
   private final SpringChain mSpringChain = SpringChain.create();
 
-  private final List<View> mViews = new ArrayList<View>();
+  private final List<View> mViews = new ArrayList<>();
   private float mLastDownX;
 
   /** Touch handling **/
-  private View mLastDraggingView;
   private float mLastDownXlat;
   private int mActivePointerId;
   private VelocityTracker mVelocityTracker;
 
+  private Integer startColor = Color.argb(255, 255, 64, 230);
+  private Integer endColor = Color.argb(255, 255, 230, 64);
+
   public SpringChainExample(Context context) {
     super(context);
-
+    setBackgroundColor(Color.argb(255, 17, 148, 231));
     LayoutInflater inflater = LayoutInflater.from(context);
     ViewGroup container = (ViewGroup) inflater.inflate(R.layout.cascade_effect, this, false);
     addView(container);
     ViewGroup rootView = (ViewGroup) container.findViewById(R.id.root);
-    int bgColor = Color.argb(255, 17, 148, 231);
-    setBackgroundColor(bgColor);
     rootView.setBackgroundResource(R.drawable.rebound_tiles);
+    initializeViews(context, rootView, new ArgbEvaluator());
+  }
 
-    int startColor = Color.argb(255, 255, 64, 230);
-    int endColor = Color.argb(255, 255, 230, 64);
-    ArgbEvaluator evaluator = new ArgbEvaluator();
+  @Override protected void onFinishInflate() {
+    super.onFinishInflate();
+    List<Spring> springs = mSpringChain.getAllSprings();
+    for (int i = 0; i < springs.size(); i++) {
+      springs.get(i).setCurrentValue(-mViews.get(i).getWidth());
+    }
+    postDelayed(new Runnable() {
+      @Override public void run() {
+        mSpringChain.setControlSpringIndex(0).getControlSpring().setEndValue(0);
+      }
+    }, 500);
+  }
+
+  private void initializeViews(Context context, ViewGroup rootView, ArgbEvaluator evaluator) {
     int viewCount = 10;
     for (int i = 0; i < viewCount; i++) {
       final View view = new View(context);
@@ -74,37 +86,12 @@ public class SpringChainExample extends FrameLayout {
           view.setTranslationX(value);
         }
       });
-      int color = (Integer) evaluator.evaluate((float) i / (float) viewCount, startColor, endColor);
-      view.setBackgroundColor(color);
-      view.setOnTouchListener(new OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-          return handleRowTouch(v, event);
-        }
-      });
+      view.setBackgroundColor((Integer)
+          evaluator.evaluate((float) i / (float) viewCount, startColor, endColor));
+      view.setOnTouchListener(onTouchListener);
       mViews.add(view);
       rootView.addView(view);
     }
-
-    getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        getViewTreeObserver().removeOnGlobalLayoutListener(this);
-        List<Spring> springs = mSpringChain.getAllSprings();
-        for (int i = 0; i < springs.size(); i++) {
-          springs.get(i).setCurrentValue(-mViews.get(i).getWidth());
-        }
-        postDelayed(new Runnable() {
-          @Override
-          public void run() {
-            mSpringChain
-                .setControlSpringIndex(0)
-                .getControlSpring()
-                .setEndValue(0);
-          }
-        }, 500);
-      }
-    });
   }
 
   private boolean handleRowTouch(View view, MotionEvent event) {
@@ -114,13 +101,12 @@ public class SpringChainExample extends FrameLayout {
 
         mActivePointerId = event.getPointerId(0);
         mLastDownXlat = view.getTranslationX();
-        mLastDraggingView = view;
         mLastDownX = event.getRawX();
 
         mVelocityTracker = VelocityTracker.obtain();
         mVelocityTracker.addMovement(event);
 
-        int idx = mViews.indexOf(mLastDraggingView);
+        int idx = mViews.indexOf(view);
         mSpringChain
             .setControlSpringIndex(idx)
             .getControlSpring()
@@ -155,4 +141,11 @@ public class SpringChainExample extends FrameLayout {
       }
     return true;
   }
+
+  private View.OnTouchListener onTouchListener = new OnTouchListener() {
+    @Override public boolean onTouch(View v, MotionEvent event) {
+      return handleRowTouch(v, event);
+    }
+  };
+
 }

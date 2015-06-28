@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
-import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.facebook.rebound.playground.R;
@@ -67,22 +66,22 @@ public class SimpleExample extends FrameLayout {
     addView(mRootView);
   }
 
-  @Override
-  protected void onAttachedToWindow() {
+  @Override protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
     mScaleSpring.addListener(mSpringListener);
   }
 
-  @Override
-  protected void onDetachedFromWindow() {
+  @Override protected void onDetachedFromWindow() {
     mScaleSpring.removeListener(mSpringListener);
+    super.onDetachedFromWindow();
   }
 
   private class ExampleSpringListener extends SimpleSpringListener {
-    @Override
-    public void onSpringUpdate(Spring spring) {
+    @Override public void onSpringUpdate(Spring spring) {
       float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
       mImageView.setScaleX(mappedValue);
       mImageView.setScaleY(mappedValue);
     }
   }
+
 }

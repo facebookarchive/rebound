@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.facebook.rebound.SimpleSpringListener;
@@ -74,18 +73,6 @@ public class OrigamiExample extends FrameLayout {
           }
         });
 
-
-    // Here we just wait until the first layout pass finishes and call our render method to update
-    // the animation to the initial resting state of the spring.
-    mPhotoGrid.getViewTreeObserver().addOnGlobalLayoutListener(
-        new ViewTreeObserver.OnGlobalLayoutListener() {
-          @Override
-          public void onGlobalLayout() {
-            render();
-            mPhotoGrid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-          }
-        });
-
     /** Optional - Live Spring Tuning **/
 
     // Put our config into a registry. This is optional, but it gives you the ability to live tune
@@ -97,6 +84,11 @@ public class OrigamiExample extends FrameLayout {
     // Uncomment this line to actually show the SpringConfiguratorView allowing you to live tune
     // the Spring constants as you manipulate the UI.
     mSpringConfiguratorView.setVisibility(View.VISIBLE);
+  }
+
+  @Override protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+    super.onSizeChanged(width, height, oldWidth, oldHeight);
+    render();
   }
 
   /**
