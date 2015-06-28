@@ -3,7 +3,7 @@
   android:id="@+id/root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@android:color/black">
+  android:background="@color/black">
 
   <LinearLayout
     android:id="@+id/root_container"
@@ -15,7 +15,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:src="@drawable/rebound_icon"
-      android:background="#1194e7"
+      android:background="@color/blue"
       android:layout_gravity="center"
       android:padding="40dp"/>
 
@@ -23,7 +23,7 @@
       android:id="@+id/list_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:background="#ccc"/>
+      android:background="@color/gray"/>
 
   </LinearLayout>
 
