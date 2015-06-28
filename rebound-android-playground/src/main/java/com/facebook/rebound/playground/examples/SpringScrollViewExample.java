@@ -37,8 +37,9 @@ public class SpringScrollViewExample extends FrameLayout {
     int startColor = Color.argb(255, 255, 64, 230);
     int endColor = Color.argb(255, 0, 174, 255);
     ArgbEvaluator evaluator = new ArgbEvaluator();
+    LayoutInflater layoutInflater = LayoutInflater.from(getContext());
     for (int i = 0; i < ROW_COUNT; i++) {
-      ExampleRowView exampleRowView = new ExampleRowView(context);
+      ExampleRowView exampleRowView = new ExampleRowView(context, layoutInflater);
       exampleRowView.setText(TEXT + i);
       exampleRowView.setBackgroundColor((Integer) evaluator.evaluate(
           (float) i / (float) ROW_COUNT, startColor, endColor));

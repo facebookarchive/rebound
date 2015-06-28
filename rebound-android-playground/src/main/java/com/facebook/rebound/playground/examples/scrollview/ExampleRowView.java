@@ -21,12 +21,12 @@ import android.widget.TextView;
 import com.facebook.rebound.playground.R;
 
 public class ExampleRowView extends FrameLayout {
+
   private final TextView mTextView;
 
-  public ExampleRowView(Context context) {
+  public ExampleRowView(Context context, LayoutInflater layoutInflater) {
     super(context);
-    LayoutInflater inflater = LayoutInflater.from(context);
-    ViewGroup view = (ViewGroup) inflater.inflate(R.layout.example_row_view, this, false);
+    ViewGroup view = (ViewGroup) layoutInflater.inflate(R.layout.example_row_view, this, false);
     mTextView = (TextView) view.findViewById(R.id.text_view);
     addView(view);
   }

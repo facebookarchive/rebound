@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
   compile project(':rebound-android')
+  compile 'com.android.support:appcompat-v7:22.2.0'
 }
 
 android {
