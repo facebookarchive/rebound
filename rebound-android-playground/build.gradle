@@ -15,7 +15,7 @@ android {
     applicationId "com.facebook.rebound.androidplayground"
     versionCode Integer.parseInt(project.VERSION_CODE)
     versionName project.VERSION_NAME
-    minSdkVersion 14
+    minSdkVersion Integer.parseInt(project.ANDROID_MIN_SDK)
     targetSdkVersion Integer.parseInt(project.ANDROID_TARGET_SDK_VERSION)
   }
 
