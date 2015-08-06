@@ -189,6 +189,10 @@ public class BaseSpringSystem {
   public void removeAllListeners() {
     mListeners.clear();
   }
+  
+  public SpringLooper getSpringLooper(){
+      return mSpringLooper;
+  }
 }
 
 
