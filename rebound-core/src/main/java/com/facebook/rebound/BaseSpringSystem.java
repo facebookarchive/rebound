@@ -135,12 +135,13 @@ public class BaseSpringSystem {
 
   /**
    * loop the system until idle
+   * @param elapsedMillis elapsed milliseconds
    */
-  public void loop(double ellapsedMillis) {
+  public void loop(double elapsedMillis) {
     for (SpringSystemListener listener : mListeners) {
       listener.onBeforeIntegrate(this);
     }
-    advance(ellapsedMillis);
+    advance(elapsedMillis);
     if (mActiveSprings.isEmpty()) {
       mIdle = true;
     }
@@ -172,6 +173,10 @@ public class BaseSpringSystem {
 
   /** listeners **/
 
+  /**
+   * Add new listener object.
+   * @param newListener listener
+   */
   public void addListener(SpringSystemListener newListener) {
     if (newListener == null) {
       throw new IllegalArgumentException("newListener is required");
@@ -179,6 +184,10 @@ public class BaseSpringSystem {
     mListeners.add(newListener);
   }
 
+  /**
+   * Remove listener object.
+   * @param listenerToRemove listener
+   */
   public void removeListener(SpringSystemListener listenerToRemove) {
     if (listenerToRemove == null) {
       throw new IllegalArgumentException("listenerToRemove is required");
@@ -186,6 +195,9 @@ public class BaseSpringSystem {
     mListeners.remove(listenerToRemove);
   }
 
+  /**
+   * Remove all listeners.
+   */
   public void removeAllListeners() {
     mListeners.clear();
   }

@@ -198,6 +198,7 @@ public class Spring {
 
   /**
    * set the velocity on the spring in pixels per second
+   * @param velocity velocity value
    * @return the spring for chaining
    */
   public Spring setVelocity(double velocity) {
@@ -286,7 +287,6 @@ public class Spring {
    * realTimeDelta.
    * The math is inlined inside the loop since it made a huge performance impact when there are
    * several springs being advanced.
-   * @param time clock time
    * @param realDeltaTime clock drift
    */
   void advance(double realDeltaTime) {
@@ -478,6 +478,7 @@ public class Spring {
   /**
    * Set the spring to be at rest by making its end value equal to its current value and setting
    * velocity to 0.
+   * @return this object
    */
   public Spring setAtRest() {
     mEndValue = mCurrentState.position;
