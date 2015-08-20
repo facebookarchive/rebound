@@ -11,7 +11,7 @@ package com.facebook.rebound;
 
 public class SynchronousLooper extends SpringLooper {
 
-  public static double SIXTY_FPS = 16.6667;
+  public static final double SIXTY_FPS = 16.6667;
   private double mTimeStep;
   private boolean mRunning;
 
