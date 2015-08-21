@@ -45,8 +45,9 @@ public class Spring {
   // thresholds for determining when the spring is at rest
   private double mRestSpeedThreshold = 0.005;
   private double mDisplacementFromRestThreshold = 0.005;
-  private CopyOnWriteArraySet<SpringListener> mListeners = new CopyOnWriteArraySet<SpringListener>();
   private double mTimeAccumulator = 0;
+  private final CopyOnWriteArraySet<SpringListener> mListeners =
+    new CopyOnWriteArraySet<SpringListener>();
 
   private final BaseSpringSystem mSpringSystem;
 
