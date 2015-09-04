@@ -11,7 +11,6 @@
 package com.facebook.rebound;
 
 import android.view.View;
-import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 /**
@@ -26,36 +25,10 @@ public class HardwareLayerSpringListener implements SpringListener {
   private WeakHashMap<Integer, View> weakViews = new WeakHashMap<>();
 
   public HardwareLayerSpringListener(View... views) {
-    addViews(views);
-  }
-
-  public HardwareLayerSpringListener(WeakHashMap<Integer, View> weakViews) {
-    this.weakViews = weakViews;
-  }
-
-  public void addViews(ArrayList<View> views) {
-    int countViews = views.size();
-    for(int i = 0; i < countViews; i++) {
-      addView(i, views.get(i));
-    }
-  }
-
-  public void addViews(WeakHashMap<Integer, View> weakViews) {
-    int countViews = weakViews.size();
-    for(int i = 0; i < countViews; i++) {
-      addView(i, weakViews.get(i));
-    }
-  }
-
-  public void addViews(View... views) {
     int countViews = views.length;
     for(int i = 0; i < countViews; i++) {
-      addView(i, views[i]);
+      weakViews.put(i, views[i]);
     }
-  }
-
-  public void addView(int index, View view) {
-    weakViews.put(index, view);
   }
 
   @Override
