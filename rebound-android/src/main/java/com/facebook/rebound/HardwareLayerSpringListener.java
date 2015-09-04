@@ -16,12 +16,12 @@ import java.util.WeakHashMap;
 
 /**
  * Spring Listener with Hardware Layer implementation, it's useful if
- * you use with complex transition in your views
+ * you use with complex transition in your views.
  */
 public class HardwareLayerSpringListener implements SpringListener {
 
   /**
-   * I think that WeakHashMap can avoid any memory leak, needs to be tested...
+   * WeakHashMap can avoid any memory leak, needs to be tested.
    */
   private WeakHashMap<Integer, View> weakViews = new WeakHashMap<>();
 
@@ -63,9 +63,9 @@ public class HardwareLayerSpringListener implements SpringListener {
   }
 
   /**
-   * Removes the all views of the Hardware Layer
+   * Removes the all views of the Hardware Layer.
    *
-   * @param spring the spring that's now resting
+   * @param spring the spring that's now resting.
    */
   @Override
   public void onSpringAtRest(Spring spring) {
@@ -75,9 +75,9 @@ public class HardwareLayerSpringListener implements SpringListener {
   }
 
   /**
-   * Set the layer type of the all views to View.LAYER_TYPE_HARDWARE
+   * Set the layer type of the all views to View.LAYER_TYPE_HARDWARE.
    *
-   * @param spring the spring that has left its resting state
+   * @param spring the spring that has left its resting state.
    */
   @Override
   public void onSpringActivate(Spring spring) {
