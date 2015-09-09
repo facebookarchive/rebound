@@ -11,7 +11,9 @@
 package com.facebook.rebound;
 
 import android.view.View;
-import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Spring Listener with Hardware Layer implementation, it's useful if
@@ -20,14 +22,13 @@ import java.util.WeakHashMap;
 public class HardwareLayerSpringListener implements SpringListener {
 
   /**
-   * WeakHashMap can avoid any memory leak, needs to be tested.
+   * WeakReference can avoid any memory leak, needs to be tested.
    */
-  private WeakHashMap<Integer, View> weakViews = new WeakHashMap<>();
+  private List<WeakReference<View>> weakViews = new ArrayList<>();
 
   public HardwareLayerSpringListener(View... views) {
-    int countViews = views.length;
-    for(int i = 0; i < countViews; i++) {
-      weakViews.put(i, views[i]);
+    for(View view : views) {
+      weakViews.add(new WeakReference<>(view));
     }
   }
 
@@ -42,20 +43,20 @@ public class HardwareLayerSpringListener implements SpringListener {
    */
   @Override
   public void onSpringAtRest(Spring spring) {
-    for(View view : weakViews.values()) {
-      view.setLayerType(View.LAYER_TYPE_NONE, null);
+    for(WeakReference weakReference : weakViews) {
+      ((View) weakReference.get()).setLayerType(View.LAYER_TYPE_NONE, null);
     }
   }
 
   /**
-   * Set the layer type of the all views to View.LAYER_TYPE_HARDWARE.
+   * Set the layer type of the all views to Hardware Layer
    *
    * @param spring the spring that has left its resting state.
    */
   @Override
   public void onSpringActivate(Spring spring) {
-    for(View view : weakViews.values()) {
-      view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+    for(WeakReference weakReference : weakViews) {
+      ((View) weakReference.get()).setLayerType(View.LAYER_TYPE_HARDWARE, null);
     }
   }
 
