@@ -2,7 +2,7 @@ language: java
 jdk: oraclejdk7
 env:
   matrix:
-    - ANDROID_SDKS=android-22,sysimg-22  ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-23,sysimg-23  ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
 before_install:
   # Install base Android SDK.
   - sudo apt-get update -qq
@@ -13,27 +13,27 @@ before_install:
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
   # Gradle
-  - wget http://services.gradle.org/distributions/gradle-2.4-bin.zip
-  - unzip gradle-2.4-bin.zip
-  - export GRADLE_HOME=$PWD/gradle-2.4
+  - wget http://services.gradle.org/distributions/gradle-2.10-bin.zip
+  - unzip gradle-2.10-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-2.10
   - export PATH=$GRADLE_HOME/bin:$PATH
 
   # install android build tools.
-  - wget https://dl-ssl.google.com/android/repository/build-tools_r22.0.1-linux.zip
-  - unzip build-tools_r22.0.1-linux.zip -d $ANDROID_HOME
+  - wget https://dl-ssl.google.com/android/repository/build-tools_r23.0.3-linux.zip
+  - unzip build-tools_r23.0.3-linux.zip -d $ANDROID_HOME
   - mkdir -p $ANDROID_HOME/build-tools/
-  - mv $ANDROID_HOME/android-5.1 $ANDROID_HOME/build-tools/22.0.1
-  - ls -la $ANDROID_HOME/build-tools/22.0.1
+  - mv $ANDROID_HOME/android-5.1 $ANDROID_HOME/build-tools/23.0.3
+  - ls -la $ANDROID_HOME/build-tools/23.0.3
   - echo $ANDROID_HOME
 
   # Install required components.
   # For a full list, run `android list sdk -a --extended`
-  # Note that sysimg-22 downloads the ARM, x86 and MIPS images (we should optimize this).
+  # Note that sysimg-23 downloads the ARM, x86 and MIPS images (we should optimize this).
   # Other relevant API's
   - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
   - echo yes | android update sdk --filter android-18 --no-ui --force > /dev/null
-  - echo yes | android update sdk --filter android-22 --no-ui --force > /dev/null
-  - echo yes | android update sdk --filter sysimg-22 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter android-23 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter sysimg-23 --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
 
