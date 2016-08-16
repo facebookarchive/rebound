@@ -1,4 +1,6 @@
 apply plugin: 'java'
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
 
 dependencies {
     testCompile files(
