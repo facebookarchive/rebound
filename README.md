@@ -1,8 +1,8 @@
-#Rebound 
+# Rebound 
 [![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound) 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Rebound-blue.svg?style=flat)](https://android-arsenal.com/details/1/30)
 
-##About
+## About
 
 <a href="http://facebook.github.io/rebound">Rebound</a> is a java library that
 models spring dynamics. Rebound spring models can be used to create animations
@@ -19,7 +19,7 @@ For examples and usage instructions head over to:
 
 If you are looking to build springy animations for the web, check out the [Javascript version](https://github.com/facebook/rebound-js).
 
-##License
+## License
 
 BSD License
 
