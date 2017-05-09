@@ -69,11 +69,13 @@ public class SimpleExample extends FrameLayout {
 
   @Override
   protected void onAttachedToWindow() {
+    super.onAttachedToWindow();
     mScaleSpring.addListener(mSpringListener);
   }
 
   @Override
   protected void onDetachedFromWindow() {
+    super.onDetachedFromWindow();
     mScaleSpring.removeListener(mSpringListener);
   }
 
