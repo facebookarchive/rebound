@@ -1,8 +1,12 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+      <item name="colorPrimary">@color/blue</item>
+      <item name="colorPrimaryDark">@color/blue_dark</item>
+      <item name="android:windowContentOverlay">@null</item>
+      <item name="android:windowNoTitle">true</item>
+      <item name="android:windowActionBar">false</item>
     </style>
 
 </resources>

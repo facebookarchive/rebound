@@ -37,13 +37,13 @@ import java.util.List;
 
 public class BallExample extends FrameLayout implements SpringListener, SpringSystemListener {
 
-  private final Spring xSpring;
-  private final Spring ySpring;
-  private final SpringSystem springSystem;
-  private final SpringConfig COASTING;
+  private static final String TEXT = "TOUCH";
+
+  private Spring xSpring;
+  private Spring ySpring;
+  private SpringConfig COASTING;
   private float x;
   private float y;
-  private Paint paint;
   private boolean dragging;
   private float radius = 100;
   private float downX;
@@ -55,10 +55,20 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
   private float centerY;
   private float attractionThreshold = 200;
   private SpringConfig CONVERGING = SpringConfig.fromOrigamiTensionAndFriction(20, 3);
-  private List<PointF> points = new ArrayList<PointF>();
+  private List<PointF> points = new ArrayList<>();
   private ArgbEvaluator colorEvaluator = new ArgbEvaluator();
   private Integer startColor = Color.argb(255, 0, 255, 48);
   private Integer endColor = Color.argb(255, 0, 228, 255);
+  private Integer background = Color.argb(255, 240, 240, 240);
+
+  private int i = 0;
+
+  private float touchX;
+  private float touchY;
+
+  private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private Paint ballPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+  private Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
   public BallExample(Context context) {
     this(context, null);
@@ -70,75 +80,48 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
 
   public BallExample(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    COASTING = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
-    COASTING.tension = 0;
     setBackgroundColor(Color.WHITE);
-
-    springSystem = SpringSystem.create();
-    springSystem.addListener(this);
-    xSpring = springSystem.createSpring();
-    ySpring = springSystem.createSpring();
-    xSpring.addListener(this);
-    ySpring.addListener(this);
-    paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-
-    getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-      @Override
-      public void onGlobalLayout() {
-        centerX = getWidth() / 2f;
-        centerY = getHeight() / 2f;
-
-        xSpring.setCurrentValue(centerX).setAtRest();
-        ySpring.setCurrentValue(centerY).setAtRest();
-        getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-        int offsetH = (int) ((getHeight() - (2 * radius)) % 800) / 2;
-        int offsetW = (int) ((getWidth() - (2 * radius))  % 800) / 2;
-        for (float i = offsetH + radius; i < getHeight() - offsetH; i += 400) {
-          for (float j = offsetW + radius; j < getWidth() - offsetW; j += 400) {
-            points.add(new PointF(j, i));
-          }
-        }
-      }
-    });
+    configCoasing();
+    configCirclePaint();
+    configBallPaint();
+    configTextPaint();
   }
 
-  @Override
-  protected void onDraw(Canvas canvas) {
+  @Override protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+    super.onSizeChanged(width, height, oldWidth, oldHeight);
+    centerX = getWidth() / 2f;
+    centerY = getHeight() / 2f;
+    xSpring.setCurrentValue(centerX).setAtRest();
+    ySpring.setCurrentValue(centerY).setAtRest();
+    int offsetH = (int) ((getHeight() - (2 * radius)) % 800) / 2;
+    int offsetW = (int) ((getWidth() - (2 * radius))  % 800) / 2;
+    for (float i = offsetH + radius; i < getHeight() - offsetH; i += 400) {
+      for (float j = offsetW + radius; j < getWidth() - offsetW; j += 400) {
+        points.add(new PointF(j, i));
+      }
+    }
+  }
+
+  @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-
-    int bg = Color.argb(255, 240, 240, 240);
-    canvas.drawColor(bg);
-
-    int i = 0;
+    canvas.drawColor(background);
+    i = 0;
     for (PointF point : points) {
-      paint.setColor(Color.argb(255, 255, 255, 255));
-      paint.setStyle(Paint.Style.FILL);
-      canvas.drawCircle(point.x, point.y, attractionThreshold - 80, paint);
-      Integer color = (Integer) colorEvaluator.evaluate(
-          (i + 1) / (float) points.size(), startColor, endColor);
-      paint.setColor(color);
-      paint.setStyle(Paint.Style.STROKE);
-      paint.setStrokeWidth(20);
-      canvas.drawCircle(point.x, point.y, attractionThreshold - 80, paint);
+      canvas.drawCircle(point.x, point.y, attractionThreshold - 80, circlePaint);
+      circlePaint.setColor(
+          (Integer) colorEvaluator.evaluate((i + 1) / (float) points.size(), startColor, endColor));
+      circlePaint.setStyle(Paint.Style.STROKE);
+      canvas.drawCircle(point.x, point.y, attractionThreshold - 80, circlePaint);
       i++;
     }
-
-    paint.setColor(Color.argb(200, 255, 0, 0));
-    paint.setStyle(Paint.Style.FILL);
-    canvas.drawCircle(x, y, radius, paint);
-    paint.setColor(Color.WHITE);
-    paint.setTextSize(36);
-    paint.setTextAlign(Paint.Align.CENTER);
-    canvas.drawText("TOUCH", x, y + 10, paint);
+    canvas.drawCircle(x, y, radius, ballPaint);
+    canvas.drawText(TEXT, x, y + 10, textPaint);
   }
 
-  @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    float touchX = event.getRawX();
-    float touchY = event.getRawY();
+  @Override public boolean onTouchEvent(MotionEvent event) {
+    touchX = event.getRawX();
+    touchY = event.getRawY();
     boolean ret = false;
-
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
         downX = touchX;
@@ -180,40 +163,26 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
         ySpring.setVelocity(velocityTracker.getYVelocity());
         ret = true;
     }
-
     lastX = touchX;
     lastY = touchY;
     return ret;
   }
 
-  @Override
-  public void onSpringUpdate(Spring spring) {
+  @Override public void onSpringUpdate(Spring spring) {
     x = (float) xSpring.getCurrentValue();
     y = (float) ySpring.getCurrentValue();
     invalidate();
   }
 
-  @Override
-  public void onSpringAtRest(Spring spring) {
+  @Override public void onSpringAtRest(Spring spring) { }
 
-  }
+  @Override public void onSpringActivate(Spring spring) { }
 
-  @Override
-  public void onSpringActivate(Spring spring) {
+  @Override public void onSpringEndStateChange(Spring spring) { }
 
-  }
+  @Override public void onBeforeIntegrate(BaseSpringSystem springSystem) { }
 
-  @Override
-  public void onSpringEndStateChange(Spring spring) {
-
-  }
-
-  @Override
-  public void onBeforeIntegrate(BaseSpringSystem springSystem) {
-  }
-
-  @Override
-  public void onAfterIntegrate(BaseSpringSystem springSystem) {
+  @Override public void onAfterIntegrate(BaseSpringSystem springSystem) {
     checkConstraints();
   }
 
@@ -234,7 +203,6 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
       ySpring.setVelocity(-ySpring.getVelocity());
       ySpring.setCurrentValue(ySpring.getCurrentValue() - (y - radius), false);
     }
-
     for (PointF point : points) {
       if (dist(x, y, point.x, point.y) < attractionThreshold &&
           Math.abs(xSpring.getVelocity()) < 900 &&
@@ -248,7 +216,36 @@ public class BallExample extends FrameLayout implements SpringListener, SpringSy
     }
   }
 
+  private void configCirclePaint() {
+    circlePaint.setColor(Color.argb(255, 255, 255, 255));
+    circlePaint.setStyle(Paint.Style.FILL);
+    circlePaint.setStrokeWidth(20);
+  }
+
+  private void configTextPaint() {
+    textPaint.setColor(Color.WHITE);
+    textPaint.setTextSize(36);
+    textPaint.setTextAlign(Paint.Align.CENTER);
+  }
+
+  private void configBallPaint() {
+    ballPaint.setColor(Color.argb(200, 255, 0, 0));
+    ballPaint.setStyle(Paint.Style.FILL);
+  }
+
+  private void configCoasing() {
+    COASTING = SpringConfig.fromOrigamiTensionAndFriction(0, 0.5);
+    COASTING.tension = 0;
+    SpringSystem springSystem = SpringSystem.create();
+    springSystem.addListener(this);
+    xSpring = springSystem.createSpring();
+    ySpring = springSystem.createSpring();
+    xSpring.addListener(this);
+    ySpring.addListener(this);
+  }
+
   private float dist(double posX, double posY, double pos2X, double pos2Y) {
     return (float) Math.sqrt(Math.pow(pos2X - posX, 2) + Math.pow(pos2Y - posY, 2));
   }
+
 }
