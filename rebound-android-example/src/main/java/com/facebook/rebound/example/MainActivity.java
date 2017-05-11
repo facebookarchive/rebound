@@ -14,10 +14,13 @@ package com.facebook.rebound.example;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
@@ -36,68 +39,87 @@ public class MainActivity extends Activity {
 
   private final BaseSpringSystem mSpringSystem = SpringSystem.create();
   private final ExampleSpringListener mSpringListener = new ExampleSpringListener();
-  private FrameLayout mRootView;
+
   private Spring mScaleSpring;
-  private View mImageView;
+
+  @Bind(R.id.root_view) FrameLayout mRootView;
+  @Bind(R.id.image_view) View mImageView;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     setContentView(R.layout.main);
-    mRootView = (FrameLayout) findViewById(R.id.root_view);
-    mImageView = mRootView.findViewById(R.id.image_view);
-
-    // Create the animation spring.
-    mScaleSpring = mSpringSystem.createSpring();
-
-    // Add an OnTouchListener to the root view.
-    mRootView.setOnTouchListener(new View.OnTouchListener() {
-      @Override
-      public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-          case MotionEvent.ACTION_DOWN:
-            // When pressed start solving the spring to 1.
-            mScaleSpring.setEndValue(1);
-            break;
-          case MotionEvent.ACTION_UP:
-          case MotionEvent.ACTION_CANCEL:
-            // When released start solving the spring to 0.
-            mScaleSpring.setEndValue(0);
-            break;
-        }
-        return true;
-      }
-    });
+    ButterKnife.bind(this);
+    mRootView.setOnTouchListener(onTouchListener);
   }
 
-  @Override
-  public void onResume() {
+  /**
+   * Add a listener to the spring when the Activity resumes.
+   */
+  @Override public void onResume() {
     super.onResume();
-    // Add a listener to the spring when the Activity resumes.
-    mScaleSpring.addListener(mSpringListener);
+    scaleSpring().addListener(mSpringListener);
   }
 
-  @Override
-  public void onPause() {
+  /**
+   * Remove the listener to the spring when the Activity pauses.
+   */
+  @Override public void onPause() {
+    scaleSpring().removeListener(mSpringListener);
     super.onPause();
-    // Remove the listener to the spring when the Activity pauses.
-    mScaleSpring.removeListener(mSpringListener);
   }
 
+  /**
+   * Create a new instance if spring if needed
+   *
+   * @return instance of Spring
+   */
+  private Spring scaleSpring() {
+    if(mScaleSpring == null) {
+      mScaleSpring = mSpringSystem.createSpring();
+    }
+    return mScaleSpring;
+  }
+
+  /**
+   * On each update of the spring value, we adjust the scale of the image view to match the
+   * springs new value. We use the SpringUtil linear interpolation function mapValueFromRangeToRange
+   * to translate the spring's 0 to 1 scale to a 100% to 50% scale range and apply that to the View
+   * with setScaleX/Y. Note that rendering is an implementation detail of the application and not
+   * Rebound itself. If you need Gingerbread compatibility consider using ViewCompat to update
+   * your view properties in a backwards compatible manner.
+   */
   private class ExampleSpringListener extends SimpleSpringListener {
-    @Override
-    public void onSpringUpdate(Spring spring) {
-      // On each update of the spring value, we adjust the scale of the image view to match the
-      // springs new value. We use the SpringUtil linear interpolation function mapValueFromRangeToRange
-      // to translate the spring's 0 to 1 scale to a 100% to 50% scale range and apply that to the View
-      // with setScaleX/Y. Note that rendering is an implementation detail of the application and not
-      // Rebound itself. If you need Gingerbread compatibility consider using NineOldAndroids to update
-      // your view properties in a backwards compatible manner.
+    @Override public void onSpringUpdate(Spring spring) {
       float mappedValue = (float) SpringUtil.mapValueFromRangeToRange(spring.getCurrentValue(), 0, 1, 1, 0.5);
-      mImageView.setScaleX(mappedValue);
-      mImageView.setScaleY(mappedValue);
+      ViewCompat.setScaleX(mImageView, mappedValue);
+      ViewCompat.setScaleY(mImageView, mappedValue);
     }
   }
+
+  /**
+   * # MotionEvent.ACTION_DOWN:
+   * When pressed start solving the spring to 1.
+   *
+   * #MotionEvent.ACTION_UP:
+   * #MotionEvent.ACTION_CANCEL:
+   * When released start solving the spring to 0.
+   */
+  private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
+    @Override public boolean onTouch(View v, MotionEvent event) {
+      switch (event.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+          scaleSpring().setEndValue(1);
+          break;
+        case MotionEvent.ACTION_UP:
+        case MotionEvent.ACTION_CANCEL:
+          scaleSpring().setEndValue(0);
+          break;
+        default:
+          break;
+      }
+      return true;
+    }
+  };
 
 }

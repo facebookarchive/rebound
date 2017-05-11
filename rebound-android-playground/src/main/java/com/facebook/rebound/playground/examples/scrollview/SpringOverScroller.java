@@ -42,12 +42,12 @@ public class SpringOverScroller implements SpringListener {
   }
 
   public SpringOverScroller(Context context, Interpolator interpolator,
-                            float bounceCoefficientX, float bounceCoefficientY) {
+      float bounceCoefficientX, float bounceCoefficientY) {
     this(context, interpolator, true);
   }
 
   public SpringOverScroller(Context context, Interpolator interpolator,
-                            float bounceCoefficientX, float bounceCoefficientY, boolean flywheel) {
+      float bounceCoefficientX, float bounceCoefficientY, boolean flywheel) {
     this(context, interpolator, flywheel);
   }
 
@@ -67,8 +67,7 @@ public class SpringOverScroller implements SpringListener {
         .addSpringConfig(COASTING_CONFIG, "coasting");
   }
 
-  public final void setFriction(float friction) {
-  }
+  public final void setFriction(float friction) { }
 
   public final boolean isFinished() {
     return mSpringX.isAtRest() && mSpringY.isAtRest();
@@ -149,34 +148,24 @@ public class SpringOverScroller implements SpringListener {
         .setVelocity(velocityY);
   }
 
-  public void notifyHorizontalEdgeReached(int startX, int finalX, int overX) {
-  }
+  public void notifyHorizontalEdgeReached(int startX, int finalX, int overX) { }
 
-  public void notifyVerticalEdgeReached(int startY, int finalY, int overY) {
-  }
+  public void notifyVerticalEdgeReached(int startY, int finalY, int overY) { }
 
   public void abortAnimation() {
     mSpringX.setAtRest();
     mSpringY.setAtRest();
   }
 
-  @Override
-  public void onSpringUpdate(Spring spring) {
+  @Override public void onSpringUpdate(Spring spring) {
     Log.d("WSB", "cv:" + spring.getCurrentValue());
   }
 
   @Override
-  public void onSpringAtRest(Spring spring) {
+  public void onSpringAtRest(Spring spring) { }
 
-  }
+  @Override public void onSpringActivate(Spring spring) { }
 
-  @Override
-  public void onSpringActivate(Spring spring) {
+  @Override public void onSpringEndStateChange(Spring spring) { }
 
-  }
-
-  @Override
-  public void onSpringEndStateChange(Spring spring) {
-
-  }
 }

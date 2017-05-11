@@ -8,11 +8,9 @@
         android:icon="@drawable/rebound_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true"
-        >
+        android:hardwareAccelerated="true">
         <activity
             android:name="com.facebook.rebound.playground.app.PlaygroundActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
