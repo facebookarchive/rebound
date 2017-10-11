@@ -45,8 +45,9 @@ public class Spring {
   // thresholds for determining when the spring is at rest
   private double mRestSpeedThreshold = 0.005;
   private double mDisplacementFromRestThreshold = 0.005;
-  private CopyOnWriteArraySet<SpringListener> mListeners = new CopyOnWriteArraySet<SpringListener>();
   private double mTimeAccumulator = 0;
+  private final CopyOnWriteArraySet<SpringListener> mListeners =
+    new CopyOnWriteArraySet<SpringListener>();
 
   private final BaseSpringSystem mSpringSystem;
 
@@ -104,15 +105,35 @@ public class Spring {
   /**
    * Set the displaced value to determine the displacement for the spring from the rest value.
    * This value is retained and used to calculate the displacement ratio.
-   * This also updates the start value of the Spring.
+   * The default signature also sets the Spring at rest to facilitate the common behavior of moving
+   * a spring to a new position.
    * @param currentValue the new start and current value for the spring
    * @return the spring for chaining
    */
   public Spring setCurrentValue(double currentValue) {
+    return setCurrentValue(currentValue, true);
+  }
+
+  /**
+   * The full signature for setCurrentValue includes the option of not setting the spring at rest
+   * after updating its currentValue. Passing setAtRest false means that if the endValue of the
+   * spring is not equal to the currentValue, the physics system will start iterating to resolve
+   * the spring to the end value. This is almost never the behavior that you want, so the default
+   * setCurrentValue signature passes true.
+   * @param currentValue the new start and current value for the spring
+   * @param setAtRest optionally set the spring at rest after updating its current value.
+   *                  see {@link com.facebook.rebound.Spring#setAtRest()}
+   * @return the spring for chaining
+   */
+  public Spring setCurrentValue(double currentValue, boolean setAtRest) {
     mStartValue = currentValue;
     mCurrentState.position = currentValue;
+    mSpringSystem.activateSpring(this.getId());
     for (SpringListener listener : mListeners) {
       listener.onSpringUpdate(this);
+    }
+    if (setAtRest) {
+      setAtRest();
     }
     return this;
   }
@@ -178,10 +199,15 @@ public class Spring {
 
   /**
    * set the velocity on the spring in pixels per second
+   * @param velocity velocity value
    * @return the spring for chaining
    */
   public Spring setVelocity(double velocity) {
+    if (velocity == mCurrentState.velocity) {
+      return this;
+    }
     mCurrentState.velocity = velocity;
+    mSpringSystem.activateSpring(this.getId());
     return this;
   }
 
@@ -252,8 +278,9 @@ public class Spring {
    * @return true if the spring is overshooting its target
    */
   public boolean isOvershooting() {
-    return (mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
-        (mStartValue > mEndValue && getCurrentValue() < mEndValue);
+    return mSpringConfig.tension > 0 &&
+           ((mStartValue < mEndValue && getCurrentValue() > mEndValue) ||
+           (mStartValue > mEndValue && getCurrentValue() < mEndValue));
   }
 
   /**
@@ -261,10 +288,9 @@ public class Spring {
    * realTimeDelta.
    * The math is inlined inside the loop since it made a huge performance impact when there are
    * several springs being advanced.
-   * @param time clock time
    * @param realDeltaTime clock drift
    */
-  void advance(double time, double realDeltaTime) {
+  void advance(double realDeltaTime) {
 
     boolean isAtRest = isAtRest();
 
@@ -369,8 +395,13 @@ public class Spring {
     // snapped to its end value.
     if (isAtRest() || (mOvershootClampingEnabled && isOvershooting())) {
       // Don't call setCurrentValue because that forces a call to onSpringUpdate
-      mStartValue = mEndValue;
-      mCurrentState.position = mEndValue;
+      if (tension > 0) {
+        mStartValue = mEndValue;
+        mCurrentState.position = mEndValue;
+      } else {
+        mEndValue = mCurrentState.position;
+        mStartValue = mEndValue;
+      }
       setVelocity(0);
       isAtRest = true;
     }
@@ -441,12 +472,14 @@ public class Spring {
    */
   public boolean isAtRest() {
     return Math.abs(mCurrentState.velocity) <= mRestSpeedThreshold &&
-        getDisplacementDistanceForState(mCurrentState) <= mDisplacementFromRestThreshold;
+        (getDisplacementDistanceForState(mCurrentState) <= mDisplacementFromRestThreshold ||
+         mSpringConfig.tension == 0);
   }
 
   /**
    * Set the spring to be at rest by making its end value equal to its current value and setting
    * velocity to 0.
+   * @return this object
    */
   public Spring setAtRest() {
     mEndValue = mCurrentState.position;

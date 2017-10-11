@@ -1,0 +1,21 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile project(':rebound-android')
+}
+
+android {
+
+  compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
+  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
+
+  defaultConfig {
+    applicationId "com.facebook.rebound.androidplayground"
+    versionCode Integer.parseInt(project.VERSION_CODE)
+    versionName project.VERSION_NAME
+    minSdkVersion 19
+    targetSdkVersion Integer.parseInt(project.ANDROID_TARGET_SDK_VERSION)
+  }
+
+}

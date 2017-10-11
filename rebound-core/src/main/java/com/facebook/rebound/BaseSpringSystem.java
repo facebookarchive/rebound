@@ -29,26 +29,19 @@ public class BaseSpringSystem {
 
   private final Map<String, Spring> mSpringRegistry = new HashMap<String, Spring>();
   private final Set<Spring> mActiveSprings = new CopyOnWriteArraySet<Spring>();
-  private final SpringClock mClock;
   private final SpringLooper mSpringLooper;
   private final CopyOnWriteArraySet<SpringSystemListener> mListeners = new CopyOnWriteArraySet<SpringSystemListener>();
-  private long mLastTimeMillis = -1;
   private boolean mIdle = true;
 
   /**
    * create a new BaseSpringSystem
-   * @param clock parameterized Clock to allow testability of the physics loop
    * @param springLooper parameterized springLooper to allow testability of the
    *        physics loop
    */
-  public BaseSpringSystem(SpringClock clock, SpringLooper springLooper) {
-    if (clock == null) {
-      throw new IllegalArgumentException("clock is required");
-    }
+  public BaseSpringSystem(SpringLooper springLooper) {
     if (springLooper == null) {
       throw new IllegalArgumentException("springLooper is required");
     }
-    mClock = clock;
     mSpringLooper = springLooper;
     mSpringLooper.setSpringSystem(this);
   }
@@ -107,8 +100,7 @@ public class BaseSpringSystem {
       throw new IllegalArgumentException("spring is required");
     }
     if (mSpringRegistry.containsKey(spring.getId())) {
-      throw new IllegalArgumentException("spring is already registered");
-    }
+      throw new IllegalArgumentException("spring is already registered"); }
     mSpringRegistry.put(spring.getId(), spring);
   }
 
@@ -128,14 +120,13 @@ public class BaseSpringSystem {
 
   /**
    * update the springs in the system
-   * @param time system time millis
    * @param deltaTime delta since last update in millis
    */
-  void advance(long time, long deltaTime) {
+  void advance(double deltaTime) {
     for (Spring spring : mActiveSprings) {
       // advance time in seconds
       if (spring.systemShouldAdvance()) {
-        spring.advance(time / 1000.0, deltaTime / 1000.0);
+        spring.advance(deltaTime / 1000.0);
       } else {
         mActiveSprings.remove(spring);
       }
@@ -144,29 +135,19 @@ public class BaseSpringSystem {
 
   /**
    * loop the system until idle
+   * @param elapsedMillis elapsed milliseconds
    */
-  public void loop() {
-    long currentTimeMillis = mClock.now();
-    if (mLastTimeMillis == -1) {
-      mLastTimeMillis = currentTimeMillis - 1;
-    }
-    long ellapsedMillis = currentTimeMillis - mLastTimeMillis;
-    mLastTimeMillis = currentTimeMillis;
-
+  public void loop(double elapsedMillis) {
     for (SpringSystemListener listener : mListeners) {
       listener.onBeforeIntegrate(this);
     }
-    advance(currentTimeMillis, ellapsedMillis);
-    synchronized (this) {
-      if (mActiveSprings.isEmpty()) {
-        mIdle = true;
-        mLastTimeMillis = -1;
-      }
+    advance(elapsedMillis);
+    if (mActiveSprings.isEmpty()) {
+      mIdle = true;
     }
     for (SpringSystemListener listener : mListeners) {
       listener.onAfterIntegrate(this);
     }
-
     if (mIdle) {
       mSpringLooper.stop();
     }
@@ -183,17 +164,19 @@ public class BaseSpringSystem {
     if (spring == null) {
       throw new IllegalArgumentException("springId " + springId + " does not reference a registered spring");
     }
-    synchronized (this) {
-      mActiveSprings.add(spring);
-      if (getIsIdle()) {
-        mIdle = false;
-        mSpringLooper.start();
-      }
+    mActiveSprings.add(spring);
+    if (getIsIdle()) {
+      mIdle = false;
+      mSpringLooper.start();
     }
   }
 
   /** listeners **/
 
+  /**
+   * Add new listener object.
+   * @param newListener listener
+   */
   public void addListener(SpringSystemListener newListener) {
     if (newListener == null) {
       throw new IllegalArgumentException("newListener is required");
@@ -201,6 +184,10 @@ public class BaseSpringSystem {
     mListeners.add(newListener);
   }
 
+  /**
+   * Remove listener object.
+   * @param listenerToRemove listener
+   */
   public void removeListener(SpringSystemListener listenerToRemove) {
     if (listenerToRemove == null) {
       throw new IllegalArgumentException("listenerToRemove is required");
@@ -208,6 +195,9 @@ public class BaseSpringSystem {
     mListeners.remove(listenerToRemove);
   }
 
+  /**
+   * Remove all listeners.
+   */
   public void removeAllListeners() {
     mListeners.clear();
   }

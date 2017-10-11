@@ -1,1 +1,4 @@
-include ':rebound-core', ':rebound-android', ':rebound-android-example', ':rebound-android-origami-example'
+include ':rebound-core'
+include ':rebound-android'
+include ':rebound-android-example'
+include ':rebound-android-playground'

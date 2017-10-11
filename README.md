@@ -1,6 +1,8 @@
-#Rebound [![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound)
+# Rebound 
+[![Build Status](https://travis-ci.org/facebook/rebound.png?branch=master)](https://travis-ci.org/facebook/rebound) 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Rebound-blue.svg?style=flat)](https://android-arsenal.com/details/1/30)
 
-##About
+## About
 
 <a href="http://facebook.github.io/rebound">Rebound</a> is a java library that
 models spring dynamics. Rebound spring models can be used to create animations
@@ -13,9 +15,11 @@ complex components like pagers, toggles, and scrollers.
 
 For examples and usage instructions head over to:
 
-<a href="http://facebook.github.io/rebound">facebook.github.io/rebound</a>
+[facebook.github.io/rebound](http://facebook.github.io/rebound)
 
-##License
+If you are looking to build springy animations for the web, check out the [Javascript version](https://github.com/facebook/rebound-js).
+
+## License
 
 BSD License
 
@@ -24,14 +28,14 @@ For Rebound software
 Copyright (c) 2013, Facebook, Inc.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
+Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, 
+* Redistributions of source code must retain the above copyright notice,
 this list of conditions and the following disclaimer.
 
-* Redistributions in binary form must reproduce the above copyright notice, 
-this list of conditions and the following disclaimer in the documentation 
+* Redistributions in binary form must reproduce the above copyright notice,
+this list of conditions and the following disclaimer in the documentation
 and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"

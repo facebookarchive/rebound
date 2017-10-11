@@ -1,0 +1,24 @@
+How to Release a new version:
+-----------------------------
+- Review all commits that will be in the new version.
+- Run all tests and build/install sample apps to verify that everything looks sane
+- Update the version number in build.gradle to the new version number
+- Create a new git tag for the version in the format v0.0.0
+- build the distribution jar
+  ./gradlew reboundDistJar
+- Draft a new release on github include release notes of all the changes and the
+  jar generated at build/libs/rebound-0.0.0.jar
+- publish to maven central
+- ./gradlew uploadArchives
+- login to https://oss.sonatype.org
+- Go to staging repositories and look at the bottom of the list for comfacebook-0000 this will be your
+  staging repo. Verify that the new release is in the content.
+- press Close at the top of the first horizontal pane while this staging repo is selected
+- hit refresh and see that the status is now Closed
+- hit release to submit the artifacts for publication to central. The sync may take some time to complete
+  as well as the update of the maven search index.
+- once the sync is complete update the gh-pages to reflect that a new version is available on central
+- update the published javadocs with
+  ./gradlew javadoc
+  upload the docs generated at rebound-core/build to gh-pages
+- tweet that there is an update
