@@ -22,11 +22,12 @@ import android.widget.FrameLayout;
 import com.facebook.rebound.BaseSpringSystem;
 import com.facebook.rebound.SimpleSpringListener;
 import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
 import com.facebook.rebound.SpringSystem;
 import com.facebook.rebound.SpringUtil;
 import com.facebook.rebound.playground.R;
 
-public class PhotoScaleExample extends FrameLayout {
+public class SimpleExample extends FrameLayout {
 
   private final BaseSpringSystem mSpringSystem = SpringSystem.create();
   private final ExampleSpringListener mSpringListener = new ExampleSpringListener();
@@ -34,15 +35,15 @@ public class PhotoScaleExample extends FrameLayout {
   private final Spring mScaleSpring;
   private final View mImageView;
 
-  public PhotoScaleExample(Context context) {
+  public SimpleExample(Context context) {
     this(context, null);
   }
 
-  public PhotoScaleExample(Context context, AttributeSet attrs) {
+  public SimpleExample(Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public PhotoScaleExample(Context context, AttributeSet attrs, int defStyle) {
+  public SimpleExample(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
     mScaleSpring = mSpringSystem.createSpring();
     LayoutInflater inflater = LayoutInflater.from(context);

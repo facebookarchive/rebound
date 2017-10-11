@@ -22,32 +22,40 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SpringChain implements SpringListener {
 
-  // The main spring config defines the tension and friction for the control spring. Keeping these
-  // values separate allows the behavior of the trailing springs to be different than that of the
-  // control point.
-  private static final SpringConfig MAIN_SPRING_CONFIG =
-      SpringConfig.fromOrigamiTensionAndFriction(40, 6);
-  // The attachment spring config defines the tension and friction for the rest of the springs in
-  // the chain.
-  private static final SpringConfig ATTACHMENT_SPRING_CONFIG =
-      SpringConfig.fromOrigamiTensionAndFriction(70, 10);
-
   /**
    * Add these spring configs to the registry to support live tuning through the
    * {@link com.facebook.rebound.ui.SpringConfiguratorView}
    */
-  static {
-    SpringConfigRegistry registry = SpringConfigRegistry.getInstance();
-    registry.addSpringConfig(MAIN_SPRING_CONFIG, "main spring");
-    registry.addSpringConfig(ATTACHMENT_SPRING_CONFIG, "attachment spring");
-  }
+  private static final SpringConfigRegistry registry = SpringConfigRegistry.getInstance();
+  private static final int DEFAULT_MAIN_TENSION = 40;
+  private static final int DEFAULT_MAIN_FRICTION = 6;
+  private static final int DEFAULT_ATTACHMENT_TENSION = 70;
+  private static final int DEFAULT_ATTACHMENT_FRICTION = 10;
+  private static int id = 0;
+
 
   /**
-   * Static factor method for creating a new SpringChain.
+   * Factory method for creating a new SpringChain with default SpringConfig.
    * @return the newly created SpringChain
    */
   public static SpringChain create() {
     return new SpringChain();
+  }
+
+  /**
+   * Factory method for creating a new SpringChain with the provided SpringConfig.
+   * @param mainTension tension for the main spring
+   * @param mainFriction friction for the main spring
+   * @param attachmentTension tension for the attachment spring
+   * @param attachmentFriction friction for the attachment spring
+   * @return the newly created SpringChain
+   */
+  public static SpringChain create(
+      int mainTension,
+      int mainFriction,
+      int attachmentTension,
+      int attachmentFriction) {
+    return new SpringChain(mainTension, mainFriction, attachmentTension, attachmentFriction);
   }
 
   private final SpringSystem mSpringSystem = SpringSystem.create();
@@ -55,6 +63,43 @@ public class SpringChain implements SpringListener {
       new CopyOnWriteArrayList<SpringListener>();
   private final CopyOnWriteArrayList<Spring> mSprings = new CopyOnWriteArrayList<Spring>();
   private int mControlSpringIndex = -1;
+
+  // The main spring config defines the tension and friction for the control spring. Keeping these
+  // values separate allows the behavior of the trailing springs to be different than that of the
+  // control point.
+  private final SpringConfig mMainSpringConfig;
+
+  // The attachment spring config defines the tension and friction for the rest of the springs in
+  // the chain.
+  private final SpringConfig mAttachmentSpringConfig;
+
+  private SpringChain() {
+    this(
+        DEFAULT_MAIN_TENSION,
+        DEFAULT_MAIN_FRICTION,
+        DEFAULT_ATTACHMENT_TENSION,
+        DEFAULT_ATTACHMENT_FRICTION);
+  }
+
+  private SpringChain(
+      int mainTension,
+      int mainFriction,
+      int attachmentTension,
+      int attachmentFriction) {
+    mMainSpringConfig = SpringConfig.fromOrigamiTensionAndFriction(mainTension, mainFriction);
+    mAttachmentSpringConfig =
+        SpringConfig.fromOrigamiTensionAndFriction(attachmentTension, attachmentFriction);
+    registry.addSpringConfig(mMainSpringConfig, "main spring " + id++);
+    registry.addSpringConfig(mAttachmentSpringConfig, "attachment spring " + id++);
+  }
+
+  public SpringConfig getMainSpringConfig() {
+    return mMainSpringConfig;
+  }
+
+  public SpringConfig getAttachmentSpringConfig() {
+    return mAttachmentSpringConfig;
+  }
 
   /**
    * Add a spring to the chain that will callback to the provided listener.
@@ -67,7 +112,7 @@ public class SpringChain implements SpringListener {
     Spring spring = mSpringSystem
         .createSpring()
         .addListener(this)
-        .setSpringConfig(ATTACHMENT_SPRING_CONFIG);
+        .setSpringConfig(mAttachmentSpringConfig);
     mSprings.add(spring);
     mListeners.add(listener);
     return this;
@@ -86,9 +131,9 @@ public class SpringChain implements SpringListener {
       return null;
     }
     for (Spring spring : mSpringSystem.getAllSprings()) {
-      spring.setSpringConfig(ATTACHMENT_SPRING_CONFIG);
+      spring.setSpringConfig(mAttachmentSpringConfig);
     }
-    getControlSpring().setSpringConfig(MAIN_SPRING_CONFIG);
+    getControlSpring().setSpringConfig(mMainSpringConfig);
     return this;
   }
 

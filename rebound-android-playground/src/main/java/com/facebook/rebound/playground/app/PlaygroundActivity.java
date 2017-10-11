@@ -31,7 +31,8 @@ import com.facebook.rebound.playground.examples.BallExample;
 import com.facebook.rebound.playground.examples.PhotoGalleryExample;
 import com.facebook.rebound.playground.examples.SpringChainExample;
 import com.facebook.rebound.playground.examples.OrigamiExample;
-import com.facebook.rebound.playground.examples.PhotoScaleExample;
+import com.facebook.rebound.playground.examples.SimpleExample;
+import com.facebook.rebound.playground.examples.SpringScrollViewExample;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -43,7 +44,8 @@ public class PlaygroundActivity extends Activity implements AdapterView.OnItemCl
   private static final List<Sample> SAMPLES = new ArrayList<Sample>();
 
   static {
-    SAMPLES.add(new Sample(PhotoScaleExample.class, "Photo Scale", "Scale a photo when you press and release"));
+    SAMPLES.add(new Sample(SimpleExample.class, "Simple Example", "Scale a photo when you press and release"));
+    SAMPLES.add(new Sample(SpringScrollViewExample.class, "Scroll View", "A scroll view with spring physics"));
     SAMPLES.add(new Sample(SpringChainExample.class, "SpringChain", "Drag any row in the list."));
     SAMPLES.add(new Sample(PhotoGalleryExample.class, "Photo Gallery", "Tap on a photo to enlarge or minimize."));
     SAMPLES.add(new Sample(BallExample.class, "Inertia Ball", "Toss the ball around the screen and watch it settle"));

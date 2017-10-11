@@ -41,4 +41,18 @@ public class SpringConfig {
         OrigamiValueConverter.frictionFromOrigamiValue(qcFriction)
     );
   }
+
+  /**
+   * Map values from the Origami POP Animation patch, which are based on a bounciness and speed
+   * value.
+   * @param bounciness bounciness of the POP Animation
+   * @param speed speed of the POP Animation
+   * @return a SpringConfig mapping to the specified POP Animation values.
+   */
+  public static SpringConfig fromBouncinessAndSpeed(double bounciness, double speed) {
+    BouncyConversion bouncyConversion = new BouncyConversion(speed, bounciness);
+    return fromOrigamiTensionAndFriction(
+        bouncyConversion.getBouncyTension(),
+        bouncyConversion.getBouncyFriction());
+  }
 }

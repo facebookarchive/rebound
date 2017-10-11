@@ -25,13 +25,13 @@ public class ChoreographerCompat {
   private static final long ONE_FRAME_MILLIS = 17;
   private static final boolean IS_JELLYBEAN_OR_HIGHER =
       Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
-  private static ChoreographerCompat __instance = new ChoreographerCompat();
+  private static final ChoreographerCompat INSTANCE = new ChoreographerCompat();
 
   private Handler mHandler;
   private Choreographer mChoreographer;
 
   public static ChoreographerCompat getInstance() {
-    return __instance;
+    return INSTANCE;
   }
 
   private ChoreographerCompat() {

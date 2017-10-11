@@ -18,4 +18,7 @@ How to Release a new version:
 - hit release to submit the artifacts for publication to central. The sync may take some time to complete
   as well as the update of the maven search index.
 - once the sync is complete update the gh-pages to reflect that a new version is available on central
+- update the published javadocs with
+  ./gradlew javadoc
+  upload the docs generated at rebound-core/build to gh-pages
 - tweet that there is an update

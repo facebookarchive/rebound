@@ -1,81 +1,81 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    repositories {
-        mavenCentral()
-    }
+  repositories {
+    mavenCentral()
+  }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
-    }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:1.2.3'
+  }
 }
 
 apply plugin: 'com.android.library'
 import com.android.builder.core.BuilderConstants
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
 
-    defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 19
-    }
+  compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
+  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
-    sourceSets {
-        main {
-            manifest.srcFile 'rebound-android/src/main/AndroidManifest.xml'
-            java.srcDirs = ['rebound-core/src/main/java', 'rebound-android/src/main/java']
-        }
+  defaultConfig {
+    minSdkVersion 11
+    targetSdkVersion Integer.parseInt(project.ANDROID_TARGET_SDK_VERSION)
+  }
+
+  sourceSets {
+    main {
+      manifest.srcFile 'rebound-android/src/main/AndroidManifest.xml'
+      java.srcDirs = ['rebound-core/src/main/java', 'rebound-android/src/main/java']
     }
+  }
 }
 
 // Create jar for distribution.
 android.libraryVariants.all { variant ->
-    def name = variant.buildType.name
-    if (name.equals(BuilderConstants.RELEASE)) {
-        // Distribution Jar Task
-        def distJarTask = task reboundDistJar(type: Jar, dependsOn: variant.javaCompile) {
-            from variant.javaCompile.destinationDir
-        }
-        artifacts.add('archives', distJarTask)
-
-        // Javadocs Task
-        def javadocsTask = task androidJavadocs(type: Javadoc, dependsOn: variant.javaCompile) {
-            source = variant.javaCompile.source
-            def androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-            classpath = files(variant.javaCompile.classpath.files, androidJar)
-            options {
-                links "http://docs.oracle.com/javase/7/docs/api/"
-                linksOffline "http://d.android.com/reference","${android.sdkDirectory}/docs/reference"
-            }
-            exclude '**/BuildConfig.java'
-            exclude '**/R.java'
-        }
-        def javadocsJarTask = task androidJavadocsJar(type: Jar, dependsOn: javadocsTask) {
-            classifier = 'javadoc'
-            from javadocsTask.destinationDir
-        }
-        artifacts.add('archives', javadocsJarTask)
-
-        // Sources Jar Task
-        def sourcesJarTask = task androidSourcesJar(type: Jar) {
-            classifier = 'sources'
-            from variant.javaCompile.source
-        }
-        artifacts.add('archives', sourcesJarTask)
+  def name = variant.buildType.name
+  if (name.equals(BuilderConstants.RELEASE)) {
+    // Distribution Jar Task
+    def distJarTask = task reboundDistJar(type: Jar, dependsOn: variant.javaCompile) {
+      from variant.javaCompile.destinationDir
     }
+    artifacts.add('archives', distJarTask)
+
+    // Javadocs Task
+    def javadocsTask = task androidJavadocs(type: Javadoc, dependsOn: variant.javaCompile) {
+      source = variant.javaCompile.source
+      def androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+      classpath = files(variant.javaCompile.classpath.files, androidJar)
+      options {
+        links "http://docs.oracle.com/javase/7/docs/api/"
+        linksOffline "http://d.android.com/reference","${android.sdkDirectory}/docs/reference"
+      }
+      exclude '**/BuildConfig.java'
+      exclude '**/R.java'
+    }
+    def javadocsJarTask = task androidJavadocsJar(type: Jar, dependsOn: javadocsTask) {
+      classifier = 'javadoc'
+      from javadocsTask.destinationDir
+    }
+    artifacts.add('archives', javadocsJarTask)
+
+    // Sources Jar Task
+    def sourcesJarTask = task androidSourcesJar(type: Jar) {
+      classifier = 'sources'
+      from variant.javaCompile.source
+    }
+    artifacts.add('archives', sourcesJarTask)
+  }
 }
 
 task installExample(dependsOn: 'rebound-android-example:installDebug')
 task installPlayground(dependsOn: 'rebound-android-playground:installDebug')
 task smokeTest(dependsOn: [
-  'rebound-core:assemble',
-  'rebound-core:check',
-  'rebound-android:assemble',
-  'rebound-android:check',
-  'rebound-android-example:assembleDebug',
-  'rebound-android-playground:assembleDebug',
-  'reboundDistJar'
+    'rebound-core:assemble',
+    'rebound-core:check',
+    'rebound-android:assemble',
+    'rebound-android:check',
+    'rebound-android-example:assembleDebug',
+    'rebound-android-playground:assembleDebug',
+    'reboundDistJar'
 ])
 
 // Configure gradle.properties to do maven builds
@@ -90,50 +90,50 @@ if (!project.hasProperty('sonatypeRepo') ||
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-version = "0.3.6"
+version = "0.3.8"
 group = "com.facebook.rebound"
 
 signing {
-    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
-    sign configurations.archives
+  required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+  sign configurations.archives
 }
 
 uploadArchives {
-    configuration = configurations.archives
-    repositories.mavenDeployer {
-        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+  configuration = configurations.archives
+  repositories.mavenDeployer {
+    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-        repository(url: sonatypeRepo) {
-            authentication(userName: sonatypeUsername, password: sonatypePassword)
-        }
-
-        pom.project {
-            name 'Rebound'
-            packaging 'jar'
-            description 'Rebound is a simple spring dynamics animation library for Java and Android applications.'
-            url 'http://facebook.github.io/rebound'
-
-            scm {
-                url 'scm:git@github.com:facebook/rebound.git'
-                connection 'scm:git@github.com:facebook/rebound.git'
-                developerConnection 'scm:git@github.com:facebook/rebound.git'
-            }
-
-            licenses {
-                license {
-                    name 'BSD 2-Clause License'
-                    url 'https://github.com/facebook/rebound/blob/master/LICENSE'
-                    distribution 'repo'
-                }
-            }
-
-            developers {
-                developer {
-                    id 'will.bailey'
-                    name 'Will Bailey'
-                    email 'will.bailey@gmail.com'
-                }
-            }
-        }
+    repository(url: sonatypeRepo) {
+      authentication(userName: sonatypeUsername, password: sonatypePassword)
     }
+
+    pom.project {
+      name 'Rebound'
+      packaging 'jar'
+      description 'Rebound is a simple spring dynamics animation library for Java and Android applications.'
+      url 'http://facebook.github.io/rebound'
+
+      scm {
+        url 'scm:git@github.com:facebook/rebound.git'
+        connection 'scm:git@github.com:facebook/rebound.git'
+        developerConnection 'scm:git@github.com:facebook/rebound.git'
+      }
+
+      licenses {
+        license {
+          name 'BSD 2-Clause License'
+          url 'https://github.com/facebook/rebound/blob/master/LICENSE'
+          distribution 'repo'
+        }
+      }
+
+      developers {
+        developer {
+          id 'will.bailey'
+          name 'Will Bailey'
+          email 'will.bailey@gmail.com'
+        }
+      }
+    }
+  }
 }

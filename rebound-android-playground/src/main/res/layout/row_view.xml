@@ -7,7 +7,6 @@
   android:layout_height="80dp"
   android:padding="10dp"
   android:gravity="center_vertical"
-  android:background="@drawable/row_background"
   >
   <TextView
     android:id="@+id/text_view"

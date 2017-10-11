@@ -2,39 +2,39 @@ language: java
 jdk: oraclejdk7
 env:
   matrix:
-    - ANDROID_SDKS=android-19,sysimg-19  ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-22,sysimg-22  ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
 before_install:
   # Install base Android SDK.
   - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch > /dev/null; fi
-  - wget http://dl.google.com/android/android-sdk_r23-linux.tgz
-  - tar xzf android-sdk_r23-linux.tgz
+  - wget http://dl.google.com/android/android-sdk_r24.3.3-linux.tgz
+  - tar xzf android-sdk_r24.3.3-linux.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 
   # Gradle
-  - wget http://services.gradle.org/distributions/gradle-2.0-bin.zip
-  - unzip gradle-2.0-bin.zip
-  - export GRADLE_HOME=$PWD/gradle-2.0
+  - wget http://services.gradle.org/distributions/gradle-2.4-bin.zip
+  - unzip gradle-2.4-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-2.4
   - export PATH=$GRADLE_HOME/bin:$PATH
 
   # install android build tools.
-  - wget https://dl-ssl.google.com/android/repository/build-tools_r19.1-linux.zip
-  - unzip build-tools_r19.1-linux.zip -d $ANDROID_HOME
+  - wget https://dl-ssl.google.com/android/repository/build-tools_r22.0.1-linux.zip
+  - unzip build-tools_r22.0.1-linux.zip -d $ANDROID_HOME
   - mkdir -p $ANDROID_HOME/build-tools/
-  - mv $ANDROID_HOME/android-4.4.2 $ANDROID_HOME/build-tools/19.1
-  - ls -la $ANDROID_HOME/build-tools/19.1
+  - mv $ANDROID_HOME/android-5.1 $ANDROID_HOME/build-tools/22.0.1
+  - ls -la $ANDROID_HOME/build-tools/22.0.1
   - echo $ANDROID_HOME
 
   # Install required components.
   # For a full list, run `android list sdk -a --extended`
-  # Note that sysimg-18 downloads the ARM, x86 and MIPS images (we should optimize this).
+  # Note that sysimg-22 downloads the ARM, x86 and MIPS images (we should optimize this).
   # Other relevant API's
   - echo yes | android update sdk --filter platform-tools --no-ui --force > /dev/null
   - echo yes | android update sdk --filter android-18 --no-ui --force > /dev/null
-  - echo yes | android update sdk --filter android-19 --no-ui --force > /dev/null
-  - echo yes | android update sdk --filter sysimg-19 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter android-22 --no-ui --force > /dev/null
+  - echo yes | android update sdk --filter sysimg-22 --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
   - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
 
-script: ./gradlew smokeTest
+script: ./gradlew smokeTest --stacktrace
