@@ -1,10 +1,18 @@
 buildscript {
   repositories {
-    mavenCentral()
+    google()
+    jcenter()
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:1.2.3'
+    classpath 'com.android.tools.build:gradle:3.3.1'
+  }
+}
+
+allprojects {
+  repositories {
+    google()
+    jcenter()
   }
 }
 
@@ -14,7 +22,6 @@ import com.android.builder.core.BuilderConstants
 android {
 
   compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
-  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
   defaultConfig {
     minSdkVersion 11
@@ -32,18 +39,18 @@ android {
 // Create jar for distribution.
 android.libraryVariants.all { variant ->
   def name = variant.buildType.name
-  if (name.equals(BuilderConstants.RELEASE)) {
+  if (name == BuilderConstants.RELEASE) {
     // Distribution Jar Task
-    def distJarTask = task reboundDistJar(type: Jar, dependsOn: variant.javaCompile) {
-      from variant.javaCompile.destinationDir
+    def distJarTask = task reboundDistJar(type: Jar, dependsOn: variant.getJavaCompileProvider()) {
+      from variant.javaCompileProvider.get().destinationDir
     }
     artifacts.add('archives', distJarTask)
 
     // Javadocs Task
-    def javadocsTask = task androidJavadocs(type: Javadoc, dependsOn: variant.javaCompile) {
-      source = variant.javaCompile.source
+    def javadocsTask = task androidJavadocs(type: Javadoc, dependsOn: variant.getJavaCompileProvider()) {
+      source = variant.javaCompileProvider.get().source
       def androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-      classpath = files(variant.javaCompile.classpath.files, androidJar)
+      classpath = files(variant.javaCompileProvider.get().classpath.files, androidJar)
       options {
         links "http://docs.oracle.com/javase/7/docs/api/"
         linksOffline "http://d.android.com/reference","${android.sdkDirectory}/docs/reference"
@@ -60,7 +67,7 @@ android.libraryVariants.all { variant ->
     // Sources Jar Task
     def sourcesJarTask = task androidSourcesJar(type: Jar) {
       classifier = 'sources'
-      from variant.javaCompile.source
+      from variant.javaCompileProvider.get().source
     }
     artifacts.add('archives', sourcesJarTask)
   }
