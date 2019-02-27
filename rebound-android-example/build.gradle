@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-  compile project(':rebound-android')
+  implementation project(':rebound-android')
+  implementation project(':rebound-core')
 }
 
 android {
 
   compileSdkVersion Integer.parseInt(project.ANDROID_COMPILE_SDK_VERSION)
-  buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
 
   defaultConfig {
     minSdkVersion Integer.parseInt(project.ANDROID_MIN_SDK)
