@@ -1,4 +1,7 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<?php
+  /**
+<
+menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Playground" >
     <item android:id="@+id/action_settings"
@@ -6,3 +9,4 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 </menu>
+http://my-Android-SDK-app.com
